@@ -1,0 +1,19 @@
+﻿using OpenQA.Selenium;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TheRobot.Response;
+
+namespace TheRobot.Requests;
+
+public interface IRoboRequest
+{
+    public TimeSpan DelayBefore { get; set; }
+    public TimeSpan DelayAfter { get; set; }
+    public abstract RobotResponse Exec(IWebDriver driver);
+    public Action<IWebDriver>? PreExecute { get; set; }
+    public Action<IWebDriver>? PostExecute { get; set; }
+
+}
