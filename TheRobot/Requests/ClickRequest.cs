@@ -8,7 +8,7 @@ using TheRobot.Response;
 
 namespace TheRobot.Requests;
 
-public class ClickRequest : IRoboRequest
+public class ClickRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }

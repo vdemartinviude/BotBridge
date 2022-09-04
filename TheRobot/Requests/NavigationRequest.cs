@@ -8,7 +8,7 @@ using TheRobot.Response;
 
 namespace TheRobot.Requests;
 
-public class NavigationRequest : IRoboRequest
+public class NavigationRequest : IRobotRequest
 {
     public string? Url { get; set; }
     public TimeSpan DelayBefore { get; set; }

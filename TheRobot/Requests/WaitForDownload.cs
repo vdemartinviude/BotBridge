@@ -9,7 +9,7 @@ using TheRobot.Response;
 
 namespace TheRobot.Requests;
 
-public class WaitForDownload : IRoboRequest
+public class WaitForDownload : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }

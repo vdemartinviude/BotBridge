@@ -1,13 +1,9 @@
+using Microsoft.Extensions.DependencyInjection;
+using OpenQA.Selenium;
 using TestRobot.Fixtures;
 using TheRobot;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using TheRobot.Requests;
 using TheRobot.Response;
-using NuGet.Frameworks;
-using OpenQA.Selenium;
-using FluentAssertions;
-using OpenQA.Selenium.DevTools.V102.Runtime;
 
 namespace TestRobot;
 
@@ -15,6 +11,7 @@ public class RobotTests : IClassFixture<RobotFixture>
 {
     private readonly RobotFixture _robotfixture;
     private readonly Robot _robot;
+
     public RobotTests(RobotFixture robotfixture)
     {
         _robotfixture = robotfixture;
@@ -30,9 +27,10 @@ public class RobotTests : IClassFixture<RobotFixture>
         {
             Url = url
         };
-        
-        Assert.Equal<RobotResponseStatus>(RobotResponseStatus.ActionRealizedOk,_robot.Execute(req).Result.Status);
+
+        Assert.Equal<RobotResponseStatus>(RobotResponseStatus.ActionRealizedOk, _robot.Execute(req).Result.Status);
     }
+
     [Fact]
     public void RobotCatchsTheExceptionWhenCantNavigate()
     {
@@ -40,7 +38,7 @@ public class RobotTests : IClassFixture<RobotFixture>
         {
             Url = "http://www.fjdslkfdjls.csfdsf"
         };
-        Assert.Equal<RobotResponseStatus>(RobotResponseStatus.ExceptionOccurred,_robot.Execute(req).Result.Status);
+        Assert.Equal<RobotResponseStatus>(RobotResponseStatus.ExceptionOccurred, _robot.Execute(req).Result.Status);
     }
 
     [Fact]
@@ -77,7 +75,6 @@ public class RobotTests : IClassFixture<RobotFixture>
         {
             Url = "http://www.g1.com",
             PreExecute = ((driver) => _robotfixture.logger.Info(driver.Url))
-
         };
         // Act
         await _robot.Execute(req);
@@ -92,7 +89,6 @@ public class RobotTests : IClassFixture<RobotFixture>
         };
 
         await Assert.ThrowsAsync<ArgumentNullException>(async () => await _robot.Execute(req));
- 
     }
 
     [Fact]
@@ -123,8 +119,8 @@ public class RobotTests : IClassFixture<RobotFixture>
         var resp = await _robot.Execute(req2);
 
         Assert.Contains("The goal of this challenge", resp.WebElement.Text);
-        
     }
+
     [Fact]
     public async void EnsuseTimeoutOnDownloadFile()
     {
@@ -136,9 +132,7 @@ public class RobotTests : IClassFixture<RobotFixture>
 
         var req2 = new ClickRequest()
         {
-
             By = By.XPath("//a[contains(text(),'Download')]")
-
         };
         await _robot.Execute(req2);
 
@@ -149,13 +143,14 @@ public class RobotTests : IClassFixture<RobotFixture>
             {
                 {"*.doc" }
             },
-            Timeout = new TimeSpan(0,1,0)
+            Timeout = new TimeSpan(0, 1, 0)
         };
 
         var resp = await _robot.Execute(req3);
 
         Assert.Equal<RobotResponseStatus>(RobotResponseStatus.TimedOut, resp.Status);
     }
+
     [Fact]
     public async void EnsureCanDownloadFile()
     {
@@ -167,9 +162,7 @@ public class RobotTests : IClassFixture<RobotFixture>
 
         var req2 = new ClickRequest()
         {
-            
             By = By.XPath("//a[contains(text(),'Download')]")
-            
         };
         await _robot.Execute(req2);
 
@@ -185,8 +178,5 @@ public class RobotTests : IClassFixture<RobotFixture>
         var resp = await _robot.Execute(req3);
 
         Assert.Equal<RobotResponseStatus>(RobotResponseStatus.ActionRealizedOk, resp.Status);
-
-
-
     }
 }

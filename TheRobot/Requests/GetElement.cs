@@ -10,7 +10,7 @@ using TheRobot.Helpers;
 
 namespace TheRobot.Requests;
 
-public class GetElement : IRoboRequest
+public class GetElement : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
