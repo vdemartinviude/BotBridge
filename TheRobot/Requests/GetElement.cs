@@ -36,7 +36,7 @@ public class GetElement : IRoboRequest
             RobotHelpers.DoOrTimeout(() => webElement = driver.FindElement(By), (TimeSpan)Timeout);
             resp = new RobotResponse
             {
-                Result = webElement,
+                WebElement = webElement,
                 Status = RobotResponseStatus.ActionRealizedOk
             };
             return resp;
@@ -45,7 +45,7 @@ public class GetElement : IRoboRequest
         {
             resp = new RobotResponse
             {
-                Result = null,
+                WebElement = null,
                 Status = RobotResponseStatus.ElementNotFound,
             };
             return resp;

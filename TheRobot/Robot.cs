@@ -8,13 +8,21 @@ using WebDriverManager.DriverConfigs.Impl;
 
 namespace TheRobot
 {
+    
     public class Robot : IRobot, IDisposable
     {
        
         private IWebDriver? _driver = null;
 
+        public string DownloadFolder { get; private set; }
+
         public Robot() 
         {
+            DownloadFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "RobotDownloads");
+            if (!Directory.Exists(DownloadFolder))
+            {
+                Directory.CreateDirectory(DownloadFolder);
+            }
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.File("logs/therobot.log", rollingInterval: RollingInterval.Day)
@@ -23,7 +31,7 @@ namespace TheRobot
             new DriverManager().SetUpDriver(new ChromeConfig());
             ChromeOptions options = new();
             options.AddUserProfilePreference("download.prompt_for_download", false);
-            options.AddUserProfilePreference("download.default_directory", "C:\\tmp");
+            options.AddUserProfilePreference("download.default_directory", DownloadFolder);
             _driver = new ChromeDriver(options);
 
         }

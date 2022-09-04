@@ -11,11 +11,13 @@ public enum RobotResponseStatus
 {
     ActionRealizedOk,
     ElementNotFound,
-    ExceptionOccurred
+    ExceptionOccurred,
+    TimedOut
 }
 public class RobotResponse
 {
     public RobotResponseStatus Status { get; set; }
     public string? ErrorMessage { get; set; }
-    public IWebElement? Result { get; set; }    
+    public IWebElement? WebElement { get; set; }    
+    public string? Data { get; set; }
 }

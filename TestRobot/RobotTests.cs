@@ -122,7 +122,71 @@ public class RobotTests : IClassFixture<RobotFixture>
         };
         var resp = await _robot.Execute(req2);
 
-        Assert.Contains("The goal of this challenge", resp.Result.Text);
+        Assert.Contains("The goal of this challenge", resp.WebElement.Text);
         
+    }
+    [Fact]
+    public async void EnsuseTimeoutOnDownloadFile()
+    {
+        var req = new NavigationRequest()
+        {
+            Url = "https://rpachallenge.com"
+        };
+        await _robot.Execute(req);
+
+        var req2 = new ClickRequest()
+        {
+
+            By = By.XPath("//a[contains(text(),'Download')]")
+
+        };
+        await _robot.Execute(req2);
+
+        var req3 = new WaitForDownload()
+        {
+            Folder = _robot.DownloadFolder,
+            FileTypes = new List<string>()
+            {
+                {"*.doc" }
+            },
+            Timeout = new TimeSpan(0,1,0)
+        };
+
+        var resp = await _robot.Execute(req3);
+
+        Assert.Equal<RobotResponseStatus>(RobotResponseStatus.TimedOut, resp.Status);
+    }
+    [Fact]
+    public async void EnsureCanDownloadFile()
+    {
+        var req = new NavigationRequest()
+        {
+            Url = "https://rpachallenge.com"
+        };
+        await _robot.Execute(req);
+
+        var req2 = new ClickRequest()
+        {
+            
+            By = By.XPath("//a[contains(text(),'Download')]")
+            
+        };
+        await _robot.Execute(req2);
+
+        var req3 = new WaitForDownload()
+        {
+            Folder = _robot.DownloadFolder,
+            FileTypes = new List<string>()
+            {
+                {"*.xlsx" }
+            }
+        };
+
+        var resp = await _robot.Execute(req3);
+
+        Assert.Equal<RobotResponseStatus>(RobotResponseStatus.ActionRealizedOk, resp.Status);
+
+
+
     }
 }
