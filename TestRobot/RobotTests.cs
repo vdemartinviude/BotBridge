@@ -150,7 +150,21 @@ public class RobotTests : IClassFixture<RobotFixture>
 
         Assert.Equal<RobotResponseStatus>(RobotResponseStatus.TimedOut, resp.Status);
     }
-
+    [Fact]
+    public async void EnsureCanSetText()
+    {
+        var req = new NavigationRequest()
+        {
+            Url = "http://www.google.com"
+        };
+        await _robot.Execute(req);
+        var req2 = new SetText()
+        {
+            By = By.XPath("//input[@name='q']"),
+            Text = "Sociedade Esportiva Palmeiras"
+        };
+        await _robot.Execute(req2);
+    }
     [Fact]
     public async void EnsureCanDownloadFile()
     {
