@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-WorkerService1-6EB03A08-F367-42DC-BAC4-49A045972B82</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="JsonExemplo.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="JsonExemplo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Appccelerate.StateMachine" Version="5.1.0" />
+    <PackageReference Include="JsonPath.Net" Version="0.2.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CiaExemplo\CiaExemplo.csproj" />
+    <ProjectReference Include="..\StatesAndEvents\StatesAndEvents.csproj" />
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties jsonexemplo_1json__JsonSchema="https://docs.renovatebot.com/renovate-schema.json" /></VisualStudio></ProjectExtensions>
+</Project>

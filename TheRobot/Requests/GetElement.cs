@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TheRobot.Response;
 using TheRobot.Helpers;
+using OpenQA.Selenium.Support.UI;
 
 namespace TheRobot.Requests;
 
@@ -23,33 +24,33 @@ public class GetElement : IRobotRequest
         IWebElement webElement = null;
         if (By == null)
         {
-            throw new ArgumentNullException("You must specify the element using By");
+            throw new ArgumentNullException(nameof(By));
         }
         if (Timeout == null)
         {
-            throw new ArgumentNullException("You must specify a timeout");
+            throw new ArgumentNullException(nameof(Timeout));
         }
-        RobotResponse resp;
-
+        
+        WebDriverWait wait = new WebDriverWait(driver, (TimeSpan) Timeout);
         try
         {
-            RobotHelpers.DoOrTimeout(() => webElement = driver.FindElement(By), (TimeSpan)Timeout);
-            resp = new RobotResponse
-            {
-                WebElement = webElement,
-                Status = RobotResponseStatus.ActionRealizedOk
-            };
-            return resp;
+            webElement = wait.Until(e => e.FindElement(By));
+            
         }
-        catch(Exception ex)
+        catch(WebDriverTimeoutException)
         {
-            resp = new RobotResponse
+            return new()
             {
                 WebElement = null,
                 Status = RobotResponseStatus.ElementNotFound,
             };
-            return resp;
+          
         }
-
+        
+        return new()
+        {
+            WebElement = webElement,
+            Status = RobotResponseStatus.ActionRealizedOk
+        };
     }
 }

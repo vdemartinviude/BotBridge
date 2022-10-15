@@ -158,13 +158,30 @@ public class RobotTests : IClassFixture<RobotFixture>
             Url = "http://www.google.com"
         };
         await _robot.Execute(req);
-        var req2 = new SetText()
+        var req2 = new SetTextRequest()
         {
             By = By.XPath("//input[@name='q']"),
             Text = "Sociedade Esportiva Palmeiras"
         };
         await _robot.Execute(req2);
     }
+    [Fact]
+    public async void EnsureCanHandleNotFoundElementForSetText()
+    {
+        var req = new NavigationRequest()
+        {
+            Url = "http://www.google.com"
+        };
+        await _robot.Execute(req);
+        var req2 = new SetTextRequest()
+        {
+            By = By.XPath("//input[@name='q'dsdsdsdsd]"),
+            Text = "Sociedade Esportiva Palmeiras"
+        };
+        var resp = await _robot.Execute(req2);
+        Assert.Equal<RobotResponseStatus>(RobotResponseStatus.ElementNotFound, resp.Status);
+    }
+
     [Fact]
     public async void EnsureCanDownloadFile()
     {

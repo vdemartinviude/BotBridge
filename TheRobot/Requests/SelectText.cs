@@ -9,30 +9,28 @@ using TheRobot.Response;
 
 namespace TheRobot.Requests;
 
-public class ClickRequest : IRobotRequest
+public class SelectText : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
-    public By? By { get; set; }
-    public Action<IWebDriver>? PreExecute { get; set; }
-    public Action<IWebDriver>? PostExecute { get; set; }
-    public TimeSpan? Timeout { get; set; }
+    public Action<IWebDriver> PreExecute { get; set; }
+    public Action<IWebDriver> PostExecute { get; set; }
+    public string Text { get; set; }
+    public By By { get; set; }
+
     public RobotResponse Exec(IWebDriver driver)
     {
-        if (By == null)
+        if (string.IsNullOrEmpty(Text))
         {
-            throw new ArgumentNullException("By", "You must specify the element to click");
+            throw new ArgumentNullException("text");
         }
-        if (Timeout == null)
-        {
-            Timeout = TimeSpan.FromSeconds(2);
-        }
-        var wait = new WebDriverWait(driver, (TimeSpan) Timeout);
         try
         {
-            wait.Until(e => e.FindElement(By)).Click();
+            IWebElement selectElement = new WebDriverWait(driver, TimeSpan.FromSeconds(2)).Until(x => x.FindElement(By));
+            var selectObject = new SelectElement(selectElement);
+            selectObject.SelectByText(Text);
         }
-        catch (WebDriverTimeoutException)
+        catch (OpenQA.Selenium.WebDriverTimeoutException ex)
         {
             return new()
             {

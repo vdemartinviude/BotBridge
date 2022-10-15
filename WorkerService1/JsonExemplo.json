@@ -1,0 +1,55 @@
+{
+  "DadosLogin": {
+    "CpfLogin": "31141264803",
+    "Password": "Minha casa minha vida"
+  },
+  "Ramo": "Zona Leste",
+  "DadosRenovacao": {
+    "Renovacao": true,
+    "DadosApoliceAnterior": {
+      "Seguradora": "BRADESCO",
+      "Apolice": "1000",
+      "Item": ""
+    }
+  },
+  "Seguro": {
+    "InicioVigencia": "01/11/2022",
+    "FinalVigencia": "31/10/2023"
+  },
+  "Segurado": {
+    "TipoPessoa": "Física",
+    "CPF": "27368201852",
+    "SeguradoPrincipalCondutor": false,
+    "CPFPrincipalCondutor": "24977972856",
+    "SexoSegurado": "Feminino"
+  },
+
+  "PrincipalCondutor": {
+    "VinculoSegurado": "Cônjuge",
+    "SexoCondutor": "Masculino",
+    "EstadoCivilCondutor": "Casado"
+  },
+  "Perfil": {
+    "VeiculoUsadoPrestacaoServicos": "Não",
+    "ResideIdadeEntre18e24": "Não",
+    "EstenderCoberturaIdadeEntre18e24": "Não se aplica",
+    "SexoPessoasIdadeEntre18e24": "Não se aplica"
+  },
+  "Proprietario": {
+    "VinculoSegurado": "Próprio segurado"
+  },
+  "Veiculo": {
+    "ZeroKmSemPlaca": false,
+    "Placa": "GFC8I18",
+    "Chassi": "23232039203920"
+  },
+  "Local": {
+    "CEPPernoite": "03128141",
+    "CEPPernoiteResidencia": true,
+    "CEPResidencia": "03128141"
+  },
+  "Fiscal": {
+    "IsencaoFiscal": true,
+    "TipoIsencao": "PESSOA COM"
+  }
+}

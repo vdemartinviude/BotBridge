@@ -1,15 +1,10 @@
 ﻿using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TheRobot.Helpers;
+using OpenQA.Selenium.Support.UI;
 using TheRobot.Response;
 
 namespace TheRobot.Requests;
 
-public class SetText : IRobotRequest
+public class SetTextRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
@@ -32,14 +27,16 @@ public class SetText : IRobotRequest
         {
             throw new ApplicationException("WebDriver error");
         }
-        IWebElement webElement = null;
+        IWebElement webElement;
+
+        WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
         try
         {
-            RobotHelpers.DoOrTimeout(() => webElement = driver.FindElement(By), new TimeSpan(0, 0, 2)).Wait();
+            webElement = wait.Until(e => e.FindElement(By));
         }
-        catch (Exception ex)
+        catch (OpenQA.Selenium.WebDriverTimeoutException)
         {
-            return new RobotResponse()
+            return new()
             {
                 Status = RobotResponseStatus.ElementNotFound
             };
@@ -48,15 +45,22 @@ public class SetText : IRobotRequest
         var rnd = new Random();
         webElement?.Click();
         Task.Delay(100).Wait();
-        foreach(var c in Text)
+        foreach (var c in Text)
         {
             webElement?.SendKeys(c.ToString());
             Task.Delay(rnd.Next(100, 200)).Wait();
         }
+
+        //IJavaScriptExecutor javaScriptExecutor;
+        //javaScriptExecutor = (IJavaScriptExecutor) driver;
+        //var NowValue = javaScriptExecutor.ExecuteScript("arguments[0].text();",webElement);
+        //if (NowValue != Text)
+        //{
+        //    // Erro na digitação
+        //}
         return new RobotResponse()
         {
             Status = RobotResponseStatus.ActionRealizedOk
         };
-        
     }
 }
