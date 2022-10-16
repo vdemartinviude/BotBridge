@@ -59,7 +59,7 @@ public class BaseState : IState
         return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
     }
 
-    public void MainExecute(PassiveStateMachine<BaseState, RobotEvents> passiveStateMachine)
+    public void MainExecute(ActiveStateMachine<BaseState, RobotEvents> passiveStateMachine)
     {
         Execute();
         Thread.Sleep(100);

@@ -7,9 +7,9 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddSingleton<Robot>();
         services.AddSingleton<BaseOrcamento>(x => new BaseOrcamento(Path.Combine(Environment.CurrentDirectory, "JsonExemplo.json")));
+        services.AddSingleton<WatchDog>();
         services.AddHostedService<Worker>();
-        services.AddHostedService<WatchDog>();
     })
     .Build();
-
+await host.Services.GetService<WatchDog>().StartAsync(new CancellationToken());
 await host.RunAsync();

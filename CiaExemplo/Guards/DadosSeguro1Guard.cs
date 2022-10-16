@@ -9,7 +9,7 @@ using TheRobot;
 
 namespace CiaExemplo.Guards;
 
-public class FinalGuard : IGuard<DadosSeguro2>
+public class DadosSeguro1Guard : IGuard<DadosSeguro1, DadosSeguro2>
 {
     public bool Condition(Robot robot)
     {

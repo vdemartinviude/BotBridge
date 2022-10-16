@@ -14,9 +14,10 @@ public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private readonly Robot _robot;
-    private PassiveStateMachine<BaseState, RobotEvents> _passiveStateMachine;
+    private ActiveStateMachine<BaseState, RobotEvents> _activeStateMachine;
+    private WatchDog _watchDog;
 
-    public Worker(ILogger<Worker> logger, Robot robot, BaseOrcamento baseOrcamento)
+    public Worker(ILogger<Worker> logger, Robot robot, BaseOrcamento baseOrcamento, WatchDog watchDog)
     {
         _logger = logger;
         _robot = robot;
@@ -30,7 +31,7 @@ public class Worker : BackgroundService
 
         foreach (var state in states)
         {
-            builder.In(state).ExecuteOnEntry(() => state.MainExecute(_passiveStateMachine));
+            builder.In(state).ExecuteOnEntry(() => state.MainExecute(_activeStateMachine));
             var Guards = PagesAssembly.GetExportedTypes()
                 .Where(x => x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IGuard<,>)))
                 .Select(x => new
@@ -62,28 +63,43 @@ public class Worker : BackgroundService
         }
 
         builder.WithInitialState(states.Single(x => x.GetType() == typeof(FirstPage)));
-        _passiveStateMachine = builder.Build().CreatePassiveStateMachine();
+        _activeStateMachine = builder.Build().CreateActiveStateMachine();
+        _watchDog = watchDog;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         var generator = new StateMachineReportGenerator<BaseState, RobotEvents>();
-        _passiveStateMachine.Report(generator);
+        _activeStateMachine.Report(generator);
 
         string report = generator.Result;
         _logger.LogDebug(report);
+
+        _activeStateMachine.TransitionCompleted += _activeStateMachine_TransitionCompleted;
+        _activeStateMachine.TransitionExceptionThrown += _activeStateMachine_TransitionExceptionThrown;
         try
         {
-            _passiveStateMachine.Start();
+            _activeStateMachine.Start();
         }
         catch (Appccelerate.StateMachine.Machine.StateMachineException ex)
         {
             _logger.LogCritical(ex.InnerException.Message);
         }
-        //while (!stoppingToken.IsCancellationRequested)
-        //{
-        //    _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-        //    await Task.Delay(1000, stoppingToken);
-        //}
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+            await Task.Delay(1000, stoppingToken);
+        }
+    }
+
+    private void _activeStateMachine_TransitionExceptionThrown(object sender, Appccelerate.StateMachine.Machine.Events.TransitionExceptionEventArgs<BaseState, RobotEvents> e)
+    {
+        _logger.LogCritical("EXCEPTION!!!!");
+    }
+
+    private void _activeStateMachine_TransitionCompleted(object sender, Appccelerate.StateMachine.Machine.Events.TransitionCompletedEventArgs<BaseState, RobotEvents> e)
+    {
+        _logger.LogWarning("TRANSIÇÃO REALIZADA!!!!");
+        _watchDog.SetWatchDog();
     }
 }
