@@ -50,4 +50,15 @@ public class BaseOrcamento : IDadosOrcamento
         }
         return matches[0].Value.GetDouble();
     }
+
+    public bool? GetBoolData(string jsonPath)
+    {
+        var theJsonPath = JsonPath.Parse(jsonPath);
+        var matches = theJsonPath.Evaluate(JsonDoc.RootElement).Matches;
+        if (matches.Count == 0)
+        {
+            return null;
+        }
+        return matches[0].Value.GetBoolean();
+    }
 }

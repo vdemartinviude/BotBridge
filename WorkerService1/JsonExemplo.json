@@ -53,8 +53,34 @@
     "TipoIsencao": "PESSOA COM"
   },
   "Coberturas": {
-    "FatorDeAjuste": 105.0,
-    "Franquia": 51,
-    "DanosMateriais": 100001
+    "FatorDeAjuste": 100.0,
+    "Franquia": 50,
+    "DanosMateriais": 100000,
+    "DanosCorporais": 100000,
+    "DanosMorais": 100000,
+    "AcidentesPessoaisMorte": 60000,
+    "AcidentesPessoaisInvalidez": 60000,
+    "AcidentesPessoaisDespesasMedicas": 10000,
+    "Reparos": {
+      "TipoPecaRepraro": "ORIGINAIS",
+      "Assistencia24h": "SUPERIOR",
+      "LocalReparoVidros": "Livre",
+      "CoberturaVidros": "BASICO",
+      "ProtecaoPequenosReparos": true,
+      "ProtecaoRodaPneu": true,
+      "DespesasExtras": true,
+      "DespesasHigienizacao": true,
+      "ExtensaoPerimetro": true
+    },
+    "CarroReserva": {
+      "Padrao": "ar condicionado",
+      "DiasPerdaParcial": "7",
+      "DiasTodosEventos": "15",
+      "IndenizacaoIntegral": "30",
+      "Terceiros": "7"
+    }
+  },
+  "DadosCorretagem": {
+    "Comissao": 28.76
   }
 }

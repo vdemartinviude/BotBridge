@@ -14,10 +14,12 @@ public enum RobotResponseStatus
     ExceptionOccurred,
     TimedOut
 }
+
 public class RobotResponse
 {
     public RobotResponseStatus Status { get; set; }
     public string? ErrorMessage { get; set; }
-    public IWebElement? WebElement { get; set; }    
+    public IWebElement? WebElement { get; set; }
     public string? Data { get; set; }
+    public List<IWebElement>? WebElements { get; set; }
 }

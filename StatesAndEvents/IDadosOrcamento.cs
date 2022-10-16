@@ -14,4 +14,6 @@ public interface IDadosOrcamento
     public abstract string GetStringData(JsonPath jsonPath);
 
     public abstract string GetStringData(string jsonPath);
+
+    public abstract bool? GetBoolData(string jsonPath);
 }
