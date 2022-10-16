@@ -20,7 +20,7 @@ public class DadosSeguro1 : BaseState
     {
         #region SexoSegurado
 
-        if (_orcamento.GetData("$.Segurado.SexoSegurado") == "Feminino")
+        if (_orcamento.GetStringData("$.Segurado.SexoSegurado") == "Feminino")
         {
             var clicksexfem = new ClickRequest()
             {
@@ -46,14 +46,14 @@ public class DadosSeguro1 : BaseState
         var setiniciovigencia = new SetTextWithJs
         {
             By = By.Id("CotacaoModelDataInicioVigencia"),
-            Text = _orcamento.GetData("$.Seguro.InicioVigencia")
+            Text = _orcamento.GetStringData("$.Seguro.InicioVigencia")
         };
         _robot.Execute(setiniciovigencia).Wait();
 
         _robot.Execute(new SetTextWithJs()
         {
             By = By.Id("CotacaoModelDataFimVigencia"),
-            Text = _orcamento.GetData("$.Seguro.FinalVigencia")
+            Text = _orcamento.GetStringData("$.Seguro.FinalVigencia")
         }).Wait();
 
         #endregion Vigencia
@@ -63,11 +63,11 @@ public class DadosSeguro1 : BaseState
         _robot.Execute(new SetTextWithKeyDown()
         {
             By = By.Id("CodigoCodigoEnderecamentoPostalPernoite"),
-            Text = _orcamento.GetData("$.Local.CEPPernoite").Substring(0, 5),
+            Text = _orcamento.GetStringData("$.Local.CEPPernoite").Substring(0, 5),
             DelayAfter = TimeSpan.FromSeconds(3)
         }).Wait();
 
-        if (_orcamento.GetData("$.Local.CEPPernoiteResidencia") == "False")
+        if (_orcamento.GetStringData("$.Local.CEPPernoiteResidencia") == "False")
         {
             _robot.Execute(new ClickRequest()
             {
@@ -77,7 +77,7 @@ public class DadosSeguro1 : BaseState
             _robot.Execute(new SetTextRequest()
             {
                 By = By.Id("ItemAutoCotacaoModelCepResidencia"),
-                Text = _orcamento.GetData("$.Local.CEPResidencia")
+                Text = _orcamento.GetStringData("$.Local.CEPResidencia")
             }).Wait();
         }
 
@@ -85,9 +85,9 @@ public class DadosSeguro1 : BaseState
 
         #region IsencaoFiscal
 
-        if (_orcamento.GetData("$.Fiscal.IsencaoFiscal") == "True")
+        if (_orcamento.GetStringData("$.Fiscal.IsencaoFiscal") == "True")
         {
-            if (_orcamento.GetData("$.Fiscal.TipoIsencao").Contains("PESSOA COM"))
+            if (_orcamento.GetStringData("$.Fiscal.TipoIsencao").Contains("PESSOA COM"))
             {
                 _robot.Execute(new SelectBy2Clicks()
                 {
@@ -112,7 +112,7 @@ public class DadosSeguro1 : BaseState
             _robot.Execute(new SelectBy2Clicks()
             {
                 By1 = By.XPath("//div[@id='ItemAutoCotacaoModelMotivoIsencaoFiscal_chosen']//b"),
-                By2 = By.XPath($"//div[@id='ItemAutoCotacaoModelMotivoIsencaoFiscal_chosen']//li[contains(text(),'{_orcamento.GetData("$.Fiscal.TipoIsencao")}')]"),
+                By2 = By.XPath($"//div[@id='ItemAutoCotacaoModelMotivoIsencaoFiscal_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Fiscal.TipoIsencao")}')]"),
                 DelayBetweenClicks = TimeSpan.FromSeconds(2)
             }).Wait();
         }
@@ -124,7 +124,7 @@ public class DadosSeguro1 : BaseState
         _robot.Execute(new SelectBy2Clicks()
         {
             By1 = By.XPath("//div[@id='PropriedadeVeiculoCotacaoModelTipoPropriedadeVeiculo_chosen']//b"),
-            By2 = By.XPath($"//div[@id='PropriedadeVeiculoCotacaoModelTipoPropriedadeVeiculo_chosen']//li[contains(text(),'{_orcamento.GetData("$.Proprietario.VinculoSegurado")}')]"),
+            By2 = By.XPath($"//div[@id='PropriedadeVeiculoCotacaoModelTipoPropriedadeVeiculo_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Proprietario.VinculoSegurado")}')]"),
             DelayBetweenClicks = TimeSpan.FromSeconds(1)
         }).Wait();
 
@@ -141,10 +141,10 @@ public class DadosSeguro1 : BaseState
         {
             DelayBetweenClicks = TimeSpan.FromSeconds(2),
             By1 = By.XPath("//div[@id='CondutorVeiculoCotacaoModelTipoCondutorDependente_chosen']//b"),
-            By2 = By.XPath($"//div[@id='CondutorVeiculoCotacaoModelTipoCondutorDependente_chosen']//li[contains(text(),'{_orcamento.GetData("$.PrincipalCondutor.VinculoSegurado")}')]")
+            By2 = By.XPath($"//div[@id='CondutorVeiculoCotacaoModelTipoCondutorDependente_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.PrincipalCondutor.VinculoSegurado")}')]")
         }).Wait();
         By bySexoCondutor;
-        if (_orcamento.GetData("$.PrincipalCondutor.SexoCondutor") == "Masculino")
+        if (_orcamento.GetStringData("$.PrincipalCondutor.SexoCondutor") == "Masculino")
         {
             bySexoCondutor = By.Id("CondutorVeiculoCotacaoModelCodigoSexoMasculino");
         }
@@ -164,35 +164,35 @@ public class DadosSeguro1 : BaseState
         _robot.Execute(new SelectBy2Clicks()
         {
             By1 = By.XPath("//div[@id='PerfilItem143_chosen']//b"),
-            By2 = By.XPath($"//div[@id='PerfilItem143_chosen']//li[contains(text(),'{_orcamento.GetData("$.PrincipalCondutor.EstadoCivilCondutor")}')]")
+            By2 = By.XPath($"//div[@id='PerfilItem143_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.PrincipalCondutor.EstadoCivilCondutor")}')]")
         }).Wait();
 
         _robot.Execute(new SelectBy2Clicks()
         {
             By1 = By.XPath("//div[@id='PerfilItem147_chosen']//b"),
-            By2 = By.XPath($"//div[@id='PerfilItem147_chosen']//li[contains(text(),'{_orcamento.GetData("$.Perfil.VeiculoUsadoPrestacaoServicos")}')]")
+            By2 = By.XPath($"//div[@id='PerfilItem147_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Perfil.VeiculoUsadoPrestacaoServicos")}')]")
         }).Wait();
 
         _robot.Execute(new SelectBy2Clicks()
         {
             By1 = By.XPath("//div[@id='PerfilItem148_chosen']//b"),
-            By2 = By.XPath($"//div[@id='PerfilItem148_chosen']//li[contains(text(),'{_orcamento.GetData("$.Perfil.ResideIdadeEntre18e24")}')]")
+            By2 = By.XPath($"//div[@id='PerfilItem148_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Perfil.ResideIdadeEntre18e24")}')]")
         }).Wait();
 
-        if (_orcamento.GetData("$.Perfil.ResideIdadeEntre18e24") == "Sim")
+        if (_orcamento.GetStringData("$.Perfil.ResideIdadeEntre18e24") == "Sim")
         {
             _robot.Execute(new SelectBy2Clicks()
             {
                 By1 = By.XPath("//div[@id='PerfilItem149_chosen']//b"),
-                By2 = By.XPath($"//div[@id='PerfilItem149_chosen']//li[contains(text(),'{_orcamento.GetData("$.Perfil.EstenderCoberturaIdadeEntre18e24")}')]")
+                By2 = By.XPath($"//div[@id='PerfilItem149_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Perfil.EstenderCoberturaIdadeEntre18e24")}')]")
             }).Wait();
         }
-        if (_orcamento.GetData("$.Perfil.EstenderCoberturaIdadeEntre18e24").Contains("Sim"))
+        if (_orcamento.GetStringData("$.Perfil.EstenderCoberturaIdadeEntre18e24").Contains("Sim"))
         {
             _robot.Execute(new SelectBy2Clicks()
             {
                 By1 = By.XPath("//div[@id='PerfilItem150_chosen']//b"),
-                By2 = By.XPath($"//div[@id='PerfilItem150_chosen']//li[contains(text(),'{_orcamento.GetData("$.Perfil.SexoPessoasIdadeEntre18e24")}')]")
+                By2 = By.XPath($"//div[@id='PerfilItem150_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Perfil.SexoPessoasIdadeEntre18e24")}')]")
             }).Wait();
         }
 

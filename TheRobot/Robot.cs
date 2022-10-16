@@ -74,7 +74,7 @@ namespace TheRobot
 
             request.PostExecute?.Invoke(_driver);
 
-            Log.Debug("{@IRoboRequest} Executed", request);
+            Log.Information("{@IRoboRequest} Executed", request);
             return resp;
         }
     }

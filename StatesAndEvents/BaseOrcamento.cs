@@ -19,7 +19,7 @@ public class BaseOrcamento : IDadosOrcamento
         JsonDoc = JsonDocument.Parse(text);
     }
 
-    public string GetData(JsonPath jsonPath)
+    public string GetStringData(JsonPath jsonPath)
     {
         var matches = jsonPath.Evaluate(JsonDoc.RootElement).Matches;
         if (matches.Count == 0)
@@ -34,9 +34,20 @@ public class BaseOrcamento : IDadosOrcamento
         throw new NotImplementedException();
     }
 
-    public string GetData(string jsonPath)
+    public string GetStringData(string jsonPath)
     {
         var theJsonPath = JsonPath.Parse(jsonPath);
-        return GetData(theJsonPath);
+        return GetStringData(theJsonPath);
+    }
+
+    public double? GetDoubleData(string jsonPath)
+    {
+        var theJsonPath = JsonPath.Parse(jsonPath);
+        var matches = theJsonPath.Evaluate(JsonDoc.RootElement).Matches;
+        if (matches.Count == 0)
+        {
+            return null;
+        }
+        return matches[0].Value.GetDouble();
     }
 }

@@ -20,13 +20,13 @@ public class DadosPrincipais : BaseState
     public override void Execute()
     {
         var pathRenovacao = JsonPath.Parse("$.DadosRenovacao.Renovacao");
-        if (_orcamento.GetData(pathRenovacao) == "True")
+        if (_orcamento.GetStringData(pathRenovacao) == "True")
 
         #region ComRenovação
 
         {
             var pathSeguradora = JsonPath.Parse("$.DadosRenovacao.DadosApoliceAnterior.Seguradora");
-            var seguradora = _orcamento.GetData(pathSeguradora);
+            var seguradora = _orcamento.GetStringData(pathSeguradora);
             if (String.IsNullOrEmpty(seguradora))
             {
                 throw new EstimateParametersException("Seguradora anterior não informada na renovação");
@@ -48,7 +48,7 @@ public class DadosPrincipais : BaseState
             };
             _robot.Execute(selectSeguradora).Wait();
 
-            var apoliceAnterior = _orcamento.GetData("$.DadosRenovacao.DadosApoliceAnterior.Apolice");
+            var apoliceAnterior = _orcamento.GetStringData("$.DadosRenovacao.DadosApoliceAnterior.Apolice");
             if (!String.IsNullOrEmpty(apoliceAnterior))
             {
                 var digitaApolice = new SetTextRequest()
@@ -59,7 +59,7 @@ public class DadosPrincipais : BaseState
                 _robot.Execute(digitaApolice).Wait();
             }
 
-            var itemAnterior = _orcamento.GetData("$.DadosRenovacao.DadosApoliceAnterior.Item");
+            var itemAnterior = _orcamento.GetStringData("$.DadosRenovacao.DadosApoliceAnterior.Item");
             if (!String.IsNullOrEmpty(itemAnterior))
             {
                 var digitaItem = new SetTextRequest()
@@ -89,7 +89,7 @@ public class DadosPrincipais : BaseState
 
         #region Segurado
 
-        if (_orcamento.GetData("$.Segurado.TipoPessoa") == "Jurídica")
+        if (_orcamento.GetStringData("$.Segurado.TipoPessoa") == "Jurídica")
         {
             #region PessoaJuridica
 
@@ -100,7 +100,7 @@ public class DadosPrincipais : BaseState
                 DelayAfter = TimeSpan.FromSeconds(1)
             };
             _robot.Execute(clickpessoajuridica).Wait();
-            var cnpj = _orcamento.GetData("$.Segurado.CNPJ");
+            var cnpj = _orcamento.GetStringData("$.Segurado.CNPJ");
             if (String.IsNullOrEmpty(cnpj))
             {
                 throw new EstimateParametersException("CNPJ da pessoa jurídica não informado");
@@ -111,7 +111,7 @@ public class DadosPrincipais : BaseState
                 Text = cnpj
             };
             _robot.Execute(typecnpj).Wait();
-            var cpfcondutor = _orcamento.GetData("$.Segurado.CPFPrincipalCondutor");
+            var cpfcondutor = _orcamento.GetStringData("$.Segurado.CPFPrincipalCondutor");
             if (String.IsNullOrEmpty(cpfcondutor))
             {
                 throw new EstimateParametersException("CPF Principal condutor não informado");
@@ -136,7 +136,7 @@ public class DadosPrincipais : BaseState
             };
             _robot.Execute(clickpessoafisica).Wait();
 
-            var cpf = _orcamento.GetData("$.Segurado.CPF");
+            var cpf = _orcamento.GetStringData("$.Segurado.CPF");
             var typecpf = new SetTextRequest()
             {
                 By = By.Id("PrincipalSeguradoCotacaoModelCodigoCodigoPessoaFisicaCgc"),
@@ -144,7 +144,7 @@ public class DadosPrincipais : BaseState
             };
             _robot.Execute(typecpf).Wait();
 
-            if (_orcamento.GetData("$.Segurado.SeguradoPrincipalCondutor") == "True")
+            if (_orcamento.GetStringData("$.Segurado.SeguradoPrincipalCondutor") == "True")
             {
                 var clickprincipalcondutor = new ClickRequest()
                 {
@@ -158,7 +158,7 @@ public class DadosPrincipais : BaseState
                 var typecpfcondutor = new SetTextRequest()
                 {
                     By = By.Id("PrincipalCpfPrincipalCondutor"),
-                    Text = _orcamento.GetData("$.Segurado.CPFPrincipalCondutor")
+                    Text = _orcamento.GetStringData("$.Segurado.CPFPrincipalCondutor")
                 };
                 _robot.Execute(typecpfcondutor).Wait();
             }
@@ -170,7 +170,7 @@ public class DadosPrincipais : BaseState
 
         #region PlacaChassi
 
-        if (_orcamento.GetData("$.Veiculo.ZeroKmSemPlaca") == "True")
+        if (_orcamento.GetStringData("$.Veiculo.ZeroKmSemPlaca") == "True")
         {
             var clicksemplaca = new ClickRequest()
             {
@@ -184,11 +184,11 @@ public class DadosPrincipais : BaseState
             var typeplaca = new SetTextRequest()
             {
                 By = By.Id("PrincipalItemAutoCotacaoModelLicencaCodigo"),
-                Text = _orcamento.GetData("$.Veiculo.Placa")
+                Text = _orcamento.GetStringData("$.Veiculo.Placa")
             };
             _robot.Execute(typeplaca).Wait();
         }
-        var chassi = _orcamento.GetData("$.Veiculo.Chassi");
+        var chassi = _orcamento.GetStringData("$.Veiculo.Chassi");
         if (!string.IsNullOrEmpty(chassi))
         {
             var typechassi = new SetTextRequest()

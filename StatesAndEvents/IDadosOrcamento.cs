@@ -11,7 +11,7 @@ public interface IDadosOrcamento
 {
     public abstract Task ReadJson(string jsonFilePath);
 
-    public abstract string GetData(JsonPath jsonPath);
+    public abstract string GetStringData(JsonPath jsonPath);
 
-    public abstract string GetData(string jsonPath);
+    public abstract string GetStringData(string jsonPath);
 }

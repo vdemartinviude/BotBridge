@@ -51,5 +51,10 @@
   "Fiscal": {
     "IsencaoFiscal": true,
     "TipoIsencao": "PESSOA COM"
+  },
+  "Coberturas": {
+    "FatorDeAjuste": 105.0,
+    "Franquia": 51,
+    "DanosMateriais": 100001
   }
 }
