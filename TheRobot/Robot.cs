@@ -1,5 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Remote;
+using OpenQA.Selenium.Chromium;
 using Serilog;
 using System.Diagnostics;
 using TheRobot.Requests;
@@ -12,15 +14,16 @@ namespace TheRobot
 {
     public class Robot : IRobot, IDisposable
     {
-        public IWebDriver _driver { get; private set; }
+        private IWebDriver _driver { get; set; }
 
         public string DownloadFolder { get; private set; }
 
         public Robot()
         {
             var Processes = Process.GetProcesses();
-            //TODO: Amarrar com o usuário da máquina. Pois há outros chromes rodando na mesma máquina
+
             Processes.Where(p => p.ProcessName.ToLower().Contains("chrome")).ToList().ForEach(x => x.Kill());
+
             DownloadFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "RobotDownloads");
             if (!Directory.Exists(DownloadFolder))
             {
@@ -38,11 +41,14 @@ namespace TheRobot
 
             options.AddUserProfilePreference("download.prompt_for_download", false);
             options.AddUserProfilePreference("download.default_directory", DownloadFolder);
-            //options.AddArgument("--headless");
-            //var user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36";
-            //options.AddArgument($"user-agent={user_agent}");
+            options.AddArgument("--log-level=OFF");
+
+            Log.Logger.Information("Starting the selenium driver");
+
             _driver = new ChromeDriver(options);
+
             _driver.Manage().Window.Maximize();
+            Log.Logger.Information("Selenium driver started");
         }
 
         public void Dispose()

@@ -1,4 +1,5 @@
 ﻿using Json.Path;
+using JsonDocumentsManager;
 using OpenQA.Selenium;
 using StatesAndEvents;
 using TheRobot;
@@ -8,7 +9,7 @@ namespace CiaExemplo.PagesStates;
 
 public class SelecaoCanal : BaseState
 {
-    public SelecaoCanal(Robot robot, BaseOrcamento baseOrcamento) : base("SelecaoCanal", robot, baseOrcamento)
+    public SelecaoCanal(Robot robot, BaseOrcamento baseOrcamento, ResultJsonDocument resultJson) : base("SelecaoCanal", robot, baseOrcamento, resultJson)
     {
     }
 

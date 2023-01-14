@@ -16,6 +16,8 @@ public enum RobotEvents
 public interface IGuard<TCurrentState, TNextState> where TCurrentState : BaseState where TNextState : BaseState
 {
     public abstract bool Condition(Robot robot);
+
+    public abstract uint Priority { get; }
 }
 
 public interface IGuard<TFinalState> where TFinalState : BaseState

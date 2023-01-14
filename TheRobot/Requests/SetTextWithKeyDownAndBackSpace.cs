@@ -21,31 +21,41 @@ public class SetTextWithKeyDownAndBackSpace : IRobotRequest
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        var element = driver.FindElement(By);
-        var firstactions = new Actions(driver);
-        BackSpaceNumber ??= 5;
-        firstactions.ScrollToElement(element);
-        firstactions.ScrollByAmount(0, 10);
-        firstactions.Click(element);
-        for (int i = 0; i < BackSpaceNumber; i++)
+        try
         {
-            firstactions.KeyDown(Keys.Backspace);
-            firstactions.Pause(TimeSpan.FromMilliseconds(150));
-            firstactions.KeyUp(Keys.Backspace);
-            firstactions.Pause(TimeSpan.FromMilliseconds(150));
-        }
+            var element = driver.FindElement(By);
+            var firstactions = new Actions(driver);
+            BackSpaceNumber ??= 5;
+            firstactions.ScrollToElement(element);
+            firstactions.ScrollByAmount(0, 10);
+            firstactions.Click(element);
+            for (int i = 0; i < BackSpaceNumber; i++)
+            {
+                firstactions.KeyDown(Keys.Backspace);
+                firstactions.Pause(TimeSpan.FromMilliseconds(150));
+                firstactions.KeyUp(Keys.Backspace);
+                firstactions.Pause(TimeSpan.FromMilliseconds(150));
+            }
 
-        firstactions.Perform();
-        foreach (var c in Text)
+            firstactions.Perform();
+            foreach (var c in Text)
+            {
+                string s = String.Empty;
+                s += c;
+                var actions = new Actions(driver);
+                actions.KeyDown(s);
+                actions.Pause(TimeSpan.FromMilliseconds(150));
+                actions.KeyUp(s);
+                actions.Pause(TimeSpan.FromMilliseconds(150));
+                actions.Perform();
+            }
+        }
+        catch (Exception ex)
         {
-            string s = String.Empty;
-            s += c;
-            var actions = new Actions(driver);
-            actions.KeyDown(s);
-            actions.Pause(TimeSpan.FromMilliseconds(150));
-            actions.KeyUp(s);
-            actions.Pause(TimeSpan.FromMilliseconds(150));
-            actions.Perform();
+            return new()
+            {
+                Status = RobotResponseStatus.ElementNotFound
+            };
         }
         return new() { Status = RobotResponseStatus.ActionRealizedOk };
     }

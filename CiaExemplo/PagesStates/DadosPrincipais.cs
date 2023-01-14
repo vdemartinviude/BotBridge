@@ -1,4 +1,5 @@
 ﻿using Json.Path;
+using JsonDocumentsManager;
 using OpenQA.Selenium;
 using StatesAndEvents;
 using System;
@@ -13,7 +14,7 @@ namespace CiaExemplo.PagesStates;
 
 public class DadosPrincipais : BaseState
 {
-    public DadosPrincipais(Robot robot, BaseOrcamento inputdata) : base("DadosPrincipais", robot, inputdata)
+    public DadosPrincipais(Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson) : base("DadosPrincipais", robot, inputdata, resultJson)
     {
     }
 

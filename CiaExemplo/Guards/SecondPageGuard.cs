@@ -11,20 +11,26 @@ using System.Text;
 using System.Threading.Tasks;
 using TheRobot;
 using TheRobot.Helpers;
+using TheRobot.Requests;
 
 namespace CiaExemplo.Guards;
 
 public class ErroLoginPageGuard : IGuard<FazLogin, ErroLogin>
 {
+    public uint Priority => 10;
+
     public bool Condition(Robot robot)
     {
-        try
+        var request = new ElementExist()
         {
-            IWebElement wait = new WebDriverWait(robot._driver, TimeSpan.FromSeconds(4))
-                .Until(ExpectedConditions.ElementIsVisible(By.XPath("//span[text()='Usuário ou senha inválidos.']")));
+            By = By.XPath("//span[text()='Usuário ou senha inválidos.']"),
+            Timeout = TimeSpan.FromSeconds(4)
+        };
+        if (robot.Execute(request).Result.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk)
+        {
             return true;
         }
-        catch (OpenQA.Selenium.WebDriverTimeoutException)
+        else
         {
             return false;
         }
@@ -33,15 +39,22 @@ public class ErroLoginPageGuard : IGuard<FazLogin, ErroLogin>
 
 public class ErroLoginPageGuard2 : IGuard<FazLogin, ErroLogin>
 {
+    public uint Priority => 10;
+
     public bool Condition(Robot robot)
     {
-        try
+        var request = new ElementExist()
         {
-            IWebElement wait = new WebDriverWait(robot._driver, TimeSpan.FromSeconds(4))
-                .Until(ExpectedConditions.ElementIsVisible(By.XPath("//span[contains(text(),'bloqueada')]")));
+            By = By.XPath("//span[contains(text(),'bloqueada')]"),
+            Timeout = TimeSpan.FromSeconds(4)
+        };
+        var robotResult = robot.Execute(request).Result;
+
+        if (robotResult.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && robotResult.WebElement.Displayed == true)
+        {
             return true;
         }
-        catch (OpenQA.Selenium.WebDriverTimeoutException)
+        else
         {
             return false;
         }
@@ -50,8 +63,20 @@ public class ErroLoginPageGuard2 : IGuard<FazLogin, ErroLogin>
 
 public class LoginComSucessoGuard : IGuard<FazLogin, AcessaCotacaoAuto>
 {
+    public uint Priority => 10;
+
     public bool Condition(Robot robot)
     {
-        return WaitTransitions.ExistMoveClickable(By.XPath("//a[contains(text(),'Cotar')]"), robot);
+        var element = robot.Execute(new WaitAndMoveToElementClickableRequest
+        {
+            Timeout = TimeSpan.FromSeconds(4),
+            By = By.XPath("//a[contains(text(),'Cotar')]")
+        }).Result;
+
+        if (element.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk)
+        {
+            return true;
+        }
+        return false;
     }
 }

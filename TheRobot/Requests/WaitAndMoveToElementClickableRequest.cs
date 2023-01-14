@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,24 +10,31 @@ using TheRobot.Response;
 
 namespace TheRobot.Requests;
 
-public class ScrollToElementRequest : IRobotRequest
+public class WaitAndMoveToElementClickableRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
     public Action<IWebDriver> PreExecute { get; set; }
     public Action<IWebDriver> PostExecute { get; set; }
     public By By { get; set; }
+    public TimeSpan Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
         try
         {
-            IWebElement webElement = new WebDriverWait(driver, TimeSpan.FromSeconds(2)).Until(x => x.FindElement(By));
+            var wait = new WebDriverWait(driver, Timeout)
+                .Until(ExpectedConditions.ElementExists(By));
+            IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
+            executor.ExecuteScript("arguments[0].scrollIntoView();", wait);
+            var wait2 = new WebDriverWait(driver, TimeSpan.FromSeconds(15))
+                .Until(ExpectedConditions.ElementToBeClickable(By));
 
-            var actions = new Actions(driver);
-            actions.ScrollToElement(webElement);
-            actions.ScrollByAmount(0, 10);
-            actions.Perform();
+            return new()
+            {
+                WebElement = wait,
+                Status = RobotResponseStatus.ActionRealizedOk
+            };
         }
         catch (Exception ex)
         {
@@ -36,6 +43,5 @@ public class ScrollToElementRequest : IRobotRequest
                 Status = RobotResponseStatus.ElementNotFound
             };
         }
-        return new() { Status = RobotResponseStatus.ActionRealizedOk };
     }
 }

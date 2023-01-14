@@ -9,19 +9,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TheRobot;
+using TheRobot.Requests;
 
 namespace CiaExemplo.Guards;
 
 public class FirstPageGuard : IGuard<FirstPage, FazLogin>
 {
+    public uint Priority => 10;
+
     public bool Condition(Robot robot)
     {
-        IWebElement? wait = new WebDriverWait(robot._driver, TimeSpan.FromSeconds(10))
-            .Until(ExpectedConditions.ElementExists(By.XPath("//input[@name='username']")));
-        IJavaScriptExecutor executor = (IJavaScriptExecutor)robot._driver;
-        executor.ExecuteScript("arguments[0].scrollIntoView();", wait);
-        var wait2 = new WebDriverWait(robot._driver, TimeSpan.FromSeconds(15))
-            .Until(ExpectedConditions.ElementToBeClickable(By.XPath("//input[@name='username']")));
+        robot.Execute(new WaitAndMoveToElementClickableRequest
+        {
+            Timeout = TimeSpan.FromSeconds(10),
+            By = By.XPath("//input[@name='username']")
+        }).Wait();
 
         return true;
     }

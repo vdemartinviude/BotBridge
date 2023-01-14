@@ -26,7 +26,18 @@ public class SelectRangeByValue : IRobotRequest
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        IWebElement firstClickElement = new WebDriverWait(driver, TimeSpan.FromSeconds(2)).Until(x => x.FindElement(ByClick));
+        IWebElement firstClickElement;
+        try
+        {
+            firstClickElement = new WebDriverWait(driver, TimeSpan.FromSeconds(2)).Until(x => x.FindElement(ByClick));
+        }
+        catch (Exception ex)
+        {
+            return new()
+            {
+                Status = RobotResponseStatus.ElementNotFound
+            };
+        }
         DelayBetweenClicks ??= TimeSpan.FromSeconds(1);
         var actions = new Actions(driver);
         actions.ScrollToElement(firstClickElement);
@@ -35,24 +46,33 @@ public class SelectRangeByValue : IRobotRequest
         Thread.Sleep((TimeSpan)DelayBetweenClicks);
         firstClickElement.Click();
         Thread.Sleep((TimeSpan)DelayBetweenClicks);
-        var elements = driver.FindElements(BySelectValues)
-                       .Select(element => new
-                       {
-                           element = element,
-                           valor = Convert.ToDouble(
-                           System.Text.RegularExpressions.Regex.Match(element.Text, @"[\d\.,]+").Value, new CultureInfo("pt-BR"))
-                       });
-        IWebElement element = null;
-        if (GreaterThan)
+        try
         {
-            element = elements.OrderBy(a => a.valor).Where(a => a.valor >= Value).Select(a => a.element).First();
+            var elements = driver.FindElements(BySelectValues)
+                           .Select(element => new
+                           {
+                               element = element,
+                               valor = Convert.ToDouble(
+                               System.Text.RegularExpressions.Regex.Match(element.Text, @"[\d\.,]+").Value, new CultureInfo("pt-BR"))
+                           });
+            IWebElement element = null;
+            if (GreaterThan)
+            {
+                element = elements.OrderBy(a => a.valor).Where(a => a.valor >= Value).Select(a => a.element).First();
+            }
+            if (LessThan)
+            {
+                element = elements.OrderByDescending(a => a.valor).Where(a => a.valor <= Value).Select(a => a.element).First();
+            }
+            element.Click();
         }
-        if (LessThan)
+        catch (Exception ex)
         {
-            element = elements.OrderByDescending(a => a.valor).Where(a => a.valor <= Value).Select(a => a.element).First();
+            return new()
+            {
+                Status = RobotResponseStatus.ElementNotFound
+            };
         }
-        element.Click();
-
         return new() { Status = RobotResponseStatus.ActionRealizedOk };
     }
 }

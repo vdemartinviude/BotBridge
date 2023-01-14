@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using JsonDocumentsManager;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using StatesAndEvents;
 using TheRobot;
@@ -8,7 +9,7 @@ namespace CiaExemplo.PagesStates;
 
 public class MeuCotador : BaseState
 {
-    public MeuCotador(Robot robot, BaseOrcamento inputdata) : base("MeuCotador", robot, inputdata)
+    public MeuCotador(Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson) : base("MeuCotador", robot, inputdata, resultJson)
     {
     }
 

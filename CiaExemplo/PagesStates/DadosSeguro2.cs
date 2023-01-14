@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using JsonDocumentsManager;
+using OpenQA.Selenium;
 using StatesAndEvents;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace CiaExemplo.PagesStates;
 
 public class DadosSeguro2 : BaseState
 {
-    public DadosSeguro2(Robot robot, BaseOrcamento inputdata) : base("DadosSeguro2", robot, inputdata)
+    public DadosSeguro2(Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson) : base("DadosSeguro2", robot, inputdata, resultJson)
     {
     }
 
@@ -206,7 +207,7 @@ public class DadosSeguro2 : BaseState
         {
             By = By.Id("btnCalcular"),
             Timeout = TimeSpan.FromSeconds(1),
-            DelayAfter = TimeSpan.FromSeconds(7)
+            DelayAfter = TimeSpan.FromSeconds(17)
         }).Wait();
     }
 }

@@ -17,6 +17,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CiaExemplo", "CiaExemplo\Ci
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkerService1", "WorkerService1\WorkerService1.csproj", "{E76AD707-F02E-40C4-9E2C-F43E7F3272C0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonDocumentsManager", "JsonDocumentsManager\JsonDocumentsManager.csproj", "{0E6DEAF9-A10B-4E4F-B1E6-28F9D9DA85CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp2", "ConsoleApp2\ConsoleApp2.csproj", "{0AE496FE-E461-41A5-B785-66B289261865}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{E76AD707-F02E-40C4-9E2C-F43E7F3272C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E76AD707-F02E-40C4-9E2C-F43E7F3272C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E76AD707-F02E-40C4-9E2C-F43E7F3272C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E6DEAF9-A10B-4E4F-B1E6-28F9D9DA85CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E6DEAF9-A10B-4E4F-B1E6-28F9D9DA85CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E6DEAF9-A10B-4E4F-B1E6-28F9D9DA85CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E6DEAF9-A10B-4E4F-B1E6-28F9D9DA85CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AE496FE-E461-41A5-B785-66B289261865}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AE496FE-E461-41A5-B785-66B289261865}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AE496FE-E461-41A5-B785-66B289261865}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AE496FE-E461-41A5-B785-66B289261865}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

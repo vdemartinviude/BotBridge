@@ -1,4 +1,5 @@
 ﻿using Appccelerate.StateMachine;
+using JsonDocumentsManager;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
@@ -8,20 +9,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TheRobot;
+using Serilog;
+using TheRobot.Requests;
 
 namespace StatesAndEvents;
 
+/// <summary>
+/// This is the BaseState of the state machine.
+/// It's has three protected properties:
+/// _robot = It's an instance of a selenium robot...
+/// _orcamento = It's an instance of the input data
+/// _results = It's an instance of the output data
+/// </summary>
 public class BaseState : IState
 {
     public string Name { get; private set; }
     protected readonly Robot _robot;
     protected readonly BaseOrcamento _orcamento;
+    protected readonly ResultJsonDocument _results;
 
-    public BaseState(string name, Robot robot, BaseOrcamento inputdata)
+    public BaseState(string name, Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson)
     {
         Name = name;
         _robot = robot;
         _orcamento = inputdata;
+        _results = resultJson;
     }
 
     public override bool Equals(object? obj)
@@ -59,13 +71,18 @@ public class BaseState : IState
         return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
     }
 
-    public void MainExecute(ActiveStateMachine<BaseState, RobotEvents> passiveStateMachine)
+    public void MainExecute(ActiveStateMachine<BaseState, RobotEvents> activeStateMachine)
     {
+        Log.Information("Executing state {@state}", this);
         Execute();
         Thread.Sleep(100);
-        var waitPageLoadIfNecessary = new WebDriverWait(_robot._driver, TimeSpan.FromSeconds(10))
-            .Until(a => a.FindElement(By.XPath("//body")));
-        passiveStateMachine.Fire(RobotEvents.NormalTransition);
+        _robot.Execute(new ElementExist
+        {
+            By = By.XPath("//body"),
+            Timeout = TimeSpan.FromSeconds(10)
+        }).Wait();
+
+        activeStateMachine.Fire(RobotEvents.NormalTransition);
     }
 
     public virtual void Execute()

@@ -32,10 +32,11 @@ public class WatchDog : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        _logger.LogInformation("Watch dog service is starting");
         ThreadPool.RegisterWaitForSingleObject(ev, new WaitOrTimerCallback(WaitProc), null, 180000, false);
         while (!stoppingToken.IsCancellationRequested)
         {
-            _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("Watch dog - Worker running at: {time}", DateTimeOffset.Now);
             await Task.Delay(20000, stoppingToken);
         }
     }

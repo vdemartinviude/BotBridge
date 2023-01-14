@@ -18,7 +18,19 @@ public class GetElementsList : IRobotRequest
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        var elements = driver.FindElements(By).ToList();
+        List<IWebElement> elements;
+        try
+        {
+            elements = driver.FindElements(By).ToList();
+        }
+        catch (Exception ex)
+        {
+            return new()
+            {
+                Status = RobotResponseStatus.ElementNotFound
+            };
+        }
+
         return new()
         {
             Status = RobotResponseStatus.ActionRealizedOk,

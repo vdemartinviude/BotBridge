@@ -19,9 +19,19 @@ public class SetTextWithJs : IRobotRequest
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        IJavaScriptExecutor javaScriptExecutor = (IJavaScriptExecutor)driver;
-        var element = driver.FindElement(By);
-        javaScriptExecutor.ExecuteScript($"arguments[0].value='{Text}';", element);
+        try
+        {
+            IJavaScriptExecutor javaScriptExecutor = (IJavaScriptExecutor)driver;
+            var element = driver.FindElement(By);
+            javaScriptExecutor.ExecuteScript($"arguments[0].value='{Text}';", element);
+        }
+        catch (Exception e)
+        {
+            return new()
+            {
+                Status = RobotResponseStatus.ElementNotFound
+            };
+        }
         return new()
         {
             Status = RobotResponseStatus.ActionRealizedOk

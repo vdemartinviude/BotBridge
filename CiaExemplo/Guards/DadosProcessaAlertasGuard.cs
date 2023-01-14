@@ -8,21 +8,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TheRobot;
+using TheRobot.Requests;
 
 namespace CiaExemplo.Guards;
 
 public class DadosProcessaAlertasGuard : IGuard<DadosSeguro2, ProcessaAlertas>
 {
+    public uint Priority => 10;
+
     public bool Condition(Robot robot)
     {
-        try
+        var element = robot.Execute(new ElementExist
         {
-            var wait = new WebDriverWait(robot._driver, TimeSpan.FromSeconds(5)).Until(x => x.FindElement(By.XPath("//div[@role='alert']")));
+            By = By.XPath("//div[@role='alert']"),
+            Timeout = TimeSpan.FromSeconds(5)
+        }).Result;
+
+        if (element.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && element.WebElement.Displayed)
             return true;
-        }
-        catch (WebDriverTimeoutException)
-        {
-            return false;
-        }
+
+        return false;
     }
 }

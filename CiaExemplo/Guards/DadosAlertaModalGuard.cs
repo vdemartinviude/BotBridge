@@ -8,21 +8,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TheRobot;
+using TheRobot.Requests;
 
 namespace CiaExemplo.Guards;
 
 public class DadosAlertaModalGuard : IGuard<DadosSeguro2, ProcessaModal>
 {
+    public uint Priority => 5;
+
     public bool Condition(Robot robot)
     {
-        try
+        var modal = robot.Execute(new ElementExist
         {
-            var modal = new WebDriverWait(robot._driver, TimeSpan.FromSeconds(7)).Until(x => x.FindElement(By.XPath("//div[@class='modal-master-header modal-master-header-warning']")));
+            By = By.Id("modalCotacao"),
+            Timeout = TimeSpan.FromSeconds(7)
+        }).Result;
+        if (modal.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && modal.WebElement.Displayed)
             return true;
-        }
-        catch (WebDriverTimeoutException)
-        {
-            return false;
-        }
+        return false;
     }
 }
