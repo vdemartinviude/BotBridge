@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ public class ClickRequest : IRobotRequest
     public Action<IWebDriver>? PreExecute { get; set; }
     public Action<IWebDriver>? PostExecute { get; set; }
     public TimeSpan? Timeout { get; set; }
+
     public RobotResponse Exec(IWebDriver driver)
     {
         if (By == null)
@@ -27,18 +29,43 @@ public class ClickRequest : IRobotRequest
         {
             Timeout = TimeSpan.FromSeconds(2);
         }
-        var wait = new WebDriverWait(driver, (TimeSpan) Timeout);
+        var wait = new WebDriverWait(driver, (TimeSpan)Timeout);
+        wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(WebDriverTimeoutException));
+        IWebElement element = null;
+
         try
         {
-            wait.Until(e => e.FindElement(By)).Click();
+            element = wait.Until(e =>
+                {
+                    try
+                    {
+                        var element = e.FindElement(By);
+                        return element;
+                    }
+                    catch (Exception)
+                    {
+                        return null;
+                    }
+                });
         }
-        catch (WebDriverTimeoutException)
+        catch (Exception)
+        {
+            element = null;
+        }
+
+        if (element == null)
         {
             return new()
             {
                 Status = RobotResponseStatus.ElementNotFound
             };
         }
+        new Actions(driver)
+            .ScrollToElement(element)
+            .Perform();
+
+        element.Click();
+
         return new()
         {
             Status = RobotResponseStatus.ActionRealizedOk

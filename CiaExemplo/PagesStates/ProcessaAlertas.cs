@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using JsonDocumentsManager;
+using OpenQA.Selenium;
 using StatesAndEvents;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace CiaExemplo.PagesStates;
 
 public class ProcessaAlertas : BaseState
 {
-    public ProcessaAlertas(Robot robot, BaseOrcamento inputdata) : base("ProcessaAlertas", robot, inputdata)
+    public ProcessaAlertas(Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson) : base("ProcessaAlertas", robot, inputdata, resultJson)
     {
     }
 
@@ -26,6 +27,8 @@ public class ProcessaAlertas : BaseState
         //TODO: Register alerts on result.
         foreach (var alert in alertas)
         {
+            _results.AddResultMessage("Mensagem [CIA]", alert.Text);
+
             if (alert.Text.Contains("Fator de ajuste com restrição"))
             {
                 _robot.Execute(new SetTextWithKeyDownAndBackSpace()
@@ -45,11 +48,13 @@ public class ProcessaAlertas : BaseState
             }
         }
 
+        Console.WriteLine(_results.GetDocument());
+
         _robot.Execute(new ClickRequest()
         {
             By = By.Id("btnCalcular"),
             Timeout = TimeSpan.FromSeconds(1),
-            DelayAfter = TimeSpan.FromSeconds(7)
+            DelayAfter = TimeSpan.FromSeconds(20)
         }).Wait();
     }
 }

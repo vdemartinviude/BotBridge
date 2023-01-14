@@ -51,13 +51,6 @@ public class SetTextRequest : IRobotRequest
             Task.Delay(rnd.Next(100, 200)).Wait();
         }
 
-        //IJavaScriptExecutor javaScriptExecutor;
-        //javaScriptExecutor = (IJavaScriptExecutor) driver;
-        //var NowValue = javaScriptExecutor.ExecuteScript("arguments[0].text();",webElement);
-        //if (NowValue != Text)
-        //{
-        //    // Erro na digitação
-        //}
         return new RobotResponse()
         {
             Status = RobotResponseStatus.ActionRealizedOk

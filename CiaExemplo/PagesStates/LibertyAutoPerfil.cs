@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using JsonDocumentsManager;
+using OpenQA.Selenium;
 using StatesAndEvents;
 using TheRobot;
 using TheRobot.Requests;
@@ -7,7 +8,7 @@ namespace CiaExemplo.PagesStates;
 
 public class LibertyAutoPerfil : BaseState
 {
-    public LibertyAutoPerfil(Robot robot, BaseOrcamento inputdata) : base("LibertyAutoPerfil", robot, inputdata)
+    public LibertyAutoPerfil(Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson) : base("LibertyAutoPerfil", robot, inputdata, resultJson)
     {
     }
 

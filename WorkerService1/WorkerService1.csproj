@@ -21,10 +21,12 @@
     <PackageReference Include="Appccelerate.StateMachine" Version="5.1.0" />
     <PackageReference Include="JsonPath.Net" Version="0.2.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CiaExemplo\CiaExemplo.csproj" />
+    <ProjectReference Include="..\JsonDocumentsManager\JsonDocumentsManager.csproj" />
     <ProjectReference Include="..\StatesAndEvents\StatesAndEvents.csproj" />
   </ItemGroup>
 

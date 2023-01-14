@@ -1,4 +1,5 @@
 ﻿using Json.Path;
+using JsonDocumentsManager;
 using OpenQA.Selenium;
 using StatesAndEvents;
 using System;
@@ -13,7 +14,7 @@ namespace CiaExemplo.PagesStates;
 
 public class FazLogin : BaseState
 {
-    public FazLogin(Robot robot, BaseOrcamento baseOrcamento) : base("FazLogin", robot, baseOrcamento)
+    public FazLogin(Robot robot, BaseOrcamento baseOrcamento, ResultJsonDocument resultJson) : base("FazLogin", robot, baseOrcamento, resultJson)
     {
     }
 
@@ -41,5 +42,30 @@ public class FazLogin : BaseState
             DelayAfter = new TimeSpan(0, 0, 15)
         };
         _robot.Execute(clicklogin).Wait();
+
+        _robot.Execute(new ClickRequest()
+        {
+            By = By.Id("edit-agree"),
+            Timeout = TimeSpan.FromSeconds(1)
+        }).Wait();
+
+        _robot.Execute(new ClickRequest()
+        {
+            By = By.Id("edit-submit"),
+            Timeout = TimeSpan.FromSeconds(2),
+            DelayAfter = TimeSpan.FromSeconds(7)
+        }).Wait();
+
+        //_robot.Execute(new ClickRequest()
+        //{
+        //    By = By.XPath("//h4[@class='legal-terms-heading']/../../div/button"),
+        //    DelayAfter = TimeSpan.FromSeconds(7)
+        //}).Wait();
+
+        //_robot.Execute(setuser).Wait();
+
+        //_robot.Execute(setpassword).Wait();
+
+        //_robot.Execute(clicklogin).Wait();
     }
 }

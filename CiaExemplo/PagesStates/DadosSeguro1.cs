@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using JsonDocumentsManager;
+using OpenQA.Selenium;
 using StatesAndEvents;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace CiaExemplo.PagesStates;
 
 public class DadosSeguro1 : BaseState
 {
-    public DadosSeguro1(Robot robot, BaseOrcamento inputdata) : base("DadosSeguro1", robot, inputdata)
+    public DadosSeguro1(Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson) : base("DadosSeguro1", robot, inputdata, resultJson)
     {
     }
 

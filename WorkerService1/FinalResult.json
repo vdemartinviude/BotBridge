@@ -1,0 +1,140 @@
+{
+  "Messages": [
+    {
+      "topic": "Mensagem [CIA]",
+      "message": "Para este seguro disponibilizamos a instalação do dispositivo localizador que proporciona proteção ao veículo.\r\nCaso o segurado já possua outro dispositivo do mesmo tipo (rastreador ou localizador com equipe de busca), selecione-o no campo \u201CDispositivo antifurto\u201D. Neste caso, deverá ser enviado o comprovante de aquisição ou de pagamento da última mensalidade ou anuidade do dispositivo.\r\n\r\nInformações sobre a instalação:\r\nO segurado deverá aguardar contato da prestadora para agendamento da instalação que deverá ser feita exclusivamente nos postos credenciados.\r\nCaso o segurado não disponibilize o veiculo para instalação do dispositivo, a apólice será cancelada.",
+      "title": "Dispositivo antifurto"
+    },
+    {
+      "topic": "Mensagem [CIA]",
+      "message": "×\r\nGravação efetuada com sucesso!\r\nCódigo cotação: 678888818"
+    },
+    {
+      "topic": "Mensagem [CIA]",
+      "message": "×\r\nAtenção: Veículos com Isenção Fiscal possuem regras de aceitação e processo de liquidação de sinistro diferenciados. De acordo com os dados preenchidos na cotação, o veículo do item 1 possui isenção fiscal."
+    },
+    {
+      "topic": "Mensagem [CIA]",
+      "message": "×\r\nAs informações de CPF/CNPJ, placa e chassi são necessárias para a análise de aceitação do cálculo. Ao incluir ou alterar estes dados o valor do prêmio poderá ser alterado, assim como o parecer quanto à aceitação."
+    },
+    {
+      "topic": "Mensagem [CIA]",
+      "message": "×\r\nPara cobertura de Carro Reserva, verificar se o Segurado/Condutor é maior que de 21 anos, habilitado no minimo há 2 anos e se possui cartão de credito com limite minimo de R$800,00."
+    },
+    {
+      "topic": "Mensagem [CIA]",
+      "message": ""
+    },
+    {
+      "topic": "Mensagem [CIA]",
+      "message": ""
+    }
+  ],
+  "Results": [
+    {
+      "topic": "Prêmios",
+      "description": "Prêmio Total",
+      "value": 18565.76
+    },
+    {
+      "topic": "Prêmios",
+      "description": "ACIDENTES PESSOAIS PASSAGEIROS - LMI POR PASSAGEIRO / DESPESAS MÉDICAS HOSPITALARES",
+      "value": 424.87
+    },
+    {
+      "topic": "Prêmios",
+      "description": "ACIDENTES PESSOAIS PASSAGEIROS - LMI POR PASSAGEIRO / INVALIDEZ PERMANENTE",
+      "value": 892.23
+    },
+    {
+      "topic": "Prêmios",
+      "description": "ACIDENTES PESSOAIS PASSAGEIROS - LMI POR PASSAGEIRO / MORTE",
+      "value": 892.23
+    },
+    {
+      "topic": "Prêmios",
+      "description": "BASICA /",
+      "value": 0
+    },
+    {
+      "topic": "Prêmios",
+      "description": "BASICA / 01-COMPREENSIVA",
+      "value": 9128.48
+    },
+    {
+      "topic": "Prêmios",
+      "description": "CARRO RESERVA / 15 DIAS BÁSICO COM AR",
+      "value": 375.38
+    },
+    {
+      "topic": "Prêmios",
+      "description": "CARRO RESERVA INDENIZAÇÃO INTEGRAL / 30 DIAS BÁSICO COM AR",
+      "value": 114.53
+    },
+    {
+      "topic": "Prêmios",
+      "description": "CARRO RESERVA TERCEIROS / 7 DIAS BÁSICO TERCEIRO",
+      "value": 58.15
+    },
+    {
+      "topic": "Prêmios",
+      "description": "COB ADICIONAL / DESPESAS HIGIENIZAÇÃO",
+      "value": 60.89
+    },
+    {
+      "topic": "Prêmios",
+      "description": "FRQ / 7 DIAS BASICO AR/DESC FRQ 20%",
+      "value": 151.59
+    },
+    {
+      "topic": "Prêmios",
+      "description": "LIBERTY ASSISTÊNCIA / SUPERIOR",
+      "value": 1255.65
+    },
+    {
+      "topic": "Prêmios",
+      "description": "LIBERTY VIDROS / BASICO",
+      "value": 521.57
+    },
+    {
+      "topic": "Prêmios",
+      "description": "PROTECAO DE RODA E PNEU / UNICA",
+      "value": 354.62
+    },
+    {
+      "topic": "Prêmios",
+      "description": "PROTECAO PEQUENOS REPAROS / UNICA",
+      "value": 263.76
+    },
+    {
+      "topic": "Prêmios",
+      "description": "RESP CIVIL FACULTATIVA VEICULOS / DANOS CORPORAIS",
+      "value": 397.42
+    },
+    {
+      "topic": "Prêmios",
+      "description": "RESP CIVIL FACULTATIVA VEICULOS / DANOS MATERIAIS",
+      "value": 1218.23
+    },
+    {
+      "topic": "Prêmios",
+      "description": "RESP CIVIL FACULTATIVA VEICULOS / DANOS MORAIS",
+      "value": 1180.18
+    },
+    {
+      "topic": "Prêmios",
+      "description": "Franquia",
+      "value": 6446.5
+    },
+    {
+      "topic": "Prêmios",
+      "description": "Prêmio Líquido",
+      "value": 17289.77
+    },
+    {
+      "topic": "Prêmios",
+      "description": "IOF",
+      "value": 1275.99
+    }
+  ]
+}

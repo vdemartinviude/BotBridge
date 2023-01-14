@@ -39,10 +39,6 @@ public class SelectBy2Clicks : IRobotRequest
             System.Threading.Thread.Sleep(DelayBetweenClicks);
             IWebElement secondClickElement = new WebDriverWait(driver, TimeSpan.FromSeconds(2)).Until(x => x.FindElement(By2));
             secondClickElement.Click();
-
-            //Console.WriteLine(String.Join('\n', option.Select(x => x.GetAttribute("outerText"))));
-
-            //selectObject.SelectByText(selectObject.Options.First(x => x.Text.Contains(Text)).Text);
         }
         catch (OpenQA.Selenium.WebDriverTimeoutException ex)
         {

@@ -1,4 +1,5 @@
-﻿using StatesAndEvents;
+﻿using JsonDocumentsManager;
+using StatesAndEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace CiaExemplo.PagesStates;
 
 public class ErroLogin : BaseState
 {
-    public ErroLogin(Robot robot, BaseOrcamento baseOrcamento) : base("ErroLogin", robot, baseOrcamento)
+    public ErroLogin(Robot robot, BaseOrcamento baseOrcamento, ResultJsonDocument resultJson) : base("ErroLogin", robot, baseOrcamento, resultJson)
     {
     }
 

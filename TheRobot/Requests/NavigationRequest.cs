@@ -20,10 +20,10 @@ public class NavigationRequest : IRobotRequest
     {
         if (String.IsNullOrEmpty(Url))
         {
-            ArgumentNullException argumentNullException = new("Url", "The parameter must not be nulll");
+            ArgumentNullException argumentNullException = new("Url", "The parameter must not be null");
             throw argumentNullException;
         }
-        
+
         try
         {
             driver.Navigate().GoToUrl(Url);
@@ -35,15 +35,11 @@ public class NavigationRequest : IRobotRequest
                 Status = RobotResponseStatus.ExceptionOccurred,
                 ErrorMessage = ex.Message
             };
-
         }
-        
+
         return new()
         {
             Status = RobotResponseStatus.ActionRealizedOk
         };
-
     }
-
-  
 }

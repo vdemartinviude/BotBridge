@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,21 +9,26 @@ using TheRobot.Response;
 
 namespace TheRobot.Requests;
 
-public class ClickByJavascriptRequest : IRobotRequest
+public class ChangeFrameRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
     public Action<IWebDriver> PreExecute { get; set; }
     public Action<IWebDriver> PostExecute { get; set; }
     public By By { get; set; }
+    public TimeSpan Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        IJavaScriptExecutor javaScriptExecutor;
-        IWebElement element;
+        if (Timeout == TimeSpan.Zero)
+        {
+            Timeout = TimeSpan.FromSeconds(4);
+        }
         try
         {
-            element = driver.FindElement(By);
+            var wait = new WebDriverWait(driver, Timeout);
+            var iframe = wait.Until(e => e.FindElement(By));
+            driver.SwitchTo().Frame(iframe);
         }
         catch (Exception ex)
         {
@@ -31,8 +37,6 @@ public class ClickByJavascriptRequest : IRobotRequest
                 Status = RobotResponseStatus.ElementNotFound
             };
         }
-        javaScriptExecutor = (IJavaScriptExecutor)driver;
-        javaScriptExecutor.ExecuteScript("arguments[0].click();", element);
         return new()
         {
             Status = RobotResponseStatus.ActionRealizedOk

@@ -9,7 +9,7 @@ using TheRobot;
 
 namespace CiaExemplo.Guards;
 
-public class FinalGuard : IGuard<ProcessaAlertas>
+public class FinalGuard : IGuard<ProcessaResultado>
 {
     public bool Condition(Robot robot)
     {

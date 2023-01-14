@@ -9,15 +9,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TheRobot;
+using TheRobot.Requests;
 
 namespace CiaExemplo.Guards;
 
 public class DadosPrincipaisGuard : IGuard<DadosPrincipais, DadosSeguro1>
 {
+    public uint Priority => 10;
+
     public bool Condition(Robot robot)
     {
-        var wait = new WebDriverWait(robot._driver, TimeSpan.FromSeconds(30))
-            .Until(ExpectedConditions.ElementToBeClickable(By.Id("CodigoCodigoEnderecamentoPostalPernoite")));
+        robot.Execute(new WaitElementBeClickableRequest
+        {
+            By = By.Id("CodigoCodigoEnderecamentoPostalPernoite"),
+            Timeout = TimeSpan.FromSeconds(30)
+        }).Wait();
         return true;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Appccelerate.StateMachine;
+using JsonDocumentsManager;
 using OpenQA.Selenium;
 using StatesAndEvents;
 using System;
@@ -13,7 +14,7 @@ namespace CiaExemplo.PagesStates;
 
 public class FirstPage : BaseState
 {
-    public FirstPage(Robot robot, BaseOrcamento baseOrcamento) : base("FirstPage", robot, baseOrcamento)
+    public FirstPage(Robot robot, BaseOrcamento baseOrcamento, ResultJsonDocument resultJson) : base("FirstPage", robot, baseOrcamento, resultJson)
     {
     }
 
