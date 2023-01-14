@@ -15,11 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StatesAndEvents", "StatesAn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CiaExemplo", "CiaExemplo\CiaExemplo.csproj", "{2BA52C5E-52C8-4BC2-87D3-20B29BD56D80}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkerService1", "WorkerService1\WorkerService1.csproj", "{E76AD707-F02E-40C4-9E2C-F43E7F3272C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InsuranceRobot", "WorkerService1\InsuranceRobot.csproj", "{E76AD707-F02E-40C4-9E2C-F43E7F3272C0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonDocumentsManager", "JsonDocumentsManager\JsonDocumentsManager.csproj", "{0E6DEAF9-A10B-4E4F-B1E6-28F9D9DA85CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp2", "ConsoleApp2\ConsoleApp2.csproj", "{0AE496FE-E461-41A5-B785-66B289261865}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp2", "ConsoleApp2\ConsoleApp2.csproj", "{0AE496FE-E461-41A5-B785-66B289261865}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
