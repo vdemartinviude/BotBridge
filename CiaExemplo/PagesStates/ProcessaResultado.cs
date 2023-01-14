@@ -47,6 +47,7 @@ public class ProcessaResultado : BaseState
         {
             var linhas = _robot.Execute(new GetElementsList()
             {
+                DelayBefore = TimeSpan.FromSeconds(5),
                 By = By.XPath("//table[@id='DataTables_Table_0']//tbody//tr"),
             }).Result.WebElements;
 

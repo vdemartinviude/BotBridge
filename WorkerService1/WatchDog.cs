@@ -11,6 +11,7 @@ public class WatchDog : BackgroundService
 {
     private readonly ILogger<WatchDog> _logger;
     private AutoResetEvent ev = new AutoResetEvent(false);
+    public ManualResetEvent FinalizaMaquina = new ManualResetEvent(false);
 
     public WatchDog(ILogger<WatchDog> logger)
     {
@@ -27,17 +28,19 @@ public class WatchDog : BackgroundService
         if (timeOut)
         {
             _logger.LogCritical("The Watchdog has been fired!!!!");
+            FinalizaMaquina.Set();
         }
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("Watch dog service is starting");
-        ThreadPool.RegisterWaitForSingleObject(ev, new WaitOrTimerCallback(WaitProc), null, 180000, false);
+        ThreadPool.RegisterWaitForSingleObject(ev, new WaitOrTimerCallback(WaitProc), null, (int)TimeSpan.FromMinutes(15).TotalMilliseconds, false);
+
         while (!stoppingToken.IsCancellationRequested)
         {
             _logger.LogInformation("Watch dog - Worker running at: {time}", DateTimeOffset.Now);
-            await Task.Delay(20000, stoppingToken);
+            await Task.Delay(1000, stoppingToken);
         }
     }
 }
