@@ -20,12 +20,14 @@ public class Worker : BackgroundService
     private WatchDog _watchDog;
     private readonly ResultJsonDocument _resultJsonDocument;
     private CancellationToken _cancellationToken;
+    private CancellationTokenSource _source;
 
-    public Worker(ILogger<Worker> logger, Robot robot, BaseOrcamento baseOrcamento, WatchDog watchDog, ResultJsonDocument resultJsonDocument)
+    public Worker(ILogger<Worker> logger, Robot robot, BaseOrcamento baseOrcamento, WatchDog watchDog, ResultJsonDocument resultJsonDocument, CancellationTokenSource source)
     {
         _resultJsonDocument = resultJsonDocument;
         _logger = logger;
         _robot = robot;
+        _source = source;
 
         Log.Information("Starting building the state machine");
         StateMachineDefinitionBuilder<BaseState, RobotEvents> builder = new();
@@ -113,12 +115,9 @@ public class Worker : BackgroundService
         {
             _logger.LogCritical(ex.InnerException.Message);
         }
-        while (!stoppingToken.IsCancellationRequested && _activeStateMachine.IsRunning)
-        {
-            _logger.LogInformation("State Machine Working at: {time}", DateTimeOffset.Now);
-            await Task.Delay(500, stoppingToken);
-        }
+        _watchDog.FinalizaMaquina.WaitOne(TimeSpan.FromMinutes(45));
         await _resultJsonDocument.SaveDocument("FinalResult.json");
+        _source.Cancel();
     }
 
     private void _activeStateMachine_TransitionExceptionThrown(object sender, Appccelerate.StateMachine.Machine.Events.TransitionExceptionEventArgs<BaseState, RobotEvents> e)
@@ -137,6 +136,6 @@ public class Worker : BackgroundService
     {
         _robot.Dispose();
         _resultJsonDocument.SaveDocument("FinalResult.json").Wait();
-        _activeStateMachine.Stop();
+        _watchDog.FinalizaMaquina.Set();
     }
 }
