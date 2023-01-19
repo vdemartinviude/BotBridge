@@ -63,6 +63,11 @@ namespace TheRobot
                 throw new Exception("Driver not loaded!");
             }
 
+            if (request.Timeout == null)
+            {
+                request.Timeout = TimeSpan.FromSeconds(5);
+            }
+
             Log.Information("About to execute {@IRoboRequest}", request);
             RobotResponse response = new();
 

@@ -27,17 +27,25 @@ public class SelectBy2ClicksRequest : IRobotRequest
     {
         IWebElement firstClickElement = new WebDriverWait(driver, Timeout.Value).Until(x => x.FindElement(By1));
 
-        var actions = new Actions(driver);
-        actions.ScrollToElement(firstClickElement);
-        actions.ScrollByAmount(0, 100);
-        actions.Perform();
+            var actions = new Actions(driver);
+            actions.ScrollToElement(firstClickElement);
+            actions.ScrollByAmount(0, 100);
+            actions.Perform();
         Thread.Sleep(DelayBetweenClicks);
 
-        firstClickElement.Click();
+            firstClickElement.Click();
 
         Thread.Sleep(DelayBetweenClicks);
         IWebElement secondClickElement = new WebDriverWait(driver, Timeout.Value).Until(x => x.FindElement(By2));
-        secondClickElement.Click();
+            secondClickElement.Click();
+        }
+        catch (OpenQA.Selenium.WebDriverTimeoutException ex)
+        {
+            return new()
+            {
+                Status = RobotResponseStatus.ElementNotFound
+            };
+        }
         return new()
         {
             Status = RobotResponseStatus.ActionRealizedOk

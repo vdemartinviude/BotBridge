@@ -22,21 +22,33 @@ public class ChangeWindowByClickRequest : IRobotRequest
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        string originalWindow = driver.CurrentWindowHandle;
-        var wait = new WebDriverWait(driver, Timeout.Value);
-        var clickElement = wait.Until(d => d.FindElement(By));
+        try
+        {
+            string originalWindow = driver.CurrentWindowHandle;
+            var wait = new WebDriverWait(driver, Timeout.Value);
+            var clickElement = wait.Until(d => d.FindElement(By));
 
-        clickElement.Click();
-        Thread.Sleep(3000);
+            clickElement.Click();
+            Thread.Sleep(3000);
 
         var wait2 = new WebDriverWait(driver, Timeout.Value);
-        var elements = wait2.Until(d => d.WindowHandles.Count == 2);
-        foreach (string window in driver.WindowHandles)
-        {
-            if (originalWindow != window)
+            var elements = wait2.Until(d => d.WindowHandles.Count == 2);
+            foreach (string window in driver.WindowHandles)
             {
-                driver.SwitchTo().Window(window); break;
+                if (originalWindow != window)
+                {
+                    driver.SwitchTo().Window(window); break;
+                }
             }
+        }
+        catch (Exception ex) when (ex is WebDriverTimeoutException ||
+                                   ex is NoSuchElementException ||
+                                   ex is NoSuchWindowException)
+        {
+            return new()
+            {
+                Status = RobotResponseStatus.ElementNotFound
+            };
         }
         return new()
         {

@@ -24,11 +24,22 @@ public class ElementExistRequest : IRobotRequest
 
         IWebElement element = null;
 
-        element = wait.Until(d => d.FindElement(By));
+        try
+        {
+            element = wait.Until(d => d.FindElement(By));
+        }
+        catch (Exception ex) when (ex is NoSuchElementException || ex is WebDriverTimeoutException)
+        {
+            return new()
+            {
+                Status = RobotResponseStatus.ElementNotFound
+            };
+        }
         return new()
         {
             Status = RobotResponseStatus.ActionRealizedOk,
             WebElement = element
         };
     }
+}
 }
