@@ -18,7 +18,7 @@ public class MeuCotadorGuard : IGuard<MeuCotador, LibertyAutoPerfil>
 
     public bool Condition(Robot robot)
     {
-        var element = robot.Execute(new ElementExist
+        var element = robot.Execute(new ElementExistRequest
         {
             Timeout = TimeSpan.FromSeconds(5),
             By = By.XPath("//h1[contains(text(),'Meu Cotador')]")

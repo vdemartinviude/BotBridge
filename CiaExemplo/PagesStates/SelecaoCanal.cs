@@ -15,7 +15,7 @@ public class SelecaoCanal : BaseState
 
     public override void Execute()
     {
-        var SelectRequest = new SelectText
+        var SelectRequest = new SelectTextRequest
         {
             By = By.Id("ddlBranch"),
             Text = _orcamento.GetStringData(JsonPath.Parse("$.Ramo")),

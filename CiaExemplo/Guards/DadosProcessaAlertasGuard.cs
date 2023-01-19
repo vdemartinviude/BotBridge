@@ -18,7 +18,7 @@ public class DadosProcessaAlertasGuard : IGuard<DadosSeguro2, ProcessaAlertas>
 
     public bool Condition(Robot robot)
     {
-        var element = robot.Execute(new ElementExist
+        var element = robot.Execute(new ElementExistRequest
         {
             By = By.XPath("//div[@role='alert']"),
             Timeout = TimeSpan.FromSeconds(5)

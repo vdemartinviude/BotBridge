@@ -8,7 +8,7 @@ using TheRobot.Response;
 
 namespace TheRobot.Requests;
 
-public class SetTextWithJs : IRobotRequest
+public class SetTextWithJsRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
@@ -16,22 +16,14 @@ public class SetTextWithJs : IRobotRequest
     public Action<IWebDriver>? PostExecute { get; set; }
     public By By { get; set; }
     public string Text { get; set; }
+    public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        try
-        {
-            IJavaScriptExecutor javaScriptExecutor = (IJavaScriptExecutor)driver;
-            var element = driver.FindElement(By);
-            javaScriptExecutor.ExecuteScript($"arguments[0].value='{Text}';", element);
-        }
-        catch (Exception e)
-        {
-            return new()
-            {
-                Status = RobotResponseStatus.ElementNotFound
-            };
-        }
+        IJavaScriptExecutor javaScriptExecutor = (IJavaScriptExecutor)driver;
+        var element = driver.FindElement(By);
+        javaScriptExecutor.ExecuteScript($"arguments[0].value='{Text}';", element);
+
         return new()
         {
             Status = RobotResponseStatus.ActionRealizedOk

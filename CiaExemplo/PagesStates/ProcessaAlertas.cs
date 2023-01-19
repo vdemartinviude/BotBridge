@@ -19,7 +19,7 @@ public class ProcessaAlertas : BaseState
 
     public override void Execute()
     {
-        var alertas = _robot.Execute(new GetElementsList
+        var alertas = _robot.Execute(new GetElementsListRequest
         {
             By = By.XPath("//div[@role='alert']")
         }).Result.WebElements;
@@ -31,7 +31,7 @@ public class ProcessaAlertas : BaseState
 
             if (alert.Text.Contains("Fator de ajuste com restrição"))
             {
-                _robot.Execute(new SetTextWithKeyDownAndBackSpace()
+                _robot.Execute(new SetTextWithKeyDownAndBackSpaceRequest()
                 {
                     BackSpaceNumber = 7,
                     By = By.Id("TipoCobertura_FatorAjuste_1"),
@@ -40,7 +40,7 @@ public class ProcessaAlertas : BaseState
             }
             if (alert.Text.Contains("A cobertura de Peças"))
             {
-                _robot.Execute(new SelectBy2Clicks()
+                _robot.Execute(new SelectBy2ClicksRequest()
                 {
                     By1 = By.XPath("//div[@id='PecasReposicao_1_chosen']//b"),
                     By2 = By.XPath("//div[@id='PecasReposicao_1_chosen']//li[contains(text(),'ORIGINAIS')]")

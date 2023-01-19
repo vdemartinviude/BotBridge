@@ -64,24 +64,53 @@ namespace TheRobot
             }
 
             Log.Information("About to execute {@IRoboRequest}", request);
+            RobotResponse response = new();
 
-            request.PreExecute?.Invoke(_driver);
-
-            if (request.DelayBefore.Ticks > 0)
+            try
             {
-                await Task.Delay(request.DelayBefore);
-            }
-            var resp = request.Exec(_driver);
+                if (request.Timeout == null)
+                {
+                    request.Timeout = TimeSpan.FromSeconds(5);
+                }
 
-            if (request.DelayAfter.Ticks > 0)
+                request.PreExecute?.Invoke(_driver);
+
+                if (request.DelayBefore.Ticks > 0)
+                {
+                    await Task.Delay(request.DelayBefore);
+                }
+
+                response = request.Exec(_driver);
+
+                if (response.Status != RobotResponseStatus.ActionRealizedOk)
+                {
+                    Log.Information("The request was not successfully");
+                }
+
+                if (request.DelayAfter.Ticks > 0)
+                {
+                    await Task.Delay(request.DelayAfter);
+                }
+
+                request.PostExecute?.Invoke(_driver);
+            }
+            catch (Exception ex) when (ExecuteExceptionFilter(ex))
             {
-                await Task.Delay(request.DelayAfter);
+                Log.Information("An exception was thrown in the request execution.\nThe exception: {@Exception}", ex);
+                response.Status = RobotResponseStatus.ExceptionOccurred;
+                response.ErrorMessage = ex.Message;
             }
-
-            request.PostExecute?.Invoke(_driver);
 
             Log.Information("{@IRoboRequest} Executed", request);
-            return resp;
+            return response;
+        }
+
+        private bool ExecuteExceptionFilter(Exception ex)
+        {
+            return ex is NoSuchElementException ||
+                   ex is WebDriverTimeoutException ||
+                   ex is NoSuchFrameException ||
+                   ex is NoSuchWindowException;
         }
     }
 }

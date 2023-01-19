@@ -18,7 +18,7 @@ public class DadosAlertaModalGuard : IGuard<DadosSeguro2, ProcessaModal>
 
     public bool Condition(Robot robot)
     {
-        var modal = robot.Execute(new ElementExist
+        var modal = robot.Execute(new ElementExistRequest
         {
             By = By.Id("modalCotacao"),
             Timeout = TimeSpan.FromSeconds(7)

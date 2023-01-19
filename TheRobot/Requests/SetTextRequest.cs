@@ -12,6 +12,7 @@ public class SetTextRequest : IRobotRequest
     public Action<IWebDriver>? PostExecute { get; set; }
     public By? By { get; set; }
     public string? Text { get; set; }
+    public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
@@ -29,18 +30,8 @@ public class SetTextRequest : IRobotRequest
         }
         IWebElement webElement;
 
-        WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
-        try
-        {
-            webElement = wait.Until(e => e.FindElement(By));
-        }
-        catch (OpenQA.Selenium.WebDriverTimeoutException)
-        {
-            return new()
-            {
-                Status = RobotResponseStatus.ElementNotFound
-            };
-        }
+        WebDriverWait wait = new WebDriverWait(driver, Timeout.Value);
+        webElement = wait.Until(e => e.FindElement(By));
         Task.Delay(100).Wait();
         var rnd = new Random();
         webElement?.Click();

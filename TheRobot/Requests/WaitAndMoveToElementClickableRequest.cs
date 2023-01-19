@@ -17,31 +17,21 @@ public class WaitAndMoveToElementClickableRequest : IRobotRequest
     public Action<IWebDriver> PreExecute { get; set; }
     public Action<IWebDriver> PostExecute { get; set; }
     public By By { get; set; }
-    public TimeSpan Timeout { get; set; }
+    public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        try
-        {
-            var wait = new WebDriverWait(driver, Timeout)
-                .Until(ExpectedConditions.ElementExists(By));
-            IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
-            executor.ExecuteScript("arguments[0].scrollIntoView();", wait);
-            var wait2 = new WebDriverWait(driver, TimeSpan.FromSeconds(15))
-                .Until(ExpectedConditions.ElementToBeClickable(By));
+        var wait = new WebDriverWait(driver, Timeout.Value)
+            .Until(ExpectedConditions.ElementExists(By));
+        IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
+        executor.ExecuteScript("arguments[0].scrollIntoView();", wait);
+        var wait2 = new WebDriverWait(driver, TimeSpan.FromSeconds(15))
+            .Until(ExpectedConditions.ElementToBeClickable(By));
 
-            return new()
-            {
-                WebElement = wait,
-                Status = RobotResponseStatus.ActionRealizedOk
-            };
-        }
-        catch (Exception ex)
+        return new()
         {
-            return new()
-            {
-                Status = RobotResponseStatus.ElementNotFound
-            };
-        }
+            WebElement = wait,
+            Status = RobotResponseStatus.ActionRealizedOk
+        };
     }
 }

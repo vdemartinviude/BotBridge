@@ -18,7 +18,7 @@ public class LibertyAutoPerfilGuard : IGuard<LibertyAutoPerfil, DadosPrincipais>
 
     public bool Condition(Robot robot)
     {
-        var element = robot.Execute(new ElementExist
+        var element = robot.Execute(new ElementExistRequest
         {
             Timeout = TimeSpan.FromSeconds(30),
             By = By.XPath("//label[contains(text(),'É uma renovação?')]")

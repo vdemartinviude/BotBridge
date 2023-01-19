@@ -18,7 +18,7 @@ public class AlertasToModalGuard : IGuard<ProcessaAlertas, ProcessaModal>
 
     public bool Condition(Robot robot)
     {
-        var modal = robot.Execute(new ElementExist
+        var modal = robot.Execute(new ElementExistRequest
         {
             By = By.XPath("//div[@class='modal-master-header modal-master-header-warning']"),
             Timeout = TimeSpan.FromSeconds(7)

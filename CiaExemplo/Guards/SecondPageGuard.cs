@@ -3,7 +3,6 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using StatesAndEvents;
-using StatesAndEvents.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +20,7 @@ public class ErroLoginPageGuard : IGuard<FazLogin, ErroLogin>
 
     public bool Condition(Robot robot)
     {
-        var request = new ElementExist()
+        var request = new ElementExistRequest()
         {
             By = By.XPath("//span[text()='Usuário ou senha inválidos.']"),
             Timeout = TimeSpan.FromSeconds(4)
@@ -43,7 +42,7 @@ public class ErroLoginPageGuard2 : IGuard<FazLogin, ErroLogin>
 
     public bool Condition(Robot robot)
     {
-        var request = new ElementExist()
+        var request = new ElementExistRequest()
         {
             By = By.XPath("//span[contains(text(),'bloqueada')]"),
             Timeout = TimeSpan.FromSeconds(4)

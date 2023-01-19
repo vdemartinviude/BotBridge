@@ -16,27 +16,13 @@ public class ChangeFrameRequest : IRobotRequest
     public Action<IWebDriver> PreExecute { get; set; }
     public Action<IWebDriver> PostExecute { get; set; }
     public By By { get; set; }
-    public TimeSpan Timeout { get; set; }
+    public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        if (Timeout == TimeSpan.Zero)
-        {
-            Timeout = TimeSpan.FromSeconds(4);
-        }
-        try
-        {
-            var wait = new WebDriverWait(driver, Timeout);
-            var iframe = wait.Until(e => e.FindElement(By));
-            driver.SwitchTo().Frame(iframe);
-        }
-        catch (Exception ex)
-        {
-            return new()
-            {
-                Status = RobotResponseStatus.ElementNotFound
-            };
-        }
+        var wait = new WebDriverWait(driver, Timeout.Value);
+        var iframe = wait.Until(e => e.FindElement(By));
+        driver.SwitchTo().Frame(iframe);
         return new()
         {
             Status = RobotResponseStatus.ActionRealizedOk

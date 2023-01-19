@@ -22,11 +22,9 @@ public class BaseOrcamento : IDadosOrcamento
     public string GetStringData(JsonPath jsonPath)
     {
         var matches = jsonPath.Evaluate(JsonDoc.RootElement).Matches;
-        if (matches.Count == 0)
-        {
+        if (matches == null || matches.Count == 0)
             return String.Empty;
-        }
-        return matches[0].Value.ToString();
+        return matches![0].Value.ToString();
     }
 
     public Task ReadJson(string jsonFilePath)
@@ -44,7 +42,7 @@ public class BaseOrcamento : IDadosOrcamento
     {
         var theJsonPath = JsonPath.Parse(jsonPath);
         var matches = theJsonPath.Evaluate(JsonDoc.RootElement).Matches;
-        if (matches.Count == 0)
+        if (matches!.Count == 0)
         {
             return null;
         }
@@ -55,7 +53,7 @@ public class BaseOrcamento : IDadosOrcamento
     {
         var theJsonPath = JsonPath.Parse(jsonPath);
         var matches = theJsonPath.Evaluate(JsonDoc.RootElement).Matches;
-        if (matches.Count == 0)
+        if (matches!.Count == 0)
         {
             return null;
         }

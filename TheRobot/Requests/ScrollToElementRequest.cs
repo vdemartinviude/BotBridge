@@ -17,25 +17,16 @@ public class ScrollToElementRequest : IRobotRequest
     public Action<IWebDriver> PreExecute { get; set; }
     public Action<IWebDriver> PostExecute { get; set; }
     public By By { get; set; }
+    public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        try
-        {
-            IWebElement webElement = new WebDriverWait(driver, TimeSpan.FromSeconds(2)).Until(x => x.FindElement(By));
+        IWebElement webElement = new WebDriverWait(driver, Timeout.Value).Until(x => x.FindElement(By));
 
-            var actions = new Actions(driver);
-            actions.ScrollToElement(webElement);
-            actions.ScrollByAmount(0, 10);
-            actions.Perform();
-        }
-        catch (Exception ex)
-        {
-            return new()
-            {
-                Status = RobotResponseStatus.ElementNotFound
-            };
-        }
+        var actions = new Actions(driver);
+        actions.ScrollToElement(webElement);
+        actions.ScrollByAmount(0, 10);
+        actions.Perform();
         return new() { Status = RobotResponseStatus.ActionRealizedOk };
     }
 }

@@ -11,7 +11,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace TheRobot.Requests;
 
-public class GetElement : IRobotRequest
+public class GetElementRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
@@ -19,6 +19,7 @@ public class GetElement : IRobotRequest
     public Action<IWebDriver>? PostExecute { get; set; }
     public TimeSpan? Timeout { get; set; }
     public By? By { get; set; }
+
     public RobotResponse Exec(IWebDriver driver)
     {
         IWebElement webElement = null;
@@ -26,27 +27,10 @@ public class GetElement : IRobotRequest
         {
             throw new ArgumentNullException(nameof(By));
         }
-        if (Timeout == null)
-        {
-            throw new ArgumentNullException(nameof(Timeout));
-        }
-        
-        WebDriverWait wait = new WebDriverWait(driver, (TimeSpan) Timeout);
-        try
-        {
-            webElement = wait.Until(e => e.FindElement(By));
-            
-        }
-        catch(WebDriverTimeoutException)
-        {
-            return new()
-            {
-                WebElement = null,
-                Status = RobotResponseStatus.ElementNotFound,
-            };
-          
-        }
-        
+
+        WebDriverWait wait = new WebDriverWait(driver, Timeout.Value);
+        webElement = wait.Until(e => e.FindElement(By));
+
         return new()
         {
             WebElement = webElement,

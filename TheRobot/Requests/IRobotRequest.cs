@@ -12,8 +12,10 @@ public interface IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
+
     public abstract RobotResponse Exec(IWebDriver driver);
+
     public Action<IWebDriver>? PreExecute { get; set; }
     public Action<IWebDriver>? PostExecute { get; set; }
-
+    public TimeSpan? Timeout { get; set; }
 }

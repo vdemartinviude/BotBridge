@@ -76,7 +76,7 @@ public class BaseState : IState
         Log.Information("Executing state {@state}", this);
         Execute();
         Thread.Sleep(100);
-        _robot.Execute(new ElementExist
+        _robot.Execute(new ElementExistRequest
         {
             By = By.XPath("//body"),
             Timeout = TimeSpan.FromSeconds(10)

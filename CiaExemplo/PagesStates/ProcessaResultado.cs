@@ -21,7 +21,7 @@ public class ProcessaResultado : BaseState
 
     public override void Execute()
     {
-        var PremioTotal = _robot.Execute(new GetElement()
+        var PremioTotal = _robot.Execute(new GetElementRequest()
         {
             By = By.XPath("//table[contains(@class,'TablePremio_Franquia')]//tbody//tr[1]//label[@class='valor_premioTotalNovo']"),
             Timeout = TimeSpan.FromSeconds(2)
@@ -45,7 +45,7 @@ public class ProcessaResultado : BaseState
         bool continua = false;
         do
         {
-            var linhas = _robot.Execute(new GetElementsList()
+            var linhas = _robot.Execute(new GetElementsListRequest()
             {
                 DelayBefore = TimeSpan.FromSeconds(5),
                 By = By.XPath("//table[@id='DataTables_Table_0']//tbody//tr"),
@@ -57,7 +57,7 @@ public class ProcessaResultado : BaseState
                 var valor = Convert.ToDouble(Regex.Match(element.FindElement(By.XPath("./td[2]")).Text, @"\d{1,3}(\.\d{3})*,\d{2}").Value, new CultureInfo("pt-BR"));
                 _results.AddResultValue("Prêmios", descricao, valor);
             }
-            var botaoNext = _robot.Execute(new GetElement
+            var botaoNext = _robot.Execute(new GetElementRequest
             {
                 By = By.Id("DataTables_Table_0_next"),
                 Timeout = TimeSpan.FromSeconds(3)
@@ -78,7 +78,7 @@ public class ProcessaResultado : BaseState
             DelayAfter = TimeSpan.FromSeconds(1)
         }).Wait();
 
-        var Franquia = _robot.Execute(new GetElement()
+        var Franquia = _robot.Execute(new GetElementRequest()
         {
             By = By.XPath("//table[contains(@class,'TablePremio_Franquia')]//tbody//tr[2]//label"),
             Timeout = TimeSpan.FromSeconds(2)
@@ -87,7 +87,7 @@ public class ProcessaResultado : BaseState
         var ValorFranquia = Convert.ToDouble(Regex.Match(Franquia.Text, @"\d{1,3}(\.\d{3})*,\d{2}").Value, new CultureInfo("pt-BR"));
         _results.AddResultValue("Prêmios", "Franquia", ValorFranquia);
 
-        var PremioLiquido = _robot.Execute(new GetElement()
+        var PremioLiquido = _robot.Execute(new GetElementRequest()
         {
             By = By.XPath("//td[@id='formaPgtoPremioLiquido']"),
             Timeout = TimeSpan.FromSeconds(2)
@@ -96,7 +96,7 @@ public class ProcessaResultado : BaseState
         var valorPremioLiquido = Convert.ToDouble(Regex.Match(PremioLiquido.Text, @"\d{1,3}(\.\d{3})*,\d{2}").Value, new CultureInfo("pt-BR"));
         _results.AddResultValue("Prêmios", "Prêmio Líquido", valorPremioLiquido);
 
-        var IOF = _robot.Execute(new GetElement()
+        var IOF = _robot.Execute(new GetElementRequest()
         {
             By = By.XPath("//td[@id='formaPgtoIof']"),
             Timeout = TimeSpan.FromSeconds(2)
@@ -114,7 +114,7 @@ public class ProcessaResultado : BaseState
         string formadepagamento = "";
         string parcela = "";
 
-        var pagamentos = _robot.Execute(new GetElementsList()
+        var pagamentos = _robot.Execute(new GetElementsListRequest()
         {
             By = By.XPath("//div[contains(@class,'titulo-forma-pagamento')]/div[(@class='row-parcela' or @class='label-titulo') and not (contains(@style,'display:none'))]"),
         }).Result.WebElements;
@@ -140,7 +140,7 @@ public class ProcessaResultado : BaseState
             DelayBefore = TimeSpan.FromSeconds(3)
         }).Wait();
 
-        var alertas = _robot.Execute(new GetElementsList
+        var alertas = _robot.Execute(new GetElementsListRequest
         {
             By = By.XPath("//div[@role='alert']")
         }).Result.WebElements;

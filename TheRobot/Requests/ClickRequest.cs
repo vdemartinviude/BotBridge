@@ -25,47 +25,13 @@ public class ClickRequest : IRobotRequest
         {
             throw new ArgumentNullException("By", "You must specify the element to click");
         }
-        if (Timeout == null)
-        {
-            Timeout = TimeSpan.FromSeconds(2);
-        }
-        var wait = new WebDriverWait(driver, (TimeSpan)Timeout);
-        wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(WebDriverTimeoutException));
-        IWebElement element = null;
+        var wait = new WebDriverWait(driver, Timeout.Value);
 
-        try
-        {
-            element = wait.Until(e =>
-                {
-                    try
-                    {
-                        var element = e.FindElement(By);
-                        return element;
-                    }
-                    catch (Exception)
-                    {
-                        return null;
-                    }
-                });
-        }
-        catch (Exception)
-        {
-            element = null;
-        }
-
-        if (element == null)
-        {
-            return new()
-            {
-                Status = RobotResponseStatus.ElementNotFound
-            };
-        }
+        var element = wait.Until(d => d.FindElement(By));
         new Actions(driver)
             .ScrollToElement(element)
             .Perform();
-
         element.Click();
-
         return new()
         {
             Status = RobotResponseStatus.ActionRealizedOk

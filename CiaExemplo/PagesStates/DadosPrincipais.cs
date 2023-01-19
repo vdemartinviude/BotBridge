@@ -41,7 +41,7 @@ public class DadosPrincipais : BaseState
             };
             _robot.Execute(clickSim).Wait();
 
-            var selectSeguradora = new SelectBy2Clicks
+            var selectSeguradora = new SelectBy2ClicksRequest
             {
                 By1 = By.XPath("//span[contains(text(),'Selecione uma opção')]/../div/b"),
                 By2 = By.XPath($"//li[contains(@class,'active-result') and contains(text(),'{seguradora}')]"),

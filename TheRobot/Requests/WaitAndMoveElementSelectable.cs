@@ -17,32 +17,21 @@ public class WaitAndMoveElementSelectable : IRobotRequest
     public Action<IWebDriver> PreExecute { get; set; }
     public Action<IWebDriver> PostExecute { get; set; }
     public By By { get; set; }
-    public TimeSpan Timeout { get; set; }
+    public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        try
+        var wait = new WebDriverWait(driver, Timeout.Value)
+             .Until(ExpectedConditions.ElementExists(By));
+
+        if (wait == null) throw new NoSuchElementException();
+
+        IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
+        executor.ExecuteScript("arguments[0].scrollIntoView();", wait);
+        return new()
         {
-            var wait = new WebDriverWait(driver, Timeout)
-                 .Until(ExpectedConditions.ElementExists(By));
-            if (wait == null) return new()
-            {
-                Status = RobotResponseStatus.ElementNotFound
-            };
-            IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
-            executor.ExecuteScript("arguments[0].scrollIntoView();", wait);
-            return new()
-            {
-                Status = RobotResponseStatus.ActionRealizedOk,
-                WebElement = wait
-            };
-        }
-        catch (Exception ex)
-        {
-            return new()
-            {
-                Status = RobotResponseStatus.ElementNotFound,
-            };
-        }
+            Status = RobotResponseStatus.ActionRealizedOk,
+            WebElement = wait
+        };
     }
 }
