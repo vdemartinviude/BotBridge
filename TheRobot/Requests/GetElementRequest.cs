@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TheRobot.Response;
-using TheRobot.Helpers;
 using OpenQA.Selenium.Support.UI;
 
 namespace TheRobot.Requests;
