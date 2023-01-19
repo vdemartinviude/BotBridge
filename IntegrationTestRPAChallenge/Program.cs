@@ -33,6 +33,7 @@ internal class Program
         };
 
         var resp = await robot.Execute(req3);
+        
         DataSet result;
         using (var stream = new FileStream(resp.Data, FileMode.Open, FileAccess.Read))
         using (var reader = ExcelReaderFactory.CreateReader(stream))

@@ -1,7 +1,6 @@
 using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
 using Appccelerate.StateMachine.Machine.Reports;
-using CiaExemplo.CiaDomain;
 using CiaExemplo.PagesStates;
 using JsonDocumentsManager;
 using StatesAndEvents;
@@ -19,7 +18,6 @@ public class Worker : BackgroundService
     private ActiveStateMachine<BaseState, RobotEvents> _activeStateMachine;
     private WatchDog _watchDog;
     private readonly ResultJsonDocument _resultJsonDocument;
-    private CancellationToken _cancellationToken;
     private CancellationTokenSource _source;
 
     public Worker(ILogger<Worker> logger, Robot robot, BaseOrcamento baseOrcamento, WatchDog watchDog, ResultJsonDocument resultJsonDocument, CancellationTokenSource source)
@@ -32,13 +30,13 @@ public class Worker : BackgroundService
         Log.Information("Starting building the state machine");
         StateMachineDefinitionBuilder<BaseState, RobotEvents> builder = new();
 
-        var PagesAssembly = Assembly.Load("CiaExemplo");
+        var PagesAssembly = Assembly.Load("Liberty");
 
         List<BaseState> states = new();
         var statesToAdd = PagesAssembly.ExportedTypes.Where(x => x.BaseType == typeof(BaseState))
         .Select(x => (BaseState)Activator.CreateInstance(x, new object[] { _robot, baseOrcamento, _resultJsonDocument }));
         Log.Information("Events names: {@Names}", statesToAdd.Select((x, y) => y.ToString("00") + "->" + x.Name));
-        states.AddRange(statesToAdd);
+        states.AddRange(statesToAdd!);
 
         foreach (var state in states)
         {
@@ -97,8 +95,6 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _cancellationToken = stoppingToken;
-
         var generator = new StateMachineReportGenerator<BaseState, RobotEvents>();
         _activeStateMachine.Report(generator);
 

@@ -26,13 +26,13 @@ public class ProcessaModal : BaseState
             Timeout = TimeSpan.FromSeconds(2)
         }).Wait();
 
-        var title = _robot.Execute(new GetElement()
+        var title = _robot.Execute(new GetElementRequest()
         {
             By = By.XPath("//div[@class='form-title']"),
             Timeout = TimeSpan.FromSeconds(2)
         }).Result.WebElement.Text;
 
-        var conteudo = _robot.Execute(new GetElement()
+        var conteudo = _robot.Execute(new GetElementRequest()
         {
             By = By.XPath("//div[@class='conteudo-modal']"),
             Timeout = TimeSpan.FromSeconds(2)

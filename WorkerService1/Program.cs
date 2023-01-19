@@ -20,7 +20,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<CancellationTokenSource>();
     })
     .Build();
-CancellationTokenSource source = host.Services.GetService<CancellationTokenSource>();
+CancellationTokenSource source = host.Services.GetService<CancellationTokenSource>()!;
 CancellationToken watchDogCancelation = source.Token;
-await host.Services.GetService<WatchDog>().StartAsync(watchDogCancelation);
+await host.Services.GetService<WatchDog>()!.StartAsync(watchDogCancelation);
 await host.RunAsync(watchDogCancelation);

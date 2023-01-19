@@ -90,7 +90,7 @@ public class DadosSeguro1 : BaseState
         {
             if (_orcamento.GetStringData("$.Fiscal.TipoIsencao").Contains("PESSOA COM"))
             {
-                _robot.Execute(new SelectBy2Clicks()
+                _robot.Execute(new SelectBy2ClicksRequest()
                 {
                     By1 = By.XPath("//div[@id='ItemAutoCotacaoModelAdaptacaoVeiculo_chosen']//input"),
                     By2 = By.XPath("//div[@id='ItemAutoCotacaoModelAdaptacaoVeiculo_chosen']//ul[@class='chosen-results']/li[text()='DEF. FÍSICO']"),
@@ -110,7 +110,7 @@ public class DadosSeguro1 : BaseState
                 DelayAfter = TimeSpan.FromSeconds(10)
             }).Wait();
 
-            _robot.Execute(new SelectBy2Clicks()
+            _robot.Execute(new SelectBy2ClicksRequest()
             {
                 By1 = By.XPath("//div[@id='ItemAutoCotacaoModelMotivoIsencaoFiscal_chosen']//b"),
                 By2 = By.XPath($"//div[@id='ItemAutoCotacaoModelMotivoIsencaoFiscal_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Fiscal.TipoIsencao")}')]"),
@@ -122,7 +122,7 @@ public class DadosSeguro1 : BaseState
 
         #region Proprietario
 
-        _robot.Execute(new SelectBy2Clicks()
+        _robot.Execute(new SelectBy2ClicksRequest()
         {
             By1 = By.XPath("//div[@id='PropriedadeVeiculoCotacaoModelTipoPropriedadeVeiculo_chosen']//b"),
             By2 = By.XPath($"//div[@id='PropriedadeVeiculoCotacaoModelTipoPropriedadeVeiculo_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Proprietario.VinculoSegurado")}')]"),
@@ -138,7 +138,7 @@ public class DadosSeguro1 : BaseState
             By = By.XPath("//div[@id='CondutorVeiculoCotacaoModelTipoCondutorDependente_chosen']//b")
         }).Wait();
 
-        _robot.Execute(new SelectBy2Clicks()
+        _robot.Execute(new SelectBy2ClicksRequest()
         {
             DelayBetweenClicks = TimeSpan.FromSeconds(2),
             By1 = By.XPath("//div[@id='CondutorVeiculoCotacaoModelTipoCondutorDependente_chosen']//b"),
@@ -162,19 +162,19 @@ public class DadosSeguro1 : BaseState
 
         #region AvaliacaoPerfil
 
-        _robot.Execute(new SelectBy2Clicks()
+        _robot.Execute(new SelectBy2ClicksRequest()
         {
             By1 = By.XPath("//div[@id='PerfilItem143_chosen']//b"),
             By2 = By.XPath($"//div[@id='PerfilItem143_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.PrincipalCondutor.EstadoCivilCondutor")}')]")
         }).Wait();
 
-        _robot.Execute(new SelectBy2Clicks()
+        _robot.Execute(new SelectBy2ClicksRequest()
         {
             By1 = By.XPath("//div[@id='PerfilItem147_chosen']//b"),
             By2 = By.XPath($"//div[@id='PerfilItem147_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Perfil.VeiculoUsadoPrestacaoServicos")}')]")
         }).Wait();
 
-        _robot.Execute(new SelectBy2Clicks()
+        _robot.Execute(new SelectBy2ClicksRequest()
         {
             By1 = By.XPath("//div[@id='PerfilItem148_chosen']//b"),
             By2 = By.XPath($"//div[@id='PerfilItem148_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Perfil.ResideIdadeEntre18e24")}')]")
@@ -182,7 +182,7 @@ public class DadosSeguro1 : BaseState
 
         if (_orcamento.GetStringData("$.Perfil.ResideIdadeEntre18e24") == "Sim")
         {
-            _robot.Execute(new SelectBy2Clicks()
+            _robot.Execute(new SelectBy2ClicksRequest()
             {
                 By1 = By.XPath("//div[@id='PerfilItem149_chosen']//b"),
                 By2 = By.XPath($"//div[@id='PerfilItem149_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Perfil.EstenderCoberturaIdadeEntre18e24")}')]")
@@ -190,7 +190,7 @@ public class DadosSeguro1 : BaseState
         }
         if (_orcamento.GetStringData("$.Perfil.EstenderCoberturaIdadeEntre18e24").Contains("Sim"))
         {
-            _robot.Execute(new SelectBy2Clicks()
+            _robot.Execute(new SelectBy2ClicksRequest()
             {
                 By1 = By.XPath("//div[@id='PerfilItem150_chosen']//b"),
                 By2 = By.XPath($"//div[@id='PerfilItem150_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Perfil.SexoPessoasIdadeEntre18e24")}')]")

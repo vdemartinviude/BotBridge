@@ -11,7 +11,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace TheRobot.Requests;
 
-public class GetElement : IRobotRequest
+public class GetElementRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }

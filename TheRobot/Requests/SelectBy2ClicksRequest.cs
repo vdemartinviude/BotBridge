@@ -12,7 +12,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace TheRobot.Requests;
 
-public class SelectBy2Clicks : IRobotRequest
+public class SelectBy2ClicksRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }

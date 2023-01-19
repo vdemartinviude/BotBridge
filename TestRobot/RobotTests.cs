@@ -83,7 +83,7 @@ public class RobotTests : IClassFixture<RobotFixture>
     [Fact]
     public async void EnsureNullExceptionOnNullByGetElement()
     {
-        var req = new GetElement()
+        var req = new GetElementRequest()
         {
             Timeout = new TimeSpan(0, 0, 10)
         };
@@ -94,7 +94,7 @@ public class RobotTests : IClassFixture<RobotFixture>
     [Fact]
     public async void EnsureNullExceptionOnNullTimeoutGetElement()
     {
-        var req = new GetElement()
+        var req = new GetElementRequest()
         {
             By = By.XPath("")
         };
@@ -111,14 +111,14 @@ public class RobotTests : IClassFixture<RobotFixture>
         };
         await _robot.Execute(req);
 
-        var req2 = new GetElement()
+        var req2 = new GetElementRequest()
         {
             By = By.XPath("//div[contains(@class,'instructionsText')][1]"),
             Timeout = new TimeSpan(0, 0, 5)
         };
         var resp = await _robot.Execute(req2);
 
-        Assert.Contains("The goal of this challenge", resp.WebElement.Text);
+        Assert.Contains("The goal of this challenge", resp?.WebElement?.Text);
     }
 
     [Fact]

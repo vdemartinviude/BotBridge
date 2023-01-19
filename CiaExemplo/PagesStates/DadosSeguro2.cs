@@ -93,25 +93,25 @@ public class DadosSeguro2 : BaseState
             By = By.Id("TipoCobertura_LMIAPPDespesaHospitalar_1")
         }).Wait();
 
-        _robot.Execute(new SelectBy2Clicks
+        _robot.Execute(new SelectBy2ClicksRequest
         {
             By1 = By.XPath("//div[@id='PecasReposicao_1_chosen']//b"),
             By2 = By.XPath($"//div[@id='PecasReposicao_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.Reparos.TipoPecaRepraro")}')]")
         }).Wait();
 
-        _robot.Execute(new SelectBy2Clicks
+        _robot.Execute(new SelectBy2ClicksRequest
         {
             By1 = By.XPath("//div[@id='_TipoCobertura_Assistencia24h_1_chosen']//b"),
             By2 = By.XPath($"//div[@id='_TipoCobertura_Assistencia24h_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.Reparos.Assistencia24h")}')]")
         }).Wait();
 
-        _robot.Execute(new SelectBy2Clicks
+        _robot.Execute(new SelectBy2ClicksRequest
         {
             By1 = By.XPath("//div[@id='TipoCobertura_LocalReparoAssistenciaVidros_1_chosen']//b"),
             By2 = By.XPath($"//div[@id='TipoCobertura_LocalReparoAssistenciaVidros_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.Reparos.LocalReparoVidros")}')]")
         }).Wait();
 
-        _robot.Execute(new SelectBy2Clicks
+        _robot.Execute(new SelectBy2ClicksRequest
         {
             By1 = By.XPath("//div[@id='TipoCobertura_AssistenciaVidros_1_chosen']//b"),
             By2 = By.XPath($"//div[@id='TipoCobertura_AssistenciaVidros_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.Reparos.CoberturaVidros")}')]"),
@@ -163,31 +163,31 @@ public class DadosSeguro2 : BaseState
             }).Wait();
         }
 
-        _robot.Execute(new SelectBy2Clicks()
+        _robot.Execute(new SelectBy2ClicksRequest()
         {
             By1 = By.XPath("//div[@id='TipoCobertura_CarroReservaPadraoVeiculo_1_chosen']//b"),
             By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaPadraoVeiculo_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.CarroReserva.Padrao")}')]")
         }).Wait();
 
-        _robot.Execute(new SelectBy2Clicks()
+        _robot.Execute(new SelectBy2ClicksRequest()
         {
             By1 = By.XPath("//div[@id='TipoCobertura_CarroReservaDescontoFranquiaPerdaParcial_1_chosen']//b"),
             By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaDescontoFranquiaPerdaParcial_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.CarroReserva.DiasPerdaParcial")}')]")
         }).Wait();
 
-        _robot.Execute(new SelectBy2Clicks()
+        _robot.Execute(new SelectBy2ClicksRequest()
         {
             By1 = By.XPath("//div[@id='TipoCobertura_CarroReservaTodosEventos_1_chosen']//b"),
             By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaTodosEventos_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.CarroReserva.DiasTodosEventos")}')]")
         }).Wait();
 
-        _robot.Execute(new SelectBy2Clicks()
+        _robot.Execute(new SelectBy2ClicksRequest()
         {
             By1 = By.XPath("//div[@id='TipoCobertura_CarroReservaIndenizacaoIntegral_1_chosen']//b"),
             By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaIndenizacaoIntegral_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.CarroReserva.IndenizacaoIntegral")}')]")
         }).Wait();
 
-        _robot.Execute(new SelectBy2Clicks()
+        _robot.Execute(new SelectBy2ClicksRequest()
         {
             By1 = By.XPath("//div[@id='TipoCobertura_CarroReservaTerceiros_1_chosen']//b"),
             By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaTerceiros_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.CarroReserva.Terceiros")}')]")

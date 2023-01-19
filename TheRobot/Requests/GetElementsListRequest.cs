@@ -1,6 +1,4 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,33 +8,33 @@ using TheRobot.Response;
 
 namespace TheRobot.Requests;
 
-public class ScrollToElementRequest : IRobotRequest
+public class GetElementsListRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
     public Action<IWebDriver> PreExecute { get; set; }
     public Action<IWebDriver> PostExecute { get; set; }
     public By By { get; set; }
-    public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
+        List<IWebElement> elements;
         try
         {
-            IWebElement webElement = new WebDriverWait(driver, Timeout.Value).Until(x => x.FindElement(By));
-
-            var actions = new Actions(driver);
-            actions.ScrollToElement(webElement);
-            actions.ScrollByAmount(0, 10);
-            actions.Perform();
+            elements = driver.FindElements(By).ToList();
         }
-        catch (Exception ex) when (ex is NoSuchElementException || ex is WebDriverTimeoutException)
+        catch (Exception ex)
         {
             return new()
             {
                 Status = RobotResponseStatus.ElementNotFound
             };
         }
-        return new() { Status = RobotResponseStatus.ActionRealizedOk };
+
+        return new()
+        {
+            Status = RobotResponseStatus.ActionRealizedOk,
+            WebElements = elements
+        };
     }
 }

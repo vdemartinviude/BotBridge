@@ -11,21 +11,21 @@ using TheRobot.Response;
 
 namespace TheRobot.Requests;
 
-public class ChangeWindowByClick : IRobotRequest
+public class ChangeWindowByClickRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
     public Action<IWebDriver> PreExecute { get; set; }
     public Action<IWebDriver> PostExecute { get; set; }
     public By By { get; set; }
-    public TimeSpan Timeout { get; set; }
+    public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
         try
         {
             string originalWindow = driver.CurrentWindowHandle;
-            var wait = new WebDriverWait(driver, Timeout);
+            var wait = new WebDriverWait(driver, Timeout.Value);
             var clickElement = wait.Until(d => d.FindElement(By));
 
             clickElement.Click();
@@ -41,7 +41,9 @@ public class ChangeWindowByClick : IRobotRequest
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is WebDriverTimeoutException ||
+                                   ex is NoSuchElementException ||
+                                   ex is NoSuchWindowException)
         {
             return new()
             {

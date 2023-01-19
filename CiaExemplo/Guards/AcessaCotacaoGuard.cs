@@ -1,7 +1,6 @@
 ﻿using CiaExemplo.PagesStates;
 using OpenQA.Selenium;
 using StatesAndEvents;
-using StatesAndEvents.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

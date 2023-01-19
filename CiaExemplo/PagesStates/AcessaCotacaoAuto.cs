@@ -15,7 +15,7 @@ namespace CiaExemplo.PagesStates
 
         public override void Execute()
         {
-            _robot.Execute(new ChangeWindowByClick
+            _robot.Execute(new ChangeWindowByClickRequest
             {
                 By = By.XPath("//a[contains(text(),'Cotar')]"),
                 Timeout = TimeSpan.FromSeconds(1),

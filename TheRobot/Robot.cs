@@ -63,6 +63,11 @@ namespace TheRobot
                 throw new Exception("Driver not loaded!");
             }
 
+            if (request.Timeout == null)
+            {
+                request.Timeout = TimeSpan.FromSeconds(5);
+            }
+
             Log.Information("About to execute {@IRoboRequest}", request);
 
             request.PreExecute?.Invoke(_driver);
@@ -72,6 +77,11 @@ namespace TheRobot
                 await Task.Delay(request.DelayBefore);
             }
             var resp = request.Exec(_driver);
+
+            if (resp.Status != RobotResponseStatus.ActionRealizedOk)
+            {
+                Log.Information("The request was not successfully");
+            }
 
             if (request.DelayAfter.Ticks > 0)
             {
