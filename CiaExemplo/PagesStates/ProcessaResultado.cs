@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 using TheRobot;
 using TheRobot.Requests;
 
-namespace CiaExemplo.PagesStates;
+namespace Liberty.PagesStates;
 
 public class ProcessaResultado : BaseState
 {
-    public ProcessaResultado(Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson) : base("Processa Resultado", robot, inputdata, resultJson)
+    public ProcessaResultado(Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson) : base("Processa Resultado", robot, inputdata, resultJson)
     {
     }
 

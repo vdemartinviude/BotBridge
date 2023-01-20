@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 using TheRobot;
 using TheRobot.Requests;
 
-namespace CiaExemplo.PagesStates;
+namespace Liberty.PagesStates;
 
 public class FazLogin : BaseState
 {
-    public FazLogin(Robot robot, BaseOrcamento baseOrcamento, ResultJsonDocument resultJson) : base("FazLogin", robot, baseOrcamento, resultJson)
+    public FazLogin(Robot robot, InputJsonDocument baseOrcamento, ResultJsonDocument resultJson) : base("FazLogin", robot, baseOrcamento, resultJson)
     {
     }
 

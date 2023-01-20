@@ -1,4 +1,4 @@
-﻿using CiaExemplo.PagesStates;
+﻿using Liberty.PagesStates;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
 using StatesAndEvents;
@@ -11,7 +11,7 @@ using TheRobot;
 using SeleniumExtras.WaitHelpers;
 using TheRobot.Requests;
 
-namespace CiaExemplo.Guards;
+namespace Liberty.Guards;
 
 public class ModalToResultGuard : IGuard<ProcessaModal, ProcessaResultado>
 {

@@ -1,4 +1,4 @@
-﻿using CiaExemplo.PagesStates;
+﻿using Liberty.PagesStates;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using TheRobot;
 using TheRobot.Requests;
 
-namespace CiaExemplo.Guards;
+namespace Liberty.Guards;
 
 public class ErroLoginPageGuard : IGuard<FazLogin, ErroLogin>
 {

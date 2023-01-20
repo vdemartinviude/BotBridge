@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 using TheRobot;
 using TheRobot.Requests;
 
-namespace CiaExemplo.PagesStates;
+namespace Liberty.PagesStates;
 
 public class DadosPrincipais : BaseState
 {
-    public DadosPrincipais(Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson) : base("DadosPrincipais", robot, inputdata, resultJson)
+    public DadosPrincipais(Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson) : base("DadosPrincipais", robot, inputdata, resultJson)
     {
     }
 

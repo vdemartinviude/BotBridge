@@ -4,11 +4,11 @@ using StatesAndEvents;
 using TheRobot;
 using TheRobot.Requests;
 
-namespace CiaExemplo.PagesStates;
+namespace Liberty.PagesStates;
 
 public class LibertyAutoPerfil : BaseState
 {
-    public LibertyAutoPerfil(Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson) : base("LibertyAutoPerfil", robot, inputdata, resultJson)
+    public LibertyAutoPerfil(Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson) : base("LibertyAutoPerfil", robot, inputdata, resultJson)
     {
     }
 

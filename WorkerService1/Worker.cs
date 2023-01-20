@@ -1,7 +1,7 @@
 using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
 using Appccelerate.StateMachine.Machine.Reports;
-using CiaExemplo.PagesStates;
+using Liberty.PagesStates;
 using JsonDocumentsManager;
 using StatesAndEvents;
 using System.Reflection;
@@ -15,12 +15,12 @@ public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private readonly Robot _robot;
-    private ActiveStateMachine<BaseState, RobotEvents> _activeStateMachine;
+    private ActiveStateMachine<BaseState, MachineEvents> _activeStateMachine;
     private WatchDog _watchDog;
     private readonly ResultJsonDocument _resultJsonDocument;
     private CancellationTokenSource _source;
 
-    public Worker(ILogger<Worker> logger, Robot robot, BaseOrcamento baseOrcamento, WatchDog watchDog, ResultJsonDocument resultJsonDocument, CancellationTokenSource source)
+    public Worker(ILogger<Worker> logger, Robot robot, InputJsonDocument baseOrcamento, WatchDog watchDog, ResultJsonDocument resultJsonDocument, CancellationTokenSource source)
     {
         _resultJsonDocument = resultJsonDocument;
         _logger = logger;
@@ -28,7 +28,7 @@ public class Worker : BackgroundService
         _source = source;
 
         Log.Information("Starting building the state machine");
-        StateMachineDefinitionBuilder<BaseState, RobotEvents> builder = new();
+        StateMachineDefinitionBuilder<BaseState, MachineEvents> builder = new();
 
         var PagesAssembly = Assembly.Load("Liberty");
 
@@ -59,7 +59,7 @@ public class Worker : BackgroundService
             foreach (var guard in Guards.OrderBy(x => x.type.GetProperty("Priority").GetValue(x.theguard)))
             {
                 Log.Information("\t{currentstateName} -> {nextstateName} with guard: {@guard}", guard.currentstate.Name, guard.nextstate.Name, guard);
-                builder.In(state).On(RobotEvents.NormalTransition).If(() => (bool)guard.type.GetMethod("Condition").Invoke(guard.theguard, new object[] { _robot })).Goto(states.Single(x => x.GetType() == guard.nextstate));
+                builder.In(state).On(MachineEvents.NormalTransition).If(() => (bool)guard.type.GetMethod("Condition").Invoke(guard.theguard, new object[] { _robot })).Goto(states.Single(x => x.GetType() == guard.nextstate));
             }
 
             var FinalGuards = PagesAssembly.GetExportedTypes()
@@ -80,7 +80,7 @@ public class Worker : BackgroundService
                 Log.Information("\t{currentstateName} -> FinalState with guard: {guard}", state.Name, guard);
                 var theguard = Activator.CreateInstance(guard.type);
                 builder
-                    .In(state).On(RobotEvents.NormalTransition)
+                    .In(state).On(MachineEvents.NormalTransition)
                     .If(() => (bool)guard.type.GetMethod("Condition")
                     .Invoke(theguard, new object[] { _robot }))
                     //.Goto(state)
@@ -95,7 +95,7 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var generator = new StateMachineReportGenerator<BaseState, RobotEvents>();
+        var generator = new StateMachineReportGenerator<BaseState, MachineEvents>();
         _activeStateMachine.Report(generator);
 
         string report = generator.Result;
@@ -116,13 +116,13 @@ public class Worker : BackgroundService
         _source.Cancel();
     }
 
-    private void _activeStateMachine_TransitionExceptionThrown(object sender, Appccelerate.StateMachine.Machine.Events.TransitionExceptionEventArgs<BaseState, RobotEvents> e)
+    private void _activeStateMachine_TransitionExceptionThrown(object sender, Appccelerate.StateMachine.Machine.Events.TransitionExceptionEventArgs<BaseState, MachineEvents> e)
     {
         _logger.LogCritical("EXCEPTION!!!!");
         _activeStateMachine.Stop();
     }
 
-    private void _activeStateMachine_TransitionCompleted(object sender, Appccelerate.StateMachine.Machine.Events.TransitionCompletedEventArgs<BaseState, RobotEvents> e)
+    private void _activeStateMachine_TransitionCompleted(object sender, Appccelerate.StateMachine.Machine.Events.TransitionCompletedEventArgs<BaseState, MachineEvents> e)
     {
         _logger.LogWarning("TRANSIÇÃO REALIZADA!!!!");
         _watchDog.SetWatchDog();

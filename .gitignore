@@ -16,6 +16,10 @@
 # Mono auto generated files
 mono_crash.*
 
+#Input and output documents
+InputDocuments/
+OutputDocuments/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

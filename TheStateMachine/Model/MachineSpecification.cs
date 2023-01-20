@@ -9,7 +9,20 @@ namespace TheStateMachine.Model;
 
 public class MachineSpecification
 {
-    public List<BaseState> States { get; set; } 
-    public List<IGuard<BaseState, BaseState>> IntermediaryGuards { get; set; }
-    public List<IGuard<BaseState>> FinalGuards { get; set; }
+    public IEnumerable<Type> States { get; set; }
+    public IEnumerable<IntermediaryGuard> IntermediaryGuards { get; set; }
+    public IEnumerable<FinalGuard> FinalGuards { get; set; }
+}
+
+public class IntermediaryGuard
+{
+    public Type Guard { get; set; }
+    public Type CurrentState { get; set; }
+    public Type NextState { get; set; }
+}
+
+public class FinalGuard
+{
+    public Type Guard { get; set; }
+    public Type CurrentState { get; set; }
 }

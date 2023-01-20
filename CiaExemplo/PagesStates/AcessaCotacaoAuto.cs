@@ -5,11 +5,11 @@ using StatesAndEvents;
 using TheRobot;
 using TheRobot.Requests;
 
-namespace CiaExemplo.PagesStates
+namespace Liberty.PagesStates
 {
     public class AcessaCotacaoAuto : BaseState
     {
-        public AcessaCotacaoAuto(Robot robot, BaseOrcamento baseOrcamento, ResultJsonDocument resultJson) : base("AcessaCotacaoAuto", robot, baseOrcamento, resultJson)
+        public AcessaCotacaoAuto(Robot robot, InputJsonDocument baseOrcamento, ResultJsonDocument resultJson) : base("AcessaCotacaoAuto", robot, baseOrcamento, resultJson)
         {
         }
 

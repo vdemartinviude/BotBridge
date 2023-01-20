@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Appccelerate.StateMachine" Version="5.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\StatesAndEvents\StatesAndEvents.csproj" />
+    <ProjectReference Include="..\TheRobot\TheRobot.csproj" />
   </ItemGroup>
 
 </Project>

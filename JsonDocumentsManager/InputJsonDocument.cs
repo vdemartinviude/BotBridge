@@ -7,13 +7,13 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace StatesAndEvents;
+namespace JsonDocumentsManager;
 
-public class BaseOrcamento : IDadosOrcamento
+public class InputJsonDocument : IInputJsonDocument
 {
     public JsonDocument JsonDoc { get; set; }
 
-    public BaseOrcamento(string jsonFilePath)
+    public InputJsonDocument(string jsonFilePath)
     {
         string text = File.ReadAllText(jsonFilePath);
         JsonDoc = JsonDocument.Parse(text);

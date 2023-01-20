@@ -5,11 +5,11 @@ using StatesAndEvents;
 using TheRobot;
 using TheRobot.Requests;
 
-namespace CiaExemplo.PagesStates;
+namespace Liberty.PagesStates;
 
 public class SelecaoCanal : BaseState
 {
-    public SelecaoCanal(Robot robot, BaseOrcamento baseOrcamento, ResultJsonDocument resultJson) : base("SelecaoCanal", robot, baseOrcamento, resultJson)
+    public SelecaoCanal(Robot robot, InputJsonDocument baseOrcamento, ResultJsonDocument resultJson) : base("SelecaoCanal", robot, baseOrcamento, resultJson)
     {
     }
 

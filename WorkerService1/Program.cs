@@ -13,7 +13,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddSingleton<Robot>();
-        services.AddSingleton<BaseOrcamento>(x => new BaseOrcamento(Path.Combine(Environment.CurrentDirectory, "JsonExemplo.json")));
+        services.AddSingleton<InputJsonDocument>(x => new InputJsonDocument(Path.Combine(Environment.CurrentDirectory, "InputDocuments", "JsonExemplo.json")));
         services.AddSingleton<WatchDog>();
         services.AddSingleton<ResultJsonDocument>();
         services.AddHostedService<Worker>();

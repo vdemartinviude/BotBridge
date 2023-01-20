@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 using TheRobot;
 using TheRobot.Requests;
 
-namespace CiaExemplo.PagesStates;
+namespace Liberty.PagesStates;
 
 public class ProcessaAlertas : BaseState
 {
-    public ProcessaAlertas(Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson) : base("ProcessaAlertas", robot, inputdata, resultJson)
+    public ProcessaAlertas(Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson) : base("ProcessaAlertas", robot, inputdata, resultJson)
     {
     }
 

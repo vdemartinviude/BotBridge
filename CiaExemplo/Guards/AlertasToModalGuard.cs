@@ -1,4 +1,4 @@
-﻿using CiaExemplo.PagesStates;
+﻿using Liberty.PagesStates;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
 using StatesAndEvents;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using TheRobot;
 using TheRobot.Requests;
 
-namespace CiaExemplo.Guards;
+namespace Liberty.Guards;
 
 public class AlertasToModalGuard : IGuard<ProcessaAlertas, ProcessaModal>
 {

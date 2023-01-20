@@ -1,4 +1,4 @@
-﻿using CiaExemplo.PagesStates;
+﻿using Liberty.PagesStates;
 using OpenQA.Selenium;
 using StatesAndEvents;
 using System;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using TheRobot;
 using TheRobot.Requests;
 
-namespace CiaExemplo.Guards;
+namespace Liberty.Guards;
 
 public class AcessaCotacaoGuard : IGuard<AcessaCotacaoAuto, SelecaoCanal>
 {

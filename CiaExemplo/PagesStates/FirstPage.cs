@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 using TheRobot;
 using TheRobot.Requests;
 
-namespace CiaExemplo.PagesStates;
+namespace Liberty.PagesStates;
 
 public class FirstPage : BaseState
 {
-    public FirstPage(Robot robot, BaseOrcamento baseOrcamento, ResultJsonDocument resultJson) : base("FirstPage", robot, baseOrcamento, resultJson)
+    public FirstPage(Robot robot, InputJsonDocument baseOrcamento, ResultJsonDocument resultJson) : base("FirstPage", robot, baseOrcamento, resultJson)
     {
     }
 

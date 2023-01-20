@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StatesAndEvents;
+namespace JsonDocumentsManager;
 
-public interface IDadosOrcamento
+public interface IInputJsonDocument
 {
     public abstract Task ReadJson(string jsonFilePath);
 

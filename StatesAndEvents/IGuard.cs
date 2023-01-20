@@ -7,10 +7,11 @@ using TheRobot;
 
 namespace StatesAndEvents;
 
-public enum RobotEvents
+public enum MachineEvents
 {
     NormalTransition,
-    AbortTransition
+    AbortTransition,
+    FinalizeMachine
 }
 
 public interface IGuard<TCurrentState, TNextState> where TCurrentState : BaseState where TNextState : BaseState

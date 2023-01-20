@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 using TheRobot;
 using TheRobot.Requests;
 
-namespace CiaExemplo.PagesStates;
+namespace Liberty.PagesStates;
 
 public class ProcessaModal : BaseState
 {
-    public ProcessaModal(Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson) : base("ProcessaModal", robot, inputdata, resultJson)
+    public ProcessaModal(Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson) : base("ProcessaModal", robot, inputdata, resultJson)
     {
     }
 

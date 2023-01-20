@@ -7,11 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TheRobot;
 
-namespace CiaExemplo.PagesStates;
+namespace Liberty.PagesStates;
 
 public class ErroLogin : BaseState
 {
-    public ErroLogin(Robot robot, BaseOrcamento baseOrcamento, ResultJsonDocument resultJson) : base("ErroLogin", robot, baseOrcamento, resultJson)
+    public ErroLogin(Robot robot, InputJsonDocument baseOrcamento, ResultJsonDocument resultJson) : base("ErroLogin", robot, baseOrcamento, resultJson)
     {
     }
 

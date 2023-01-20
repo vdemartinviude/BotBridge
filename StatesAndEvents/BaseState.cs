@@ -25,10 +25,10 @@ public class BaseState : IState
 {
     public string Name { get; private set; }
     protected readonly Robot _robot;
-    protected readonly BaseOrcamento _orcamento;
+    protected readonly InputJsonDocument _orcamento;
     protected readonly ResultJsonDocument _results;
 
-    public BaseState(string name, Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson)
+    public BaseState(string name, Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson)
     {
         Name = name;
         _robot = robot;
@@ -71,7 +71,7 @@ public class BaseState : IState
         return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
     }
 
-    public void MainExecute(ActiveStateMachine<BaseState, RobotEvents> activeStateMachine)
+    public void MainExecute(AsyncActiveStateMachine<BaseState, MachineEvents> activeStateMachine)
     {
         Log.Information("Executing state {@state}", this);
         Execute();
@@ -82,7 +82,7 @@ public class BaseState : IState
             Timeout = TimeSpan.FromSeconds(10)
         }).Wait();
 
-        activeStateMachine.Fire(RobotEvents.NormalTransition);
+        //activeStateMachine.Fire(MachineEvents.NormalTransition).Wait();
     }
 
     public virtual void Execute()

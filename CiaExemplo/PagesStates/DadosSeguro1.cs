@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 using TheRobot;
 using TheRobot.Requests;
 
-namespace CiaExemplo.PagesStates;
+namespace Liberty.PagesStates;
 
 public class DadosSeguro1 : BaseState
 {
-    public DadosSeguro1(Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson) : base("DadosSeguro1", robot, inputdata, resultJson)
+    public DadosSeguro1(Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson) : base("DadosSeguro1", robot, inputdata, resultJson)
     {
     }
 

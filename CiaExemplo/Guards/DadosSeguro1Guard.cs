@@ -1,4 +1,4 @@
-﻿using CiaExemplo.PagesStates;
+﻿using Liberty.PagesStates;
 using StatesAndEvents;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TheRobot;
 
-namespace CiaExemplo.Guards;
+namespace Liberty.Guards;
 
 public class DadosSeguro1Guard : IGuard<DadosSeguro1, DadosSeguro2>
 {

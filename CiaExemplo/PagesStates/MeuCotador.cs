@@ -5,11 +5,11 @@ using StatesAndEvents;
 using TheRobot;
 using TheRobot.Requests;
 
-namespace CiaExemplo.PagesStates;
+namespace Liberty.PagesStates;
 
 public class MeuCotador : BaseState
 {
-    public MeuCotador(Robot robot, BaseOrcamento inputdata, ResultJsonDocument resultJson) : base("MeuCotador", robot, inputdata, resultJson)
+    public MeuCotador(Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson) : base("MeuCotador", robot, inputdata, resultJson)
     {
     }
 
