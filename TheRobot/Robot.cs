@@ -42,6 +42,7 @@ namespace TheRobot
             options.AddUserProfilePreference("download.prompt_for_download", false);
             options.AddUserProfilePreference("download.default_directory", DownloadFolder);
             options.AddArgument("--log-level=OFF");
+            options.AddExcludedArgument("enable-logging");
 
             Log.Logger.Information("Starting the selenium driver");
 
