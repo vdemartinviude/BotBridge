@@ -82,7 +82,7 @@ public class BaseState : IState
             Timeout = TimeSpan.FromSeconds(10)
         }).Wait();
 
-        //activeStateMachine.Fire(MachineEvents.NormalTransition).Wait();
+        activeStateMachine.Fire(MachineEvents.NormalTransition).Wait();
     }
 
     public virtual void Execute()

@@ -1,6 +1,7 @@
 ﻿using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.AsyncMachine;
 using JsonDocumentsManager;
+using Microsoft.Extensions.Configuration;
 using StatesAndEvents;
 using TheRobot;
 using TheStateMachine.Model;
@@ -13,28 +14,48 @@ namespace TheStateMachine
         private readonly Robot _robot;
         private readonly InputJsonDocument _inputDocument;
         private readonly ResultJsonDocument _resultDocument;
+        private readonly IConfiguration _configuration;
         public AsyncActiveStateMachine<BaseState, MachineEvents>? Machine { get; private set; }
 
-        public TheMachine(MachineSpecification machineSpecification, Robot robot, InputJsonDocument input, ResultJsonDocument resultJsonDocument)
+        public TheMachine(MachineSpecification machineSpecification, Robot robot, InputJsonDocument input, ResultJsonDocument resultJsonDocument, IConfiguration configuration)
         {
             _machineSpecification = machineSpecification;
             _robot = robot;
             _inputDocument = input;
             _resultDocument = resultJsonDocument;
+            _configuration = configuration;
         }
 
         public void Build()
         {
             StateMachineDefinitionBuilder<BaseState, MachineEvents> builder = new();
             BaseState? theFirstState = null;
-            foreach (var state in _machineSpecification.States)
-            {
-                var createdState = (BaseState)Activator.CreateInstance(state, new object[] { _robot, _inputDocument, _resultDocument })!;
-                builder.In(createdState).ExecuteOnEntry(() => createdState.MainExecute(Machine!)).On(MachineEvents.FinalizeMachine).Execute(() => _finalizaMaquina())
-                    .On(MachineEvents.NormalTransition).Execute(() => _normalFinish());
 
-                if (!_machineSpecification.IntermediaryGuards.Any(g => g.NextState.Name == state.Name))
-                    theFirstState = createdState;
+            var states = _machineSpecification.States.Select(st =>
+                (BaseState)Activator.CreateInstance(st, new object[] { _robot, _inputDocument, _resultDocument })!).ToList();
+
+            foreach (var state in states)
+            {
+                builder.In(state).ExecuteOnEntry(() => state.MainExecute(Machine!)).On(MachineEvents.FinalizeMachine).Execute(() => _finalizaMaquina());
+                foreach (var guard in _machineSpecification.IntermediaryGuards.Where(guard => guard.CurrentState.Name == state.GetType().Name))
+                {
+                    var theguard = Activator.CreateInstance(guard.Guard);
+                    var nextstate = states.Where(st => st.GetType().Name == guard.NextState.Name).Single();
+
+                    builder.In(state).On(MachineEvents.NormalTransition)
+                        .If(() => (bool)guard.Guard.GetMethod("Condition")!.Invoke(theguard, new object[] { _robot })!)
+                        .Goto(nextstate);
+                }
+
+                foreach (var guard in _machineSpecification.FinalGuards.Where(guard => guard.CurrentState.Name == state.GetType().Name))
+                {
+                    var theguard = Activator.CreateInstance(guard.Guard);
+                    builder.In(state).On(MachineEvents.NormalTransition)
+                        .If(() => (bool)guard.Guard.GetMethod("Condition")!.Invoke(theguard, new object[] { _robot })!)
+                        .Execute(() => _normalFinish());
+                }
+                if (!_machineSpecification.IntermediaryGuards.Any(g => g.NextState.Name == state.GetType().Name))
+                    theFirstState = state;
             }
 
             builder.WithInitialState(theFirstState!);

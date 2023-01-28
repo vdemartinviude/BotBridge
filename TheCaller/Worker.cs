@@ -19,9 +19,9 @@ namespace TheCaller
         {
             _theMachine.Build();
             _theMachine.ExecuteMachine();
-            int i = 0;
 
-            while (!stoppingToken.IsCancellationRequested && i < 30 && _theMachine.Machine!.IsRunning)
+            int i = 0;
+            while (!stoppingToken.IsCancellationRequested && _theMachine.Machine!.IsRunning)
             {
                 _logger.LogInformation("{i} \tWorker running at: {time}", i++, DateTimeOffset.Now);
                 await Task.Delay(1000, stoppingToken);

@@ -34,8 +34,8 @@ public class Worker : BackgroundService
 
         List<BaseState> states = new();
         var statesToAdd = PagesAssembly.ExportedTypes.Where(x => x.BaseType == typeof(BaseState))
-        .Select(x => (BaseState)Activator.CreateInstance(x, new object[] { _robot, baseOrcamento, _resultJsonDocument }));
-        Log.Information("Events names: {@Names}", statesToAdd.Select((x, y) => y.ToString("00") + "->" + x.Name));
+        .Select(x => (BaseState)Activator.CreateInstance(x, new object[] { _robot, baseOrcamento, _resultJsonDocument })!);
+        Log.Information("Events names: {@Names}", statesToAdd.Select((x, y) => y.ToString("00") + "->" + x!.Name));
         states.AddRange(statesToAdd!);
 
         foreach (var state in states)
@@ -59,7 +59,7 @@ public class Worker : BackgroundService
             foreach (var guard in Guards.OrderBy(x => x.type.GetProperty("Priority").GetValue(x.theguard)))
             {
                 Log.Information("\t{currentstateName} -> {nextstateName} with guard: {@guard}", guard.currentstate.Name, guard.nextstate.Name, guard);
-                builder.In(state).On(MachineEvents.NormalTransition).If(() => (bool)guard.type.GetMethod("Condition").Invoke(guard.theguard, new object[] { _robot })).Goto(states.Single(x => x.GetType() == guard.nextstate));
+                builder.In(state).On(MachineEvents.NormalTransition).If(() => (bool)guard.type.GetMethod("Condition").Invoke(guard.theguard, new object[] { _robot })!).Goto(states.Single(x => x.GetType() == guard.nextstate));
             }
 
             var FinalGuards = PagesAssembly.GetExportedTypes()

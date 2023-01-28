@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Appccelerate.StateMachine" Version="5.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
