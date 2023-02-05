@@ -1,11 +1,11 @@
-namespace StateMachineTests
-{
-    public class TheStateMachineTests
-    {
-        [Fact]
-        public void Test1()
-        {
+using StateMachineTests.Fixtures;
 
-        }
+namespace StateMachineTests;
+
+public class TheStateMachineTests : IClassFixture<StateMachineFixture>
+{
+    [Fact]
+    public void Test1()
+    {
     }
 }
