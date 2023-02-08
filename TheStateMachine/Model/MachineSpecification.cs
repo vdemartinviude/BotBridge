@@ -19,6 +19,7 @@ public class IntermediaryGuard
     public Type? Guard { get; set; }
     public Type? CurrentState { get; set; }
     public Type? NextState { get; set; }
+    public string Namespace { get; set; }
 }
 
 public class FinalGuard

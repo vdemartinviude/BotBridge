@@ -6,6 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TheRobot;
+using Serilog;
+using TheStateMachine;
+using System.Reflection;
+using JsonDocumentsManager;
+using TheStateMachine.Model;
 
 namespace StateMachineTests.Fixtures;
 
@@ -15,11 +20,23 @@ public class StateMachineFixture : IDisposable
 
     public StateMachineFixture()
     {
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.File("log.txt")
+            .CreateLogger();
+
         host = Host.CreateDefaultBuilder()
             .ConfigureServices((hostContext, services) =>
             {
-                services.AddSingleton<Robot>();
-            }).Build();
+                services.AddSingleton(x => new MachineInfrastructure(
+                    TheStateMachine.Helpers.TheStateMachineHelpers.GetMachineSpecification(Assembly.Load("Liberty")),
+                    new Robot(),
+                    new InputJsonDocument(Path.Combine(Environment.CurrentDirectory, "InputDocuments", "JsonExemplo.json")),
+                    new ResultJsonDocument()));
+                services.AddSingleton<TheMachine>();
+            })
+            .UseSerilog()
+            .Build();
     }
 
     public void Dispose()

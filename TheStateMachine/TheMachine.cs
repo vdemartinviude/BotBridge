@@ -17,12 +17,12 @@ namespace TheStateMachine
         private readonly IConfiguration _configuration;
         public AsyncActiveStateMachine<BaseState, MachineEvents>? Machine { get; private set; }
 
-        public TheMachine(MachineSpecification machineSpecification, Robot robot, InputJsonDocument input, ResultJsonDocument resultJsonDocument, IConfiguration configuration)
+        public TheMachine(MachineInfrastructure machineInfrastructure, IConfiguration configuration)
         {
-            _machineSpecification = machineSpecification;
-            _robot = robot;
-            _inputDocument = input;
-            _resultDocument = resultJsonDocument;
+            _machineSpecification = machineInfrastructure.MachineSpecification;
+            _robot = machineInfrastructure.Robot;
+            _inputDocument = machineInfrastructure.InputJsonDocument;
+            _resultDocument = machineInfrastructure.ResultJsonDocument;
             _configuration = configuration;
         }
 
