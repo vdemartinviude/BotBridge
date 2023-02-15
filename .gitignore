@@ -369,3 +369,5 @@ FodyWeavers.xsd
 /WorkerService1/FinalResult.json
 /WorkerService1/Resultados.json
 /TheCaller/Resultados.json
+/StateExecute/JsonDocuments/InputData.json
+/StateExecute/result.json
