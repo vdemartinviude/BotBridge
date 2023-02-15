@@ -26,13 +26,13 @@ public class FazLogin : BaseState
         var setuser = new SetTextRequest()
         {
             By = By.XPath("//input[@name='username']"),
-            Text = _orcamento.GetStringData(pathCpf)
+            Text = _inputData.GetStringData(pathCpf)
         };
         _robot.Execute(setuser).Wait();
         var setpassword = new SetTextRequest()
         {
             By = By.Id("1-password"),
-            Text = _orcamento.GetStringData(pathLogin)
+            Text = _inputData.GetStringData(pathLogin)
         };
         _robot.Execute(setpassword).Wait();
 

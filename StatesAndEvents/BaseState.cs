@@ -25,14 +25,14 @@ public class BaseState : IState
 {
     public string Name { get; private set; }
     protected readonly Robot _robot;
-    protected readonly InputJsonDocument _orcamento;
+    protected readonly InputJsonDocument _inputData;
     protected readonly ResultJsonDocument _results;
 
     public BaseState(string name, Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson)
     {
         Name = name;
         _robot = robot;
-        _orcamento = inputdata;
+        _inputData = inputdata;
         _results = resultJson;
     }
 

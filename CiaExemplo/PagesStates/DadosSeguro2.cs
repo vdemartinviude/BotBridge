@@ -20,7 +20,7 @@ public class DadosSeguro2 : BaseState
     public override void Execute()
     {
         double? value;
-        value = _orcamento.GetDoubleData("$.Coberturas.FatorDeAjuste");
+        value = _inputData.GetDoubleData("$.Coberturas.FatorDeAjuste");
         value ??= 100;
         string text = String.Format("{0:#.00}", value).Replace(".", "").Replace(",", "");
         _robot.Execute(new SetTextWithKeyDownAndBackSpaceRequest()
@@ -35,7 +35,7 @@ public class DadosSeguro2 : BaseState
             ByClick = By.XPath("//div[@id='TipoCobertura_Franquia_FranquiaCodigo_Select_1_chosen']//b"),
             BySelectValues = By.XPath("//div[@id='TipoCobertura_Franquia_FranquiaCodigo_Select_1_chosen']//li[contains(text(),'%')]"),
             LessThan = true,
-            Value = _orcamento.GetDoubleData("$.Coberturas.Franquia") ?? 50
+            Value = _inputData.GetDoubleData("$.Coberturas.Franquia") ?? 50
         }).Wait();
 
         _robot.Execute(new SelectRangeByValueRequest()
@@ -43,7 +43,7 @@ public class DadosSeguro2 : BaseState
             ByClick = By.XPath("//div[@id='TipoCobertura_LMIRFCDM_1_chosen']//b"),
             BySelectValues = By.XPath("//div[@id='TipoCobertura_LMIRFCDM_1_chosen']//li[contains(text(),'R$')]"),
             GreaterThan = true,
-            Value = _orcamento.GetDoubleData("$.Coberturas.DanosMateriais") ?? double.MaxValue
+            Value = _inputData.GetDoubleData("$.Coberturas.DanosMateriais") ?? double.MaxValue
         }).Wait();
 
         _robot.Execute(new SelectRangeByValueRequest()
@@ -51,7 +51,7 @@ public class DadosSeguro2 : BaseState
             ByClick = By.XPath("//div[@id='TipoCobertura_LMIRCFDC_1_chosen']//b"),
             BySelectValues = By.XPath("//div[@id='TipoCobertura_LMIRCFDC_1_chosen']//li[contains(text(),'R$')]"),
             GreaterThan = true,
-            Value = _orcamento.GetDoubleData("$.Coberturas.DanosCorporais") ?? double.MaxValue
+            Value = _inputData.GetDoubleData("$.Coberturas.DanosCorporais") ?? double.MaxValue
         }).Wait();
 
         _robot.Execute(new SelectRangeByValueRequest()
@@ -59,11 +59,11 @@ public class DadosSeguro2 : BaseState
             ByClick = By.XPath("//div[@id='TipoCobertura_LMIDanosMorais_1_chosen']//b"),
             BySelectValues = By.XPath("//div[@id='TipoCobertura_LMIDanosMorais_1_chosen']//li[contains(text(),'R$')]"),
             GreaterThan = true,
-            Value = _orcamento.GetDoubleData("$.Coberturas.DanosMorais") ?? double.MaxValue,
+            Value = _inputData.GetDoubleData("$.Coberturas.DanosMorais") ?? double.MaxValue,
             DelayBetweenClicks = TimeSpan.FromSeconds(2)
         }).Wait();
 
-        value = _orcamento.GetDoubleData("$.Coberturas.AcidentesPessoaisMorte");
+        value = _inputData.GetDoubleData("$.Coberturas.AcidentesPessoaisMorte");
         value ??= 100;
         text = String.Format("{0:#.00}", value).Replace(".", "").Replace(",", "");
         _robot.Execute(new SetTextWithKeyDownAndBackSpaceRequest
@@ -73,7 +73,7 @@ public class DadosSeguro2 : BaseState
             By = By.Id("TipoCobertura_LMIAPPMorte_1")
         }).Wait();
 
-        value = _orcamento.GetDoubleData("$.Coberturas.AcidentesPessoaisInvalidez");
+        value = _inputData.GetDoubleData("$.Coberturas.AcidentesPessoaisInvalidez");
         value ??= 100;
         text = String.Format("{0:#.00}", value).Replace(".", "").Replace(",", "");
         _robot.Execute(new SetTextWithKeyDownAndBackSpaceRequest
@@ -83,7 +83,7 @@ public class DadosSeguro2 : BaseState
             By = By.Id("TipoCobertura_LMIAPPInvalidez_1")
         }).Wait();
 
-        value = _orcamento.GetDoubleData("$.Coberturas.AcidentesPessoaisDespesasMedicas");
+        value = _inputData.GetDoubleData("$.Coberturas.AcidentesPessoaisDespesasMedicas");
         value ??= 100;
         text = String.Format("{0:#.00}", value).Replace(".", "").Replace(",", "");
         _robot.Execute(new SetTextWithKeyDownAndBackSpaceRequest
@@ -96,29 +96,29 @@ public class DadosSeguro2 : BaseState
         _robot.Execute(new SelectBy2ClicksRequest
         {
             By1 = By.XPath("//div[@id='PecasReposicao_1_chosen']//b"),
-            By2 = By.XPath($"//div[@id='PecasReposicao_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.Reparos.TipoPecaRepraro")}')]")
+            By2 = By.XPath($"//div[@id='PecasReposicao_1_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Coberturas.Reparos.TipoPecaRepraro")}')]")
         }).Wait();
 
         _robot.Execute(new SelectBy2ClicksRequest
         {
             By1 = By.XPath("//div[@id='_TipoCobertura_Assistencia24h_1_chosen']//b"),
-            By2 = By.XPath($"//div[@id='_TipoCobertura_Assistencia24h_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.Reparos.Assistencia24h")}')]")
+            By2 = By.XPath($"//div[@id='_TipoCobertura_Assistencia24h_1_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Coberturas.Reparos.Assistencia24h")}')]")
         }).Wait();
 
         _robot.Execute(new SelectBy2ClicksRequest
         {
             By1 = By.XPath("//div[@id='TipoCobertura_LocalReparoAssistenciaVidros_1_chosen']//b"),
-            By2 = By.XPath($"//div[@id='TipoCobertura_LocalReparoAssistenciaVidros_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.Reparos.LocalReparoVidros")}')]")
+            By2 = By.XPath($"//div[@id='TipoCobertura_LocalReparoAssistenciaVidros_1_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Coberturas.Reparos.LocalReparoVidros")}')]")
         }).Wait();
 
         _robot.Execute(new SelectBy2ClicksRequest
         {
             By1 = By.XPath("//div[@id='TipoCobertura_AssistenciaVidros_1_chosen']//b"),
-            By2 = By.XPath($"//div[@id='TipoCobertura_AssistenciaVidros_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.Reparos.CoberturaVidros")}')]"),
+            By2 = By.XPath($"//div[@id='TipoCobertura_AssistenciaVidros_1_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Coberturas.Reparos.CoberturaVidros")}')]"),
             DelayBetweenClicks = TimeSpan.FromSeconds(1)
         }).Wait();
 
-        if (_orcamento.GetBoolData("$.Coberturas.Reparos.ProtecaoPequenosReparos") ?? true)
+        if (_inputData.GetBoolData("$.Coberturas.Reparos.ProtecaoPequenosReparos") ?? true)
         {
             _robot.Execute(new ClickByJavascriptRequest
             {
@@ -127,7 +127,7 @@ public class DadosSeguro2 : BaseState
             }).Wait();
         }
 
-        if (_orcamento.GetBoolData("$.Coberturas.Reparos.ProtecaoRodaPneu") ?? true)
+        if (_inputData.GetBoolData("$.Coberturas.Reparos.ProtecaoRodaPneu") ?? true)
         {
             _robot.Execute(new ClickByJavascriptRequest
             {
@@ -136,7 +136,7 @@ public class DadosSeguro2 : BaseState
             }).Wait();
         }
 
-        if (_orcamento.GetBoolData("$.Coberturas.Reparos.DespesasExtras") ?? true)
+        if (_inputData.GetBoolData("$.Coberturas.Reparos.DespesasExtras") ?? true)
         {
             _robot.Execute(new ClickByJavascriptRequest
             {
@@ -145,7 +145,7 @@ public class DadosSeguro2 : BaseState
             }).Wait();
         }
 
-        if (_orcamento.GetBoolData("$.Coberturas.Reparos.DespesasHigienizacao") ?? true)
+        if (_inputData.GetBoolData("$.Coberturas.Reparos.DespesasHigienizacao") ?? true)
         {
             _robot.Execute(new ClickByJavascriptRequest
             {
@@ -154,7 +154,7 @@ public class DadosSeguro2 : BaseState
             }).Wait();
         }
 
-        if (_orcamento.GetBoolData("$.Coberturas.Reparos.ExtensaoPerimetro") ?? true)
+        if (_inputData.GetBoolData("$.Coberturas.Reparos.ExtensaoPerimetro") ?? true)
         {
             _robot.Execute(new ClickByJavascriptRequest
             {
@@ -166,34 +166,34 @@ public class DadosSeguro2 : BaseState
         _robot.Execute(new SelectBy2ClicksRequest()
         {
             By1 = By.XPath("//div[@id='TipoCobertura_CarroReservaPadraoVeiculo_1_chosen']//b"),
-            By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaPadraoVeiculo_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.CarroReserva.Padrao")}')]")
+            By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaPadraoVeiculo_1_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Coberturas.CarroReserva.Padrao")}')]")
         }).Wait();
 
         _robot.Execute(new SelectBy2ClicksRequest()
         {
             By1 = By.XPath("//div[@id='TipoCobertura_CarroReservaDescontoFranquiaPerdaParcial_1_chosen']//b"),
-            By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaDescontoFranquiaPerdaParcial_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.CarroReserva.DiasPerdaParcial")}')]")
+            By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaDescontoFranquiaPerdaParcial_1_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Coberturas.CarroReserva.DiasPerdaParcial")}')]")
         }).Wait();
 
         _robot.Execute(new SelectBy2ClicksRequest()
         {
             By1 = By.XPath("//div[@id='TipoCobertura_CarroReservaTodosEventos_1_chosen']//b"),
-            By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaTodosEventos_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.CarroReserva.DiasTodosEventos")}')]")
+            By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaTodosEventos_1_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Coberturas.CarroReserva.DiasTodosEventos")}')]")
         }).Wait();
 
         _robot.Execute(new SelectBy2ClicksRequest()
         {
             By1 = By.XPath("//div[@id='TipoCobertura_CarroReservaIndenizacaoIntegral_1_chosen']//b"),
-            By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaIndenizacaoIntegral_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.CarroReserva.IndenizacaoIntegral")}')]")
+            By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaIndenizacaoIntegral_1_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Coberturas.CarroReserva.IndenizacaoIntegral")}')]")
         }).Wait();
 
         _robot.Execute(new SelectBy2ClicksRequest()
         {
             By1 = By.XPath("//div[@id='TipoCobertura_CarroReservaTerceiros_1_chosen']//b"),
-            By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaTerceiros_1_chosen']//li[contains(text(),'{_orcamento.GetStringData("$.Coberturas.CarroReserva.Terceiros")}')]")
+            By2 = By.XPath($"//div[@id='TipoCobertura_CarroReservaTerceiros_1_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Coberturas.CarroReserva.Terceiros")}')]")
         }).Wait();
 
-        value = _orcamento.GetDoubleData("$.DadosCorretagem.Comissao");
+        value = _inputData.GetDoubleData("$.DadosCorretagem.Comissao");
         value ??= 100;
         text = String.Format("{0:#.00}", value).Replace(".", "").Replace(",", "");
         _robot.Execute(new SetTextWithKeyDownAndBackSpaceRequest

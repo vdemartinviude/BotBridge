@@ -11,7 +11,5 @@ namespace TheRobot;
 
 public interface IRobot
 {
-
     public abstract Task<RobotResponse> Execute(IRobotRequest request);
-    
 }

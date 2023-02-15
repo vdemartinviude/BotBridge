@@ -18,7 +18,7 @@ public class SelecaoCanal : BaseState
         var SelectRequest = new SelectTextRequest
         {
             By = By.Id("ddlBranch"),
-            Text = _orcamento.GetStringData(JsonPath.Parse("$.Ramo")),
+            Text = _inputData.GetStringData(JsonPath.Parse("$.Ramo")),
             DelayAfter = TimeSpan.FromSeconds(2),
             DelayBefore = TimeSpan.FromSeconds(3),
         };

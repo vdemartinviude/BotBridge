@@ -13,6 +13,7 @@ public class SetTextRequest : IRobotRequest
     public By? By { get; set; }
     public string? Text { get; set; }
     public TimeSpan? Timeout { get; set; }
+    public bool? ClearBefore { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
@@ -32,6 +33,11 @@ public class SetTextRequest : IRobotRequest
 
         WebDriverWait wait = new WebDriverWait(driver, Timeout.Value);
         webElement = wait.Until(e => e.FindElement(By));
+
+        if (ClearBefore.HasValue && ClearBefore.Value)
+        {
+            webElement.Clear();
+        }
         Task.Delay(100).Wait();
         var rnd = new Random();
         webElement?.Click();
