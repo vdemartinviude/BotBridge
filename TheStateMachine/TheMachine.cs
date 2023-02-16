@@ -2,8 +2,10 @@
 using Appccelerate.StateMachine.AsyncMachine;
 using JsonDocumentsManager;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using StatesAndEvents;
 using System.Reflection;
+using System.Threading;
 using TheRobot;
 using TheStateMachine.Model;
 
@@ -16,15 +18,17 @@ namespace TheStateMachine
         private readonly InputJsonDocument _inputDocument;
         private readonly ResultJsonDocument _resultDocument;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<TheMachine> _logger;
         public AsyncActiveStateMachine<BaseState, MachineEvents>? Machine { get; private set; }
 
-        public TheMachine(MachineInfrastructure machineInfrastructure, IConfiguration configuration)
+        public TheMachine(MachineInfrastructure machineInfrastructure, IConfiguration configuration, ILogger<TheMachine> logger)
         {
             _machineSpecification = machineInfrastructure.MachineSpecification;
             _robot = machineInfrastructure.Robot;
             _inputDocument = machineInfrastructure.InputJsonDocument;
             _resultDocument = machineInfrastructure.ResultJsonDocument;
             _configuration = configuration;
+            _logger = logger;
         }
 
         public void Build()
@@ -81,43 +85,20 @@ namespace TheStateMachine
 
         private void MachineExecuteState(BaseState state)
         {
+            AutoResetEvent autoResetEvent = new(false);
+            ThreadPool.RegisterWaitForSingleObject(autoResetEvent, new WaitOrTimerCallback(MyCallBackFunction), state, (int)state.StateTimeout.TotalMilliseconds, true);
             state.MainExecute(Machine);
+            autoResetEvent.Set();
         }
 
-        public void Buildold()
+        private void MyCallBackFunction(object? state, bool timedOut)
         {
-            StateMachineDefinitionBuilder<BaseState, MachineEvents> builder = new();
-            BaseState? theFirstState = null;
-
-            var states = _machineSpecification.States.Select(st =>
-                (BaseState)Activator.CreateInstance(st, new object[] { _robot, _inputDocument, _resultDocument })!).ToList();
-
-            foreach (var state in states)
+            if (timedOut)
             {
-                builder.In(state).ExecuteOnEntry(() => state.MainExecute(Machine!)).On(MachineEvents.FinalizeMachine).Execute(() => _finalizaMaquina());
-                foreach (var guard in _machineSpecification.IntermediaryGuards.Where(guard => guard.CurrentState.Name == state.GetType().Name))
-                {
-                    var theguard = Activator.CreateInstance(guard.Guard);
-                    var nextstate = states.Where(st => st.GetType().Name == guard.NextState.Name).Single();
-
-                    builder.In(state).On(MachineEvents.NormalTransition)
-                        .If(() => (bool)guard.Guard.GetMethod("Condition")!.Invoke(theguard, new object[] { _robot })!)
-                        .Goto(nextstate);
-                }
-
-                foreach (var guard in _machineSpecification.FinalGuards.Where(guard => guard.CurrentState.Name == state.GetType().Name))
-                {
-                    var theguard = Activator.CreateInstance(guard.Guard);
-                    builder.In(state).On(MachineEvents.NormalTransition)
-                        .If(() => (bool)guard.Guard.GetMethod("Condition")!.Invoke(theguard, new object[] { _robot })!)
-                        .Execute(() => _normalFinish());
-                }
-                if (!_machineSpecification.IntermediaryGuards.Any(g => g.NextState.Name == state.GetType().Name))
-                    theFirstState = state;
+                _logger.LogCritical("State {name} timeout", state.GetType().Name);
+                _robot.Dispose();
+                Machine.Stop();
             }
-
-            builder.WithInitialState(theFirstState!);
-            Machine = builder.Build().CreateActiveStateMachine();
         }
 
         public void ExecuteMachine()

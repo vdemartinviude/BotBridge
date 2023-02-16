@@ -12,6 +12,8 @@ namespace WordpressStatesAndGuards.States;
 
 public class NavigateToLogin : BaseState
 {
+    public override TimeSpan StateTimeout => TimeSpan.FromSeconds(30);
+
     public NavigateToLogin(Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson) : base("NavigateToLogin", robot, inputdata, resultJson)
     {
     }

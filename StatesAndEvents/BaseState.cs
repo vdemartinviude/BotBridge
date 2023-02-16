@@ -24,6 +24,9 @@ namespace StatesAndEvents;
 public class BaseState : IState
 {
     public string Name { get; private set; }
+
+    public virtual TimeSpan StateTimeout => TimeSpan.FromSeconds(5);
+
     protected readonly Robot _robot;
     protected readonly InputJsonDocument _inputData;
     protected readonly ResultJsonDocument _results;

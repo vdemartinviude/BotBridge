@@ -6,7 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace StatesAndEvents;
+
 public interface IState : IComparable
 {
-
+    public abstract TimeSpan StateTimeout { get; }
 }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TheRobot;
 using TheRobot.Requests;
+using TheRobot.Response;
 
 namespace WordpressStatesAndGuards.States;
 
@@ -39,5 +40,17 @@ public class LoadWpressFile : BaseState
             InputSelectBy = By.Id("ai1wm-select-file"),
             FilePath = _inputData.GetStringData("$.WpressFilePath")
         });
+
+        RobotResponse resp;
+        do
+        {
+            resp = _robot.ExecuteWithWait(new ElementExistRequest
+            {
+                By = By.XPath("//button[contains(text(),'Continuar') and @class='ai1wm-button-green']"),
+                Timeout = TimeSpan.FromSeconds(1)
+            });
+        } while (resp.Status != RobotResponseStatus.ActionRealizedOk);
+
+        resp.WebElement.Click();
     }
 }
