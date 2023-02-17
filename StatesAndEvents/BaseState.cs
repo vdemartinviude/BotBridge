@@ -74,21 +74,21 @@ public class BaseState : IState
         return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
     }
 
-    public void MainExecute(AsyncActiveStateMachine<BaseState, MachineEvents> activeStateMachine)
+    public async Task MainExecute(AsyncActiveStateMachine<BaseState, MachineEvents> activeStateMachine)
     {
         Log.Information("Executing state {@state}", this);
-        Execute();
+        await Execute();
         Thread.Sleep(100);
-        _robot.Execute(new ElementExistRequest
+        await _robot.Execute(new ElementExistRequest
         {
             By = By.XPath("//body"),
             Timeout = TimeSpan.FromSeconds(10)
-        }).Wait();
+        });
 
-        activeStateMachine.Fire(MachineEvents.NormalTransition).Wait();
+        await activeStateMachine.Fire(MachineEvents.NormalTransition);
     }
 
-    public virtual void Execute()
+    public virtual async Task Execute()
     {
     }
 }

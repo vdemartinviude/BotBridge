@@ -13,24 +13,26 @@ namespace WordpressStatesAndGuards.States;
 
 public class WPLogin : BaseState
 {
+    public override TimeSpan StateTimeout => TimeSpan.FromMinutes(2);
+
     public WPLogin(Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson) : base("WPLogin", robot, inputdata, resultJson)
     {
     }
 
-    public override void Execute()
+    public override async Task Execute()
     {
-        _robot.ExecuteWithWait(new SetTextRequest
+        await _robot.Execute(new SetTextRequest
         {
             By = By.Id("user_login"),
             Text = _inputData.GetStringData("$.UserLogin")
         });
-        _robot.ExecuteWithWait(new SetTextRequest
+        await _robot.Execute(new SetTextRequest
         {
             By = By.Id("user_pass"),
             Text = _inputData.GetStringData("$.Password")
         });
 
-        _robot.ExecuteWithWait(new ClickRequest
+        await _robot.Execute(new ClickRequest
         {
             By = By.Id("wp-submit")
         });

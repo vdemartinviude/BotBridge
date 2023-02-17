@@ -10,11 +10,13 @@ namespace StateExecute
     {
         private readonly ILogger<Worker> _logger;
         private readonly TheMachine _theMachine;
+        private readonly IApplicationLifetime _applicationLifetime;
 
-        public Worker(ILogger<Worker> logger, TheMachine theMachine)
+        public Worker(ILogger<Worker> logger, TheMachine theMachine, IApplicationLifetime applicationLifetime)
         {
             _logger = logger;
             _theMachine = theMachine;
+            _applicationLifetime = applicationLifetime;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -22,11 +24,12 @@ namespace StateExecute
             _theMachine.Build();
             _theMachine.ExecuteMachine();
 
-            while (!stoppingToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested && _theMachine.RobotWorking)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                _logger.LogInformation("Worker running at: {time} and Machine Running = {running}", DateTimeOffset.Now, _theMachine.RobotWorking);
                 await Task.Delay(1000, stoppingToken);
             }
+            _applicationLifetime.StopApplication();
         }
     }
 }

@@ -19,10 +19,10 @@ public class NavigationStart : BaseState
     {
     }
 
-    public override void Execute()
+    public override async Task Execute()
     {
-        _results.AddResultMessage("StartTime", $"Robot starting working at {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
-        _robot.ExecuteWithWait(new NavigationRequest
+        _results.AddResultMessage("StartTime", $"Robot start working at {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+        await _robot.Execute(new NavigationRequest
         {
             Timeout = TimeSpan.FromSeconds(5),
             Url = _inputData.GetStringData("$.Url")

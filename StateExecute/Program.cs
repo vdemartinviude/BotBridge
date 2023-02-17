@@ -7,7 +7,7 @@ using TheStateMachine.Helpers;
 using TheStateMachine.Model;
 
 var machineInfra = new MachineInfrastructure(
-    TheStateMachineHelpers.GetMachineSpecification(Assembly.Load("WordpressStatesAndGuards")),
+    TheStateMachineHelpers.GetMachineSpecification(Assembly.Load("StatesForMachineTest")),
     new Robot(),
     new InputJsonDocument(Path.Combine(Environment.CurrentDirectory, "JsonDocuments", "InputData.json")),
     new ResultJsonDocument());

@@ -15,10 +15,10 @@ public class StopRobotLoginError : BaseState
     {
     }
 
-    public override void Execute()
+    public override async Task Execute()
     {
         _results.AddResultMessage("Error", "The robot can not execute because a login error ocorred");
         _results.AddResultMessage("EndTime", $"The robot has ended working at {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
-        _results.SaveDocument("result.json").Wait();
+        await _results.SaveDocument("result.json");
     }
 }

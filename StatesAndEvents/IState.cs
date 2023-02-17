@@ -10,4 +10,5 @@ namespace StatesAndEvents;
 public interface IState : IComparable
 {
     public abstract TimeSpan StateTimeout { get; }
+    public const uint RobotPhase = 1;
 }

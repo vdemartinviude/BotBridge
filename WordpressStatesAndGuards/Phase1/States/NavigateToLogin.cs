@@ -18,9 +18,9 @@ public class NavigateToLogin : BaseState
     {
     }
 
-    public override void Execute()
+    public override async Task Execute()
     {
-        _robot.ExecuteWithWait(new NavigationRequest
+        await _robot.Execute(new NavigationRequest
         {
             Url = "http://localhost:8000/wp-admin"
         });

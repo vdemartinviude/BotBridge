@@ -111,11 +111,6 @@ namespace TheRobot
             return response;
         }
 
-        public RobotResponse ExecuteWithWait(IRobotRequest request)
-        {
-            return Execute(request).Result;
-        }
-
         private bool ExecuteExceptionFilter(Exception ex)
         {
             return ex is NoSuchElementException ||

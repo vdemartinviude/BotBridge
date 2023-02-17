@@ -27,69 +27,69 @@ public class Worker : BackgroundService
         _robot = robot;
         _source = source;
 
-        Log.Information("Starting building the state machine");
-        StateMachineDefinitionBuilder<BaseState, MachineEvents> builder = new();
+        //Log.Information("Starting building the state machine");
+        //StateMachineDefinitionBuilder<BaseState, MachineEvents> builder = new();
 
-        var PagesAssembly = Assembly.Load("Liberty");
+        //var PagesAssembly = Assembly.Load("Liberty");
 
-        List<BaseState> states = new();
-        var statesToAdd = PagesAssembly.ExportedTypes.Where(x => x.BaseType == typeof(BaseState))
-        .Select(x => (BaseState)Activator.CreateInstance(x, new object[] { _robot, baseOrcamento, _resultJsonDocument })!);
-        Log.Information("Events names: {@Names}", statesToAdd.Select((x, y) => y.ToString("00") + "->" + x!.Name));
-        states.AddRange(statesToAdd!);
+        //List<BaseState> states = new();
+        //var statesToAdd = PagesAssembly.ExportedTypes.Where(x => x.BaseType == typeof(BaseState))
+        //.Select(x => (BaseState)Activator.CreateInstance(x, new object[] { _robot, baseOrcamento, _resultJsonDocument })!);
+        //Log.Information("Events names: {@Names}", statesToAdd.Select((x, y) => y.ToString("00") + "->" + x!.Name));
+        //states.AddRange(statesToAdd!);
 
-        foreach (var state in states)
-        {
-            builder.In(state).ExecuteOnEntry(() => state.MainExecute(_activeStateMachine));
-            var Guards = PagesAssembly.GetExportedTypes()
-                .Where(x => x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IGuard<,>)))
-                .Select(x => new
-                {
-                    type = x,
-                    currentstate = x.GetInterfaces().Single(y => y.GetGenericTypeDefinition() == typeof(IGuard<,>)).GenericTypeArguments[0],
-                    nextstate = x.GetInterfaces().Single(y => y.GetGenericTypeDefinition() == typeof(IGuard<,>)).GenericTypeArguments[1],
-                    theguard = Activator.CreateInstance(x)
-                })
-                .Where(x => x.currentstate == state.GetType());
+        //foreach (var state in states)
+        //{
+        //    builder.In(state).ExecuteOnEntry(() =>  state.MainExecute(_activeStateMachine));
+        //    var Guards = PagesAssembly.GetExportedTypes()
+        //        .Where(x => x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IGuard<,>)))
+        //        .Select(x => new
+        //        {
+        //            type = x,
+        //            currentstate = x.GetInterfaces().Single(y => y.GetGenericTypeDefinition() == typeof(IGuard<,>)).GenericTypeArguments[0],
+        //            nextstate = x.GetInterfaces().Single(y => y.GetGenericTypeDefinition() == typeof(IGuard<,>)).GenericTypeArguments[1],
+        //            theguard = Activator.CreateInstance(x)
+        //        })
+        //        .Where(x => x.currentstate == state.GetType());
 
-            if (Guards.Any())
-            {
-                Log.Information($"For state {state.Name} we have the following transition guards:");
-            }
-            foreach (var guard in Guards.OrderBy(x => x.type.GetProperty("Priority").GetValue(x.theguard)))
-            {
-                Log.Information("\t{currentstateName} -> {nextstateName} with guard: {@guard}", guard.currentstate.Name, guard.nextstate.Name, guard);
-                builder.In(state).On(MachineEvents.NormalTransition).If(() => (bool)guard.type.GetMethod("Condition").Invoke(guard.theguard, new object[] { _robot })!).Goto(states.Single(x => x.GetType() == guard.nextstate));
-            }
+        //    if (Guards.Any())
+        //    {
+        //        Log.Information($"For state {state.Name} we have the following transition guards:");
+        //    }
+        //    foreach (var guard in Guards.OrderBy(x => x.type.GetProperty("Priority").GetValue(x.theguard)))
+        //    {
+        //        Log.Information("\t{currentstateName} -> {nextstateName} with guard: {@guard}", guard.currentstate.Name, guard.nextstate.Name, guard);
+        //        builder.In(state).On(MachineEvents.NormalTransition).If(() => (bool)guard.type.GetMethod("Condition").Invoke(guard.theguard, new object[] { _robot })!).Goto(states.Single(x => x.GetType() == guard.nextstate));
+        //    }
 
-            var FinalGuards = PagesAssembly.GetExportedTypes()
-                .Where(x => x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IGuard<>)))
-                .Select(x => new
-                {
-                    type = x,
-                    currentstate = x.GetInterfaces().Single(y => y.GetGenericTypeDefinition() == typeof(IGuard<>)).GenericTypeArguments[0]
-                })
-                .Where(x => x.currentstate == state.GetType());
+        //    var FinalGuards = PagesAssembly.GetExportedTypes()
+        //        .Where(x => x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IGuard<>)))
+        //        .Select(x => new
+        //        {
+        //            type = x,
+        //            currentstate = x.GetInterfaces().Single(y => y.GetGenericTypeDefinition() == typeof(IGuard<>)).GenericTypeArguments[0]
+        //        })
+        //        .Where(x => x.currentstate == state.GetType());
 
-            if (FinalGuards.Any())
-            {
-                Log.Information($"For state {state.Name} we have the following final guards:");
-            }
-            foreach (var guard in FinalGuards)
-            {
-                Log.Information("\t{currentstateName} -> FinalState with guard: {guard}", state.Name, guard);
-                var theguard = Activator.CreateInstance(guard.type);
-                builder
-                    .In(state).On(MachineEvents.NormalTransition)
-                    .If(() => (bool)guard.type.GetMethod("Condition")
-                    .Invoke(theguard, new object[] { _robot }))
-                    //.Goto(state)
-                    .Execute(() => _finalizaMaquina());
-            }
-        }
+        //    if (FinalGuards.Any())
+        //    {
+        //        Log.Information($"For state {state.Name} we have the following final guards:");
+        //    }
+        //    foreach (var guard in FinalGuards)
+        //    {
+        //        Log.Information("\t{currentstateName} -> FinalState with guard: {guard}", state.Name, guard);
+        //        var theguard = Activator.CreateInstance(guard.type);
+        //        builder
+        //            .In(state).On(MachineEvents.NormalTransition)
+        //            .If(() => (bool)guard.type.GetMethod("Condition")
+        //            .Invoke(theguard, new object[] { _robot }))
+        //            //.Goto(state)
+        //            .Execute(() => _finalizaMaquina());
+        //    }
+        //}
 
-        builder.WithInitialState(states.Single(x => x.GetType() == typeof(FirstPage)));
-        _activeStateMachine = builder.Build().CreateActiveStateMachine();
+        //builder.WithInitialState(states.Single(x => x.GetType() == typeof(FirstPage)));
+        //_activeStateMachine = builder.Build().CreateActiveStateMachine();
         _watchDog = watchDog;
     }
 

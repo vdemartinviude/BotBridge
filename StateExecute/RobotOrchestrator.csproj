@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JsonDocumentsManager\JsonDocumentsManager.csproj" />
+    <ProjectReference Include="..\StatesForMachineTest\StatesForMachineTest.csproj" />
     <ProjectReference Include="..\TheRobot\TheRobot.csproj" />
     <ProjectReference Include="..\TheStateMachine\TheStateMachine.csproj" />
     <ProjectReference Include="..\WordpressStatesAndGuards\WordpressStatesAndGuards.csproj" />

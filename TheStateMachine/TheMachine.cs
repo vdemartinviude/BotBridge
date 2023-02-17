@@ -7,6 +7,7 @@ using StatesAndEvents;
 using System.Reflection;
 using System.Threading;
 using TheRobot;
+using TheRobot.Requests;
 using TheStateMachine.Model;
 
 namespace TheStateMachine
@@ -20,6 +21,7 @@ namespace TheStateMachine
         private readonly IConfiguration _configuration;
         private readonly ILogger<TheMachine> _logger;
         public AsyncActiveStateMachine<BaseState, MachineEvents>? Machine { get; private set; }
+        public bool RobotWorking { get; private set; }
 
         public TheMachine(MachineInfrastructure machineInfrastructure, IConfiguration configuration, ILogger<TheMachine> logger)
         {
@@ -40,7 +42,7 @@ namespace TheStateMachine
                 .Select(st => (BaseState)Activator.CreateInstance(st, new object[] { _robot, _inputDocument, _resultDocument })).ToList();
             foreach (var state in states)
             {
-                builder.In(state).ExecuteOnEntry(() => MachineExecuteState(state));
+                builder.In(state).ExecuteOnEntry(async () => await MachineExecuteStateAsync(state));
                 builder.In(state).On(MachineEvents.FinalizeMachine).Execute(() => _finalizaMaquina());
                 var interGuardsForState = _machineSpecification.IntermediaryGuards.Where(x => x.CurrentState.Name == state.GetType().Name).
                     Select(x => new
@@ -83,11 +85,11 @@ namespace TheStateMachine
             Machine = builder.Build().CreateActiveStateMachine();
         }
 
-        private void MachineExecuteState(BaseState state)
+        private async Task MachineExecuteStateAsync(BaseState state)
         {
             AutoResetEvent autoResetEvent = new(false);
             ThreadPool.RegisterWaitForSingleObject(autoResetEvent, new WaitOrTimerCallback(MyCallBackFunction), state, (int)state.StateTimeout.TotalMilliseconds, true);
-            state.MainExecute(Machine);
+            await state.MainExecute(Machine);
             autoResetEvent.Set();
         }
 
@@ -95,14 +97,17 @@ namespace TheStateMachine
         {
             if (timedOut)
             {
-                _logger.LogCritical("State {name} timeout", state.GetType().Name);
-                _robot.Dispose();
                 Machine.Stop();
+                _logger.LogCritical("State {name} timeout", state.GetType().Name);
+                //while (Machine.IsRunning) ;
+                _robot.Execute(new QuitRobotRequest()).Wait();
+                RobotWorking = false;
             }
         }
 
         public void ExecuteMachine()
         {
+            RobotWorking = true;
             Machine!.Start();
         }
 
@@ -110,12 +115,14 @@ namespace TheStateMachine
         {
             _robot.Dispose();
             Machine!.Stop();
+            RobotWorking = false;
         }
 
         private void _finalizaMaquina()
         {
             _robot.Dispose();
             Machine!.Stop();
+            RobotWorking = false;
         }
     }
 }

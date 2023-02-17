@@ -13,7 +13,7 @@ namespace TheStateMachine.Helpers;
 
 public static class TheStateMachineHelpers
 {
-    public static MachineSpecification GetMachineSpecification(Assembly assembly)
+    public static MachineSpecification GetMachineSpecification(Assembly assembly, uint RobotPhase = 1)
     {
         var specification = new MachineSpecification();
         specification.States = assembly.ExportedTypes.Where(type => type.BaseType == typeof(BaseState));
