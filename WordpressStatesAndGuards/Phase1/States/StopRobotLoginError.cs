@@ -15,7 +15,7 @@ public class StopRobotLoginError : BaseState
     {
     }
 
-    public override async Task Execute()
+    public override async Task Execute(CancellationToken token)
     {
         _results.AddResultMessage("Error", "The robot can not execute because a login error ocorred");
         _results.AddResultMessage("EndTime", $"The robot has ended working at {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");

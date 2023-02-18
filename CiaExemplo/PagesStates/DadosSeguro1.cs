@@ -1,11 +1,6 @@
 ﻿using JsonDocumentsManager;
 using OpenQA.Selenium;
 using StatesAndEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheRobot;
 using TheRobot.Requests;
 
@@ -17,133 +12,74 @@ public class DadosSeguro1 : BaseState
     {
     }
 
-    public override void Execute()
+    public override async Task Execute(CancellationToken token)
     {
-        #region SexoSegurado
+        await ProcessaSexoSegurado();
 
-        if (_inputData.GetStringData("$.Segurado.SexoSegurado") == "Feminino")
+        await ProcessaVigencia();
+
+        await ProcessaCepPernoite();
+
+        await ProcessaIsencaoFiscal();
+
+        await ProcessaProprietario();
+
+        await ProcessaPrincipalCondutor();
+
+        await ProcessaAvaliacaoPerfil();
+    }
+
+    private async Task ProcessaAvaliacaoPerfil()
+    {
+        await _robot.Execute(new SelectBy2ClicksRequest()
         {
-            var clicksexfem = new ClickRequest()
+            By1 = By.XPath("//div[@id='PerfilItem143_chosen']//b"),
+            By2 = By.XPath($"//div[@id='PerfilItem143_chosen']//li[contains(text(),'{_inputData.GetStringData("$.PrincipalCondutor.EstadoCivilCondutor")}')]")
+        });
+
+        await _robot.Execute(new SelectBy2ClicksRequest()
+        {
+            By1 = By.XPath("//div[@id='PerfilItem147_chosen']//b"),
+            By2 = By.XPath($"//div[@id='PerfilItem147_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Perfil.VeiculoUsadoPrestacaoServicos")}')]")
+        });
+
+        await _robot.Execute(new SelectBy2ClicksRequest()
+        {
+            By1 = By.XPath("//div[@id='PerfilItem148_chosen']//b"),
+            By2 = By.XPath($"//div[@id='PerfilItem148_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Perfil.ResideIdadeEntre18e24")}')]")
+        });
+
+        if (_inputData.GetStringData("$.Perfil.ResideIdadeEntre18e24") == "Sim")
+        {
+            await _robot.Execute(new SelectBy2ClicksRequest()
             {
-                By = By.Id("SeguradoPessoafisicaCotacaoModelCodigoSexoFeminino"),
-                Timeout = TimeSpan.FromSeconds(1)
-            };
-            _robot.Execute(clicksexfem).Wait();
+                By1 = By.XPath("//div[@id='PerfilItem149_chosen']//b"),
+                By2 = By.XPath($"//div[@id='PerfilItem149_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Perfil.EstenderCoberturaIdadeEntre18e24")}')]")
+            });
         }
-        else
+        if (_inputData.GetStringData("$.Perfil.EstenderCoberturaIdadeEntre18e24").Contains("Sim"))
         {
-            var clicksexmas = new ClickRequest()
+            await _robot.Execute(new SelectBy2ClicksRequest()
             {
-                By = By.Id("SeguradoPessoafisicaCotacaoModelCodigoSexoMasculino"),
-                Timeout = TimeSpan.FromSeconds(1)
-            };
-            _robot.Execute(clicksexmas).Wait();
+                By1 = By.XPath("//div[@id='PerfilItem150_chosen']//b"),
+                By2 = By.XPath($"//div[@id='PerfilItem150_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Perfil.SexoPessoasIdadeEntre18e24")}')]")
+            });
         }
+    }
 
-        #endregion SexoSegurado
-
-        #region Vigencia
-
-        var setiniciovigencia = new SetTextWithJsRequest
-        {
-            By = By.Id("CotacaoModelDataInicioVigencia"),
-            Text = _inputData.GetStringData("$.Seguro.InicioVigencia")
-        };
-        _robot.Execute(setiniciovigencia).Wait();
-
-        _robot.Execute(new SetTextWithJsRequest()
-        {
-            By = By.Id("CotacaoModelDataFimVigencia"),
-            Text = _inputData.GetStringData("$.Seguro.FinalVigencia")
-        }).Wait();
-
-        #endregion Vigencia
-
-        #region CepPernoite
-
-        _robot.Execute(new SetTextWithKeyDownRequest()
-        {
-            By = By.Id("CodigoCodigoEnderecamentoPostalPernoite"),
-            Text = _inputData.GetStringData("$.Local.CEPPernoite").Substring(0, 5),
-            DelayAfter = TimeSpan.FromSeconds(3)
-        }).Wait();
-
-        if (_inputData.GetStringData("$.Local.CEPPernoiteResidencia") == "False")
-        {
-            _robot.Execute(new ClickRequest()
-            {
-                By = By.Id("ItemAutoCotacaoModelIndicadorCepResidenciaCheck"),
-                Timeout = TimeSpan.FromSeconds(2)
-            }).Wait();
-            _robot.Execute(new SetTextRequest()
-            {
-                By = By.Id("ItemAutoCotacaoModelCepResidencia"),
-                Text = _inputData.GetStringData("$.Local.CEPResidencia")
-            }).Wait();
-        }
-
-        #endregion CepPernoite
-
-        #region IsencaoFiscal
-
-        if (_inputData.GetStringData("$.Fiscal.IsencaoFiscal") == "True")
-        {
-            if (_inputData.GetStringData("$.Fiscal.TipoIsencao").Contains("PESSOA COM"))
-            {
-                _robot.Execute(new SelectBy2ClicksRequest()
-                {
-                    By1 = By.XPath("//div[@id='ItemAutoCotacaoModelAdaptacaoVeiculo_chosen']//input"),
-                    By2 = By.XPath("//div[@id='ItemAutoCotacaoModelAdaptacaoVeiculo_chosen']//ul[@class='chosen-results']/li[text()='DEF. FÍSICO']"),
-                    DelayBetweenClicks = TimeSpan.FromSeconds(1)
-                }).Wait();
-            }
-
-            _robot.Execute(new ScrollToElementRequest()
-            {
-                By = By.Id("rdIsencaoFiscalSim")
-            }).Wait();
-
-            _robot.Execute(new ClickByJavascriptRequest()
-            {
-                By = By.Id("rdIsencaoFiscalSim"),
-
-                DelayAfter = TimeSpan.FromSeconds(10)
-            }).Wait();
-
-            _robot.Execute(new SelectBy2ClicksRequest()
-            {
-                By1 = By.XPath("//div[@id='ItemAutoCotacaoModelMotivoIsencaoFiscal_chosen']//b"),
-                By2 = By.XPath($"//div[@id='ItemAutoCotacaoModelMotivoIsencaoFiscal_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Fiscal.TipoIsencao")}')]"),
-                DelayBetweenClicks = TimeSpan.FromSeconds(2)
-            }).Wait();
-        }
-
-        #endregion IsencaoFiscal
-
-        #region Proprietario
-
-        _robot.Execute(new SelectBy2ClicksRequest()
-        {
-            By1 = By.XPath("//div[@id='PropriedadeVeiculoCotacaoModelTipoPropriedadeVeiculo_chosen']//b"),
-            By2 = By.XPath($"//div[@id='PropriedadeVeiculoCotacaoModelTipoPropriedadeVeiculo_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Proprietario.VinculoSegurado")}')]"),
-            DelayBetweenClicks = TimeSpan.FromSeconds(1)
-        }).Wait();
-
-        #endregion Proprietario
-
-        #region PrincipalCondutor
-
-        _robot.Execute(new ScrollToElementRequest()
+    private async Task ProcessaPrincipalCondutor()
+    {
+        await _robot.Execute(new ScrollToElementRequest()
         {
             By = By.XPath("//div[@id='CondutorVeiculoCotacaoModelTipoCondutorDependente_chosen']//b")
-        }).Wait();
+        });
 
-        _robot.Execute(new SelectBy2ClicksRequest()
+        await _robot.Execute(new SelectBy2ClicksRequest()
         {
             DelayBetweenClicks = TimeSpan.FromSeconds(2),
             By1 = By.XPath("//div[@id='CondutorVeiculoCotacaoModelTipoCondutorDependente_chosen']//b"),
             By2 = By.XPath($"//div[@id='CondutorVeiculoCotacaoModelTipoCondutorDependente_chosen']//li[contains(text(),'{_inputData.GetStringData("$.PrincipalCondutor.VinculoSegurado")}')]")
-        }).Wait();
+        });
         By bySexoCondutor;
         if (_inputData.GetStringData("$.PrincipalCondutor.SexoCondutor") == "Masculino")
         {
@@ -153,52 +89,113 @@ public class DadosSeguro1 : BaseState
         {
             bySexoCondutor = By.Id("CondutorVeiculoCotacaoModelCodigoSexoFeminino");
         }
-        _robot.Execute(new ClickByJavascriptRequest()
+        await _robot.Execute(new ClickByJavascriptRequest()
         {
             By = bySexoCondutor,
-        }).Wait();
+        });
+    }
 
-        #endregion PrincipalCondutor
-
-        #region AvaliacaoPerfil
-
-        _robot.Execute(new SelectBy2ClicksRequest()
+    private async Task ProcessaProprietario()
+    {
+        await _robot.Execute(new SelectBy2ClicksRequest()
         {
-            By1 = By.XPath("//div[@id='PerfilItem143_chosen']//b"),
-            By2 = By.XPath($"//div[@id='PerfilItem143_chosen']//li[contains(text(),'{_inputData.GetStringData("$.PrincipalCondutor.EstadoCivilCondutor")}')]")
-        }).Wait();
+            By1 = By.XPath("//div[@id='PropriedadeVeiculoCotacaoModelTipoPropriedadeVeiculo_chosen']//b"),
+            By2 = By.XPath($"//div[@id='PropriedadeVeiculoCotacaoModelTipoPropriedadeVeiculo_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Proprietario.VinculoSegurado")}')]"),
+            DelayBetweenClicks = TimeSpan.FromSeconds(1)
+        });
+    }
 
-        _robot.Execute(new SelectBy2ClicksRequest()
+    private async Task ProcessaIsencaoFiscal()
+    {
+        if (_inputData.GetStringData("$.Fiscal.IsencaoFiscal") == "True")
         {
-            By1 = By.XPath("//div[@id='PerfilItem147_chosen']//b"),
-            By2 = By.XPath($"//div[@id='PerfilItem147_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Perfil.VeiculoUsadoPrestacaoServicos")}')]")
-        }).Wait();
-
-        _robot.Execute(new SelectBy2ClicksRequest()
-        {
-            By1 = By.XPath("//div[@id='PerfilItem148_chosen']//b"),
-            By2 = By.XPath($"//div[@id='PerfilItem148_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Perfil.ResideIdadeEntre18e24")}')]")
-        }).Wait();
-
-        if (_inputData.GetStringData("$.Perfil.ResideIdadeEntre18e24") == "Sim")
-        {
-            _robot.Execute(new SelectBy2ClicksRequest()
+            if (_inputData.GetStringData("$.Fiscal.TipoIsencao").Contains("PESSOA COM"))
             {
-                By1 = By.XPath("//div[@id='PerfilItem149_chosen']//b"),
-                By2 = By.XPath($"//div[@id='PerfilItem149_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Perfil.EstenderCoberturaIdadeEntre18e24")}')]")
-            }).Wait();
-        }
-        if (_inputData.GetStringData("$.Perfil.EstenderCoberturaIdadeEntre18e24").Contains("Sim"))
-        {
-            _robot.Execute(new SelectBy2ClicksRequest()
+                await _robot.Execute(new SelectBy2ClicksRequest()
+                {
+                    By1 = By.XPath("//div[@id='ItemAutoCotacaoModelAdaptacaoVeiculo_chosen']//input"),
+                    By2 = By.XPath("//div[@id='ItemAutoCotacaoModelAdaptacaoVeiculo_chosen']//ul[@class='chosen-results']/li[text()='DEF. FÍSICO']"),
+                    DelayBetweenClicks = TimeSpan.FromSeconds(1)
+                });
+            }
+
+            await _robot.Execute(new ScrollToElementRequest()
             {
-                By1 = By.XPath("//div[@id='PerfilItem150_chosen']//b"),
-                By2 = By.XPath($"//div[@id='PerfilItem150_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Perfil.SexoPessoasIdadeEntre18e24")}')]")
-            }).Wait();
+                By = By.Id("rdIsencaoFiscalSim")
+            });
+
+            await _robot.Execute(new ClickByJavascriptRequest()
+            {
+                By = By.Id("rdIsencaoFiscalSim"),
+
+                DelayAfter = TimeSpan.FromSeconds(10)
+            });
+
+            await _robot.Execute(new SelectBy2ClicksRequest()
+            {
+                By1 = By.XPath("//div[@id='ItemAutoCotacaoModelMotivoIsencaoFiscal_chosen']//b"),
+                By2 = By.XPath($"//div[@id='ItemAutoCotacaoModelMotivoIsencaoFiscal_chosen']//li[contains(text(),'{_inputData.GetStringData("$.Fiscal.TipoIsencao")}')]"),
+                DelayBetweenClicks = TimeSpan.FromSeconds(2)
+            });
         }
+    }
 
-        #endregion AvaliacaoPerfil
+    private async Task ProcessaCepPernoite()
+    {
+        await _robot.Execute(new SetTextWithKeyDownRequest()
+        {
+            By = By.Id("CodigoCodigoEnderecamentoPostalPernoite"),
+            Text = _inputData.GetStringData("$.Local.CEPPernoite").Substring(0, 5),
+            DelayAfter = TimeSpan.FromSeconds(3)
+        });
 
-        Console.WriteLine("Testes");
+        if (_inputData.GetStringData("$.Local.CEPPernoiteResidencia") == "False")
+        {
+            await _robot.Execute(new ClickRequest()
+            {
+                By = By.Id("ItemAutoCotacaoModelIndicadorCepResidenciaCheck"),
+                Timeout = TimeSpan.FromSeconds(2)
+            });
+            await _robot.Execute(new SetTextRequest()
+            {
+                By = By.Id("ItemAutoCotacaoModelCepResidencia"),
+                Text = _inputData.GetStringData("$.Local.CEPResidencia")
+            });
+        }
+    }
+
+    private async Task ProcessaVigencia()
+    {
+        await _robot.Execute(new SetTextWithJsRequest
+        {
+            By = By.Id("CotacaoModelDataInicioVigencia"),
+            Text = _inputData.GetStringData("$.Seguro.InicioVigencia")
+        });
+
+        await _robot.Execute(new SetTextWithJsRequest()
+        {
+            By = By.Id("CotacaoModelDataFimVigencia"),
+            Text = _inputData.GetStringData("$.Seguro.FinalVigencia")
+        });
+    }
+
+    private async Task ProcessaSexoSegurado()
+    {
+        if (_inputData.GetStringData("$.Segurado.SexoSegurado") == "Feminino")
+        {
+            await _robot.Execute(new ClickRequest()
+            {
+                By = By.Id("SeguradoPessoafisicaCotacaoModelCodigoSexoFeminino"),
+                Timeout = TimeSpan.FromSeconds(1)
+            });
+        }
+        else
+        {
+            await _robot.Execute(new ClickRequest()
+            {
+                By = By.Id("SeguradoPessoafisicaCotacaoModelCodigoSexoMasculino"),
+                Timeout = TimeSpan.FromSeconds(1)
+            });
+        }
     }
 }

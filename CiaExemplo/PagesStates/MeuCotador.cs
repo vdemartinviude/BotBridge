@@ -13,12 +13,11 @@ public class MeuCotador : BaseState
     {
     }
 
-    public override void Execute()
+    public override async Task Execute(CancellationToken token)
     {
-        var click = new ClickRequest()
+        await _robot.Execute(new ClickRequest()
         {
             By = By.XPath("//input[@id='Acessar']")
-        };
-        _robot.Execute(click);
+        });
     }
 }

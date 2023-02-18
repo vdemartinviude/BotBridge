@@ -13,15 +13,14 @@ public class SelecaoCanal : BaseState
     {
     }
 
-    public override void Execute()
+    public override async Task Execute(CancellationToken token)
     {
-        var SelectRequest = new SelectTextRequest
+        await _robot.Execute(new SelectTextRequest
         {
             By = By.Id("ddlBranch"),
             Text = _inputData.GetStringData(JsonPath.Parse("$.Ramo")),
             DelayAfter = TimeSpan.FromSeconds(2),
             DelayBefore = TimeSpan.FromSeconds(3),
-        };
-        _robot.Execute(SelectRequest).Wait();
+        });
     }
 }

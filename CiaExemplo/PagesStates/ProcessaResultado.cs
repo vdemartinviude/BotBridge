@@ -19,7 +19,7 @@ public class ProcessaResultado : BaseState
     {
     }
 
-    public override void Execute()
+    public override async Task Execute(CancellationToken token)
     {
         var PremioTotal = _robot.Execute(new GetElementRequest()
         {
@@ -27,20 +27,20 @@ public class ProcessaResultado : BaseState
             Timeout = TimeSpan.FromSeconds(2)
         }).Result.WebElement;
 
-        var ValorPremioTotal = Convert.ToDouble(Regex.Match(PremioTotal.Text, @"\d{1,3}(\.\d{3})*,\d{2}").Value, new CultureInfo("pt-BR"));
+        var ValorPremioTotal = Convert.ToDouble(Regex.Match(PremioTotal!.Text, @"\d{1,3}(\.\d{3})*,\d{2}").Value, new CultureInfo("pt-BR"));
         _results.AddResultValue("Prêmios", "Prêmio Total", ValorPremioTotal);
 
-        _robot.Execute(new ClickByJavascriptRequest()
+        await _robot.Execute(new ClickByJavascriptRequest()
         {
             By = By.Id("btnShowModalCoberturas"),
             DelayAfter = TimeSpan.FromSeconds(7)
-        }).Wait();
+        });
 
-        _robot.Execute(new ChangeFrameRequest
+        await _robot.Execute(new ChangeFrameRequest
         {
             By = By.Id("ifrmCotacao"),
             Timeout = TimeSpan.FromSeconds(5)
-        }).Wait();
+        });
 
         bool continua = false;
         do
@@ -51,7 +51,7 @@ public class ProcessaResultado : BaseState
                 By = By.XPath("//table[@id='DataTables_Table_0']//tbody//tr"),
             }).Result.WebElements;
 
-            foreach (IWebElement element in linhas)
+            foreach (IWebElement element in linhas!)
             {
                 var descricao = element.FindElement(By.XPath("./td[1]")).Text;
                 var valor = Convert.ToDouble(Regex.Match(element.FindElement(By.XPath("./td[2]")).Text, @"\d{1,3}(\.\d{3})*,\d{2}").Value, new CultureInfo("pt-BR"));
@@ -63,20 +63,20 @@ public class ProcessaResultado : BaseState
                 Timeout = TimeSpan.FromSeconds(3)
             }).Result.WebElement;
 
-            continua = !botaoNext.GetAttribute("class").Contains("disabled");
+            continua = !botaoNext!.GetAttribute("class").Contains("disabled");
             if (continua)
             {
                 botaoNext.Click();
             }
         } while (continua);
-        _robot.Execute(new SwitchToDefaultFrameRequest()).Wait();
+        await _robot.Execute(new SwitchToDefaultFrameRequest());
 
-        _robot.Execute(new ClickRequest()
+        await _robot.Execute(new ClickRequest()
         {
             By = By.Id("btnConfirmar"),
             Timeout = TimeSpan.FromSeconds(3),
             DelayAfter = TimeSpan.FromSeconds(1)
-        }).Wait();
+        });
 
         var Franquia = _robot.Execute(new GetElementRequest()
         {
@@ -84,7 +84,7 @@ public class ProcessaResultado : BaseState
             Timeout = TimeSpan.FromSeconds(2)
         }).Result.WebElement;
 
-        var ValorFranquia = Convert.ToDouble(Regex.Match(Franquia.Text, @"\d{1,3}(\.\d{3})*,\d{2}").Value, new CultureInfo("pt-BR"));
+        var ValorFranquia = Convert.ToDouble(Regex.Match(Franquia!.Text, @"\d{1,3}(\.\d{3})*,\d{2}").Value, new CultureInfo("pt-BR"));
         _results.AddResultValue("Prêmios", "Franquia", ValorFranquia);
 
         var PremioLiquido = _robot.Execute(new GetElementRequest()
@@ -93,7 +93,7 @@ public class ProcessaResultado : BaseState
             Timeout = TimeSpan.FromSeconds(2)
         }).Result.WebElement;
 
-        var valorPremioLiquido = Convert.ToDouble(Regex.Match(PremioLiquido.Text, @"\d{1,3}(\.\d{3})*,\d{2}").Value, new CultureInfo("pt-BR"));
+        var valorPremioLiquido = Convert.ToDouble(Regex.Match(PremioLiquido!.Text, @"\d{1,3}(\.\d{3})*,\d{2}").Value, new CultureInfo("pt-BR"));
         _results.AddResultValue("Prêmios", "Prêmio Líquido", valorPremioLiquido);
 
         var IOF = _robot.Execute(new GetElementRequest()
@@ -101,15 +101,15 @@ public class ProcessaResultado : BaseState
             By = By.XPath("//td[@id='formaPgtoIof']"),
             Timeout = TimeSpan.FromSeconds(2)
         }).Result.WebElement;
-        var valorIOF = Convert.ToDouble(Regex.Match(IOF.Text, @"\d{1,3}(\.\d{3})*,\d{2}").Value, new CultureInfo("pt-BR"));
+        var valorIOF = Convert.ToDouble(Regex.Match(IOF!.Text, @"\d{1,3}(\.\d{3})*,\d{2}").Value, new CultureInfo("pt-BR"));
 
         _results.AddResultValue("Prêmios", "IOF", valorIOF);
 
-        _robot.Execute(new ClickRequest()
+        await _robot.Execute(new ClickRequest()
         {
             By = By.Id("btnShowModalFormaPagamento"),
             Timeout = TimeSpan.FromSeconds(2)
-        }).Wait();
+        });
 
         string formadepagamento = "";
         string parcela = "";
@@ -119,7 +119,7 @@ public class ProcessaResultado : BaseState
             By = By.XPath("//div[contains(@class,'titulo-forma-pagamento')]/div[(@class='row-parcela' or @class='label-titulo') and not (contains(@style,'display:none'))]"),
         }).Result.WebElements;
 
-        foreach (IWebElement element in pagamentos)
+        foreach (IWebElement element in pagamentos!)
         {
             if (element.GetAttribute("class") == "label-titulo")
             {
@@ -133,19 +133,19 @@ public class ProcessaResultado : BaseState
             }
         }
 
-        _robot.Execute(new ClickRequest()
+        await _robot.Execute(new ClickRequest()
         {
             By = By.Id("btn-close-formapagamento"),
             Timeout = TimeSpan.FromSeconds(5),
             DelayBefore = TimeSpan.FromSeconds(3)
-        }).Wait();
+        });
 
         var alertas = _robot.Execute(new GetElementsListRequest
         {
             By = By.XPath("//div[@role='alert']")
         }).Result.WebElements;
 
-        foreach (var alert in alertas)
+        foreach (var alert in alertas!)
         {
             _results.AddResultMessage("Mensagem [CIA]", alert.Text);
         }

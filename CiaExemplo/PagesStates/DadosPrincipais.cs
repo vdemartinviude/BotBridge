@@ -2,11 +2,6 @@
 using JsonDocumentsManager;
 using OpenQA.Selenium;
 using StatesAndEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheRobot;
 using TheRobot.Requests;
 
@@ -18,195 +13,178 @@ public class DadosPrincipais : BaseState
     {
     }
 
-    public override void Execute()
+    public override async Task Execute(CancellationToken token)
     {
         var pathRenovacao = JsonPath.Parse("$.DadosRenovacao.Renovacao");
         if (_inputData.GetStringData(pathRenovacao) == "True")
-
-        #region ComRenovação
-
         {
-            var pathSeguradora = JsonPath.Parse("$.DadosRenovacao.DadosApoliceAnterior.Seguradora");
-            var seguradora = _inputData.GetStringData(pathSeguradora);
-            if (String.IsNullOrEmpty(seguradora))
-            {
-                throw new EstimateParametersException("Seguradora anterior não informada na renovação");
-            }
-
-            var clickSim = new ClickRequest()
-            {
-                By = By.Id("rdRenovacaoSim"),
-                Timeout = TimeSpan.FromSeconds(3),
-                DelayAfter = TimeSpan.FromSeconds(5)
-            };
-            _robot.Execute(clickSim).Wait();
-
-            var selectSeguradora = new SelectBy2ClicksRequest
-            {
-                By1 = By.XPath("//span[contains(text(),'Selecione uma opção')]/../div/b"),
-                By2 = By.XPath($"//li[contains(@class,'active-result') and contains(text(),'{seguradora}')]"),
-                DelayBetweenClicks = TimeSpan.FromSeconds(1)
-            };
-            _robot.Execute(selectSeguradora).Wait();
-
-            var apoliceAnterior = _inputData.GetStringData("$.DadosRenovacao.DadosApoliceAnterior.Apolice");
-            if (!String.IsNullOrEmpty(apoliceAnterior))
-            {
-                var digitaApolice = new SetTextRequest()
-                {
-                    By = By.Id("PrincipalRenovacaoNumeroApoliceAnterior"),
-                    Text = apoliceAnterior
-                };
-                _robot.Execute(digitaApolice).Wait();
-            }
-
-            var itemAnterior = _inputData.GetStringData("$.DadosRenovacao.DadosApoliceAnterior.Item");
-            if (!String.IsNullOrEmpty(itemAnterior))
-            {
-                var digitaItem = new SetTextRequest()
-                {
-                    By = By.Id("PrincipalRenovacaoNumeroItemApoliceAnterior"),
-                    Text = itemAnterior
-                };
-                _robot.Execute(digitaItem).Wait();
-            }
+            await ProcessaComRenovacao();
         }
-
-        #endregion ComRenovação
-
-        #region SemRenovação
-
         else
         {
-            var clicknao = new ClickRequest()
-            {
-                By = By.Id("rdRenovacaoNao"),
-                Timeout = TimeSpan.FromSeconds(1)
-            };
-            _robot.Execute(clicknao).Wait();
+            await ProcessaSemRenovacao();
         }
-
-        #endregion SemRenovação
-
-        #region Segurado
 
         if (_inputData.GetStringData("$.Segurado.TipoPessoa") == "Jurídica")
         {
-            #region PessoaJuridica
-
-            var clickpessoajuridica = new ClickRequest()
-            {
-                By = By.Id("rdSeguradoJuridica"),
-                Timeout = TimeSpan.FromSeconds(1),
-                DelayAfter = TimeSpan.FromSeconds(1)
-            };
-            _robot.Execute(clickpessoajuridica).Wait();
-            var cnpj = _inputData.GetStringData("$.Segurado.CNPJ");
-            if (String.IsNullOrEmpty(cnpj))
-            {
-                throw new EstimateParametersException("CNPJ da pessoa jurídica não informado");
-            }
-            var typecnpj = new SetTextRequest()
-            {
-                By = By.Id("PrincipalSeguradoCotacaoModelCodigoCodigoPessoaFisicaCgc"),
-                Text = cnpj
-            };
-            _robot.Execute(typecnpj).Wait();
-            var cpfcondutor = _inputData.GetStringData("$.Segurado.CPFPrincipalCondutor");
-            if (String.IsNullOrEmpty(cpfcondutor))
-            {
-                throw new EstimateParametersException("CPF Principal condutor não informado");
-            }
-            var typecpfcondutor = new SetTextRequest()
-            {
-                By = By.Id("PrincipalCpfPrincipalCondutor"),
-                Text = cpfcondutor
-            };
-            _robot.Execute(typecpfcondutor).Wait();
-
-            #endregion PessoaJuridica
+            await ProcessaPessoaJuridica();
         }
         else
         {
-            #region PessoaFisica
-
-            var clickpessoafisica = new ClickRequest()
-            {
-                By = By.Id("rdSeguradoFisica"),
-                Timeout = TimeSpan.FromSeconds(1)
-            };
-            _robot.Execute(clickpessoafisica).Wait();
-
-            var cpf = _inputData.GetStringData("$.Segurado.CPF");
-            var typecpf = new SetTextRequest()
-            {
-                By = By.Id("PrincipalSeguradoCotacaoModelCodigoCodigoPessoaFisicaCgc"),
-                Text = cpf
-            };
-            _robot.Execute(typecpf).Wait();
-
-            if (_inputData.GetStringData("$.Segurado.SeguradoPrincipalCondutor") == "True")
-            {
-                var clickprincipalcondutor = new ClickRequest()
-                {
-                    By = By.Id("PrincipalCotacaoSeguradoPrincipal"),
-                    Timeout = TimeSpan.FromSeconds(1)
-                };
-                _robot.Execute(clickprincipalcondutor).Wait();
-            }
-            else
-            {
-                var typecpfcondutor = new SetTextRequest()
-                {
-                    By = By.Id("PrincipalCpfPrincipalCondutor"),
-                    Text = _inputData.GetStringData("$.Segurado.CPFPrincipalCondutor")
-                };
-                _robot.Execute(typecpfcondutor).Wait();
-            }
-
-            #endregion PessoaFisica
+            await ProcessaPessoaFisica();
         }
 
-        #endregion Segurado
+        await ProcessaPlacaChassi();
 
-        #region PlacaChassi
+        await _robot.Execute(new ClickRequest()
+        {
+            By = By.Id("btnCotar"),
+            Timeout = TimeSpan.FromSeconds(1)
+        });
+    }
 
+    private async Task ProcessaComRenovacao()
+    {
+        var pathSeguradora = JsonPath.Parse("$.DadosRenovacao.DadosApoliceAnterior.Seguradora");
+        var seguradora = _inputData.GetStringData(pathSeguradora);
+        if (String.IsNullOrEmpty(seguradora))
+        {
+            throw new EstimateParametersException("Seguradora anterior não informada na renovação");
+        }
+
+        await _robot.Execute(new ClickRequest()
+        {
+            By = By.Id("rdRenovacaoSim"),
+            Timeout = TimeSpan.FromSeconds(3),
+            DelayAfter = TimeSpan.FromSeconds(5)
+        });
+
+        await _robot.Execute(new SelectBy2ClicksRequest
+        {
+            By1 = By.XPath("//span[contains(text(),'Selecione uma opção')]/../div/b"),
+            By2 = By.XPath($"//li[contains(@class,'active-result') and contains(text(),'{seguradora}')]"),
+            DelayBetweenClicks = TimeSpan.FromSeconds(1)
+        });
+
+        var apoliceAnterior = _inputData.GetStringData("$.DadosRenovacao.DadosApoliceAnterior.Apolice");
+        if (!String.IsNullOrEmpty(apoliceAnterior))
+        {
+            await _robot.Execute(new SetTextRequest()
+            {
+                By = By.Id("PrincipalRenovacaoNumeroApoliceAnterior"),
+                Text = apoliceAnterior
+            });
+        }
+
+        var itemAnterior = _inputData.GetStringData("$.DadosRenovacao.DadosApoliceAnterior.Item");
+        if (!String.IsNullOrEmpty(itemAnterior))
+        {
+            await _robot.Execute(new SetTextRequest()
+            {
+                By = By.Id("PrincipalRenovacaoNumeroItemApoliceAnterior"),
+                Text = itemAnterior
+            });
+        }
+    }
+
+    private async Task ProcessaPessoaFisica()
+    {
+        await _robot.Execute(new ClickRequest()
+        {
+            By = By.Id("rdSeguradoFisica"),
+            Timeout = TimeSpan.FromSeconds(1)
+        });
+
+        var cpf = _inputData.GetStringData("$.Segurado.CPF");
+        await _robot.Execute(new SetTextRequest()
+        {
+            By = By.Id("PrincipalSeguradoCotacaoModelCodigoCodigoPessoaFisicaCgc"),
+            Text = cpf
+        });
+
+        if (_inputData.GetStringData("$.Segurado.SeguradoPrincipalCondutor") == "True")
+        {
+            await _robot.Execute(new ClickRequest()
+            {
+                By = By.Id("PrincipalCotacaoSeguradoPrincipal"),
+                Timeout = TimeSpan.FromSeconds(1)
+            });
+        }
+        else
+        {
+            await _robot.Execute(new SetTextRequest()
+            {
+                By = By.Id("PrincipalCpfPrincipalCondutor"),
+                Text = _inputData.GetStringData("$.Segurado.CPFPrincipalCondutor")
+            });
+        }
+    }
+
+    private async Task ProcessaPessoaJuridica()
+    {
+        await _robot.Execute(new ClickRequest()
+        {
+            By = By.Id("rdSeguradoJuridica"),
+            Timeout = TimeSpan.FromSeconds(1),
+            DelayAfter = TimeSpan.FromSeconds(1)
+        });
+        var cnpj = _inputData.GetStringData("$.Segurado.CNPJ");
+        if (String.IsNullOrEmpty(cnpj))
+        {
+            throw new EstimateParametersException("CNPJ da pessoa jurídica não informado");
+        }
+        await _robot.Execute(new SetTextRequest()
+        {
+            By = By.Id("PrincipalSeguradoCotacaoModelCodigoCodigoPessoaFisicaCgc"),
+            Text = cnpj
+        });
+        var cpfcondutor = _inputData.GetStringData("$.Segurado.CPFPrincipalCondutor");
+        if (String.IsNullOrEmpty(cpfcondutor))
+        {
+            throw new EstimateParametersException("CPF Principal condutor não informado");
+        }
+        await _robot.Execute(new SetTextRequest()
+        {
+            By = By.Id("PrincipalCpfPrincipalCondutor"),
+            Text = cpfcondutor
+        });
+    }
+
+    private async Task ProcessaPlacaChassi()
+    {
         if (_inputData.GetStringData("$.Veiculo.ZeroKmSemPlaca") == "True")
         {
-            var clicksemplaca = new ClickRequest()
+            await _robot.Execute(new ClickRequest()
             {
                 By = By.Id("PrincipalIndicadorVeiculo0KMSemPlaca"),
                 Timeout = TimeSpan.FromSeconds(1)
-            };
-            _robot.Execute(clicksemplaca).Wait();
+            });
         }
         else
         {
-            var typeplaca = new SetTextRequest()
+            await _robot.Execute(new SetTextRequest()
             {
                 By = By.Id("PrincipalItemAutoCotacaoModelLicencaCodigo"),
                 Text = _inputData.GetStringData("$.Veiculo.Placa")
-            };
-            _robot.Execute(typeplaca).Wait();
+            });
         }
         var chassi = _inputData.GetStringData("$.Veiculo.Chassi");
         if (!string.IsNullOrEmpty(chassi))
         {
-            var typechassi = new SetTextRequest()
+            await _robot.Execute(new SetTextRequest()
             {
                 By = By.Id("PrincipalItemAutoCotacaoModelNumeroSerie"),
                 Text = chassi
-            };
-            _robot.Execute(typechassi).Wait();
+            });
         }
+    }
 
-        #endregion PlacaChassi
-
-        var clickprosseguir = new ClickRequest()
+    private async Task ProcessaSemRenovacao()
+    {
+        await _robot.Execute(new ClickRequest()
         {
-            By = By.Id("btnCotar"),
+            By = By.Id("rdRenovacaoNao"),
             Timeout = TimeSpan.FromSeconds(1)
-        };
-        _robot.Execute(clickprosseguir).Wait();
+        });
     }
 }

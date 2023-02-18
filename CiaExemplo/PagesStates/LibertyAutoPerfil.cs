@@ -12,14 +12,13 @@ public class LibertyAutoPerfil : BaseState
     {
     }
 
-    public override void Execute()
+    public override async Task Execute(CancellationToken token)
     {
-        var clickjava = new ClickByJavascriptRequest()
+        await _robot.Execute(new ClickByJavascriptRequest()
         {
             By = By.XPath("//label[contains(text(),'31111')]//.."),
             DelayBefore = TimeSpan.FromSeconds(1),
             DelayAfter = TimeSpan.FromSeconds(10)
-        };
-        _robot.Execute(clickjava).Wait();
+        });
     }
 }

@@ -4,24 +4,21 @@ using JsonDocumentsManager;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using StatesAndEvents;
-using System.Reflection;
-using System.Threading;
 using TheRobot;
-using TheRobot.Requests;
 using TheStateMachine.Model;
 
 namespace TheStateMachine
 {
     public class TheMachine
     {
-        private readonly MachineSpecification _machineSpecification;
-        private readonly Robot _robot;
-        private readonly InputJsonDocument _inputDocument;
-        private readonly ResultJsonDocument _resultDocument;
         private readonly IConfiguration _configuration;
+        private readonly InputJsonDocument _inputDocument;
         private readonly ILogger<TheMachine> _logger;
-        public AsyncActiveStateMachine<BaseState, MachineEvents>? Machine { get; private set; }
-        public bool RobotWorking { get; private set; }
+        private readonly MachineSpecification _machineSpecification;
+        private readonly ResultJsonDocument _resultDocument;
+        private readonly Robot _robot;
+        private readonly CancellationTokenSource cts;
+        private readonly CancellationToken token;
 
         public TheMachine(MachineInfrastructure machineInfrastructure, IConfiguration configuration, ILogger<TheMachine> logger)
         {
@@ -31,84 +28,46 @@ namespace TheStateMachine
             _resultDocument = machineInfrastructure.ResultJsonDocument;
             _configuration = configuration;
             _logger = logger;
+
+            cts = new();
+            token = cts.Token;
         }
+
+        public AsyncActiveStateMachine<BaseState, MachineEvents>? Machine { get; private set; }
+        public bool RobotWorking { get; private set; }
 
         public void Build()
         {
             StateMachineDefinitionBuilder<BaseState, MachineEvents> builder = new();
-            BaseState theFirstState = null;
+            BaseState? theFirstState = null;
 
-            var states = _machineSpecification.States
-                .Select(st => (BaseState)Activator.CreateInstance(st, new object[] { _robot, _inputDocument, _resultDocument })).ToList();
+            var states = _machineSpecification.States!
+                .Select(st => (BaseState)Activator.CreateInstance(st, new object[] { _robot, _inputDocument, _resultDocument })!).ToList();
             foreach (var state in states)
             {
-                builder.In(state).ExecuteOnEntry(async () => await MachineExecuteStateAsync(state));
+                builder.In(state).ExecuteOnEntry(() => MachineExecuteState(state));
                 builder.In(state).On(MachineEvents.FinalizeMachine).Execute(() => _finalizaMaquina());
-                var interGuardsForState = _machineSpecification.IntermediaryGuards.Where(x => x.CurrentState.Name == state.GetType().Name).
-                    Select(x => new
-                    {
-                        CurrentState = x.CurrentState,
-                        NextState = x.NextState,
-                        TheGuard = Activator.CreateInstance(x.Guard, new object[] { }),
-                        Guard = x.Guard
-                    })
-                    .OrderBy(x => (uint)x.Guard.GetProperty("Priority").GetValue(x.TheGuard));
-                foreach (var guard in interGuardsForState)
-                {
-                    var nextstate = states.Where(x => x.GetType().Name == guard.NextState.Name).Single();
-                    builder
-                        .In(state)
-                        .On(MachineEvents.NormalTransition)
-                        .If(() => (bool)guard.Guard.GetMethod("Condition").Invoke(guard.TheGuard, new object[] { _robot }))
-                        .Goto(nextstate);
-                }
-                var finalGuardsForState = _machineSpecification.FinalGuards.Where(x => x.CurrentState.Name == state.GetType().Name)
-                    .Select(x => new
-                    {
-                        CurrentState = x.CurrentState,
-                        TheGuard = Activator.CreateInstance(x.Guard, new object[] { }),
-                        Guard = x.Guard
-                    });
-                foreach (var guard in finalGuardsForState)
-                {
-                    builder
-                        .In(state)
-                        .On(MachineEvents.NormalTransition)
-                        .If(() => (bool)guard.Guard.GetMethod("Condition").Invoke(guard.TheGuard, new object[] { _robot }))
-                        .Execute(() => _normalFinish());
-                }
+                IntermediaryGuardsProcess(builder, states, state);
+                FinalGuardProcess(builder, state);
                 builder.In(state).On(MachineEvents.NormalTransition).Execute(() => _finalizaMaquina());
-                if (!_machineSpecification.IntermediaryGuards.Any(g => g.NextState.Name == state.GetType().Name))
+                if (!_machineSpecification!.IntermediaryGuards!.Any(g => g.NextState!.Name == state.GetType().Name))
                     theFirstState = state;
             }
             builder.WithInitialState(theFirstState!);
             Machine = builder.Build().CreateActiveStateMachine();
         }
 
-        private async Task MachineExecuteStateAsync(BaseState state)
-        {
-            AutoResetEvent autoResetEvent = new(false);
-            ThreadPool.RegisterWaitForSingleObject(autoResetEvent, new WaitOrTimerCallback(MyCallBackFunction), state, (int)state.StateTimeout.TotalMilliseconds, true);
-            await state.MainExecute(Machine);
-            autoResetEvent.Set();
-        }
-
-        private void MyCallBackFunction(object? state, bool timedOut)
-        {
-            if (timedOut)
-            {
-                Machine.Stop();
-                _logger.LogCritical("State {name} timeout", state.GetType().Name);
-                //while (Machine.IsRunning) ;
-                _robot.Execute(new QuitRobotRequest()).Wait();
-                RobotWorking = false;
-            }
-        }
-
         public void ExecuteMachine()
         {
             RobotWorking = true;
             Machine!.Start();
+        }
+
+        private void _finalizaMaquina()
+        {
+            _robot.Dispose();
+            Machine!.Stop();
+            RobotWorking = false;
         }
 
         private void _normalFinish()
@@ -118,11 +77,65 @@ namespace TheStateMachine
             RobotWorking = false;
         }
 
-        private void _finalizaMaquina()
+        private void FinalGuardProcess(StateMachineDefinitionBuilder<BaseState, MachineEvents> builder, BaseState? currentState)
         {
-            _robot.Dispose();
-            Machine!.Stop();
-            RobotWorking = false;
+            var finalGuardsForState = _machineSpecification.FinalGuards!.Where(x => x.CurrentState!.Name == currentState!.GetType().Name)
+                                .Select(x => new
+                                {
+                                    x.CurrentState,
+                                    TheGuard = Activator.CreateInstance(x.Guard!, Array.Empty<object>()),
+                                    x.Guard
+                                });
+            foreach (var guard in finalGuardsForState)
+            {
+                builder
+                    .In(currentState!)
+                    .On(MachineEvents.NormalTransition)
+                    .If(() => (bool)guard.Guard!.GetMethod("Condition")!.Invoke(guard.TheGuard, new object[] { _robot })!)
+                    .Execute(() => _normalFinish());
+            }
+        }
+
+        private void IntermediaryGuardsProcess(StateMachineDefinitionBuilder<BaseState, MachineEvents> builder, List<BaseState> states, BaseState? currentState)
+        {
+            var interGuardsForState = _machineSpecification.IntermediaryGuards!.Where(x => x.CurrentState!.Name == currentState!.GetType().Name).
+                                Select(x => new
+                                {
+                                    x.CurrentState,
+                                    x.NextState,
+                                    TheGuard = Activator.CreateInstance(x.Guard!, Array.Empty<object>()),
+                                    x.Guard
+                                })
+                                .OrderBy(x => (uint)x.Guard!.GetProperty("Priority")!.GetValue(x.TheGuard)!);
+            foreach (var guard in interGuardsForState)
+            {
+                var nextstate = states.Where(x => x.GetType().Name == guard!.NextState!.Name).Single();
+                builder
+                    .In(currentState!)
+                    .On(MachineEvents.NormalTransition)
+                    .If(() => (bool)guard.Guard!.GetMethod("Condition")!.Invoke(guard.TheGuard, new object[] { _robot })!)
+                    .Goto(nextstate);
+            }
+        }
+
+        private void MachineExecuteState(BaseState state)
+        {
+            AutoResetEvent autoResetEvent = new(false);
+
+            ThreadPool.RegisterWaitForSingleObject(autoResetEvent, new WaitOrTimerCallback(watchdogEventSignled), state, (int)state.StateTimeout.TotalMilliseconds, true);
+
+            TaskFactory factory = new(token);
+
+            var task = factory.StartNew(async () => await state.MainExecute(Machine!, token, autoResetEvent));
+        }
+
+        private void watchdogEventSignled(object? state, bool timedOut)
+        {
+            if (timedOut)
+            {
+                _logger.LogCritical("State {name} timeout", state!.GetType().Name);
+                cts.Cancel();
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ public class LoadWpressFile : BaseState
     {
     }
 
-    public override async Task Execute()
+    public override async Task Execute(CancellationToken token)
     {
         await _robot.Execute(new ClickRequest
         {
@@ -51,9 +51,10 @@ public class LoadWpressFile : BaseState
                 By = By.XPath("//button[contains(text(),'Continuar') and @class='ai1wm-button-green']"),
                 Timeout = TimeSpan.FromSeconds(1)
             });
+            token.ThrowIfCancellationRequested();
         } while (resp.Status != RobotResponseStatus.ActionRealizedOk);
 
-        resp.WebElement.Click();
+        resp.WebElement!.Click();
 
         do
         {

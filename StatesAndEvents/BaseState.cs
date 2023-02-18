@@ -74,21 +74,30 @@ public class BaseState : IState
         return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
     }
 
-    public async Task MainExecute(AsyncActiveStateMachine<BaseState, MachineEvents> activeStateMachine)
+    public async Task MainExecute(AsyncActiveStateMachine<BaseState, MachineEvents> activeStateMachine, CancellationToken token, AutoResetEvent autoEvent)
     {
         Log.Information("Executing state {@state}", this);
-        await Execute();
-        Thread.Sleep(100);
-        await _robot.Execute(new ElementExistRequest
+        try
         {
-            By = By.XPath("//body"),
-            Timeout = TimeSpan.FromSeconds(10)
-        });
+            await Execute(token);
+            token.ThrowIfCancellationRequested();
+            Thread.Sleep(100);
+            await _robot.Execute(new ElementExistRequest
+            {
+                By = By.XPath("//body"),
+                Timeout = TimeSpan.FromSeconds(10)
+            });
 
-        await activeStateMachine.Fire(MachineEvents.NormalTransition);
+            await activeStateMachine.Fire(MachineEvents.NormalTransition);
+            autoEvent.Set();
+        }
+        catch (Exception ex)
+        {
+            await activeStateMachine.FirePriority(MachineEvents.FinalizeMachine);
+        }
     }
 
-    public virtual async Task Execute()
+    public virtual async Task Execute(CancellationToken token)
     {
     }
 }

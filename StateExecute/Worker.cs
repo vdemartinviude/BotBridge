@@ -1,4 +1,5 @@
 using JsonDocumentsManager;
+using Microsoft.Extensions.Hosting;
 using StatesAndEvents;
 using TheRobot;
 using TheStateMachine;
@@ -10,9 +11,9 @@ namespace StateExecute
     {
         private readonly ILogger<Worker> _logger;
         private readonly TheMachine _theMachine;
-        private readonly IApplicationLifetime _applicationLifetime;
+        private readonly IHostApplicationLifetime _applicationLifetime;
 
-        public Worker(ILogger<Worker> logger, TheMachine theMachine, IApplicationLifetime applicationLifetime)
+        public Worker(ILogger<Worker> logger, TheMachine theMachine, IHostApplicationLifetime applicationLifetime)
         {
             _logger = logger;
             _theMachine = theMachine;
@@ -29,6 +30,7 @@ namespace StateExecute
                 _logger.LogInformation("Worker running at: {time} and Machine Running = {running}", DateTimeOffset.Now, _theMachine.RobotWorking);
                 await Task.Delay(1000, stoppingToken);
             }
+
             _applicationLifetime.StopApplication();
         }
     }

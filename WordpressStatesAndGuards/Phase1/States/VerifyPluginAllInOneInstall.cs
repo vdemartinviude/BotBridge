@@ -20,7 +20,7 @@ public class VerifyPluginAllInOneInstall : BaseState
     {
     }
 
-    public override async Task Execute()
+    public override async Task Execute(CancellationToken token)
     {
         var pluginalreadyinstalled = await _robot.Execute(new ElementExistRequest
         {

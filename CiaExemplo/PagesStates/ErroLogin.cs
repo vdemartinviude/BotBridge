@@ -15,8 +15,9 @@ public class ErroLogin : BaseState
     {
     }
 
-    public override void Execute()
+    public override Task Execute(CancellationToken token)
     {
         Console.WriteLine("Você digitou a senha errada");
+        return Task.CompletedTask;
     }
 }

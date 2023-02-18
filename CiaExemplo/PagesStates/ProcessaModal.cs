@@ -17,39 +17,37 @@ public class ProcessaModal : BaseState
     {
     }
 
-    public override void Execute()
+    public override async Task Execute(CancellationToken token)
     {
         //TODO: Register the modal message on result
-        _robot.Execute(new ChangeFrameRequest
+        await _robot.Execute(new ChangeFrameRequest
         {
             By = By.XPath("//div[@id='modal-body-cotacao']//iframe"),
             Timeout = TimeSpan.FromSeconds(2)
-        }).Wait();
+        });
 
         var title = _robot.Execute(new GetElementRequest()
         {
             By = By.XPath("//div[@class='form-title']"),
             Timeout = TimeSpan.FromSeconds(2)
-        }).Result.WebElement.Text;
+        }).Result.WebElement!.Text;
 
         var conteudo = _robot.Execute(new GetElementRequest()
         {
             By = By.XPath("//div[@class='conteudo-modal']"),
             Timeout = TimeSpan.FromSeconds(2)
-        }).Result.WebElement.Text;
+        }).Result.WebElement!.Text;
 
         _results.AddResultMessage("Mensagem [CIA]", conteudo, title);
 
-        _robot.Execute(new SwitchToDefaultFrameRequest()).Wait();
+        await _robot.Execute(new SwitchToDefaultFrameRequest());
 
-        _robot.Execute(new ClickRequest()
+        await _robot.Execute(new ClickRequest()
         {
             By = By.XPath("//button[text()='Fechar' and @id='btnConfirmar']"),
             Timeout = TimeSpan.FromSeconds(2)
-        }).Wait();
+        });
 
-        _results.SaveDocument("Resultados.json").Wait();
-
-        base.Execute();
+        await _results.SaveDocument("Resultados.json");
     }
 }

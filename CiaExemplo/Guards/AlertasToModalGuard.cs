@@ -24,7 +24,7 @@ public class AlertasToModalGuard : IGuard<ProcessaAlertas, ProcessaModal>
             Timeout = TimeSpan.FromSeconds(7)
         }).Result;
 
-        if (modal.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && modal.WebElement.Displayed)
+        if (modal.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && modal.WebElement!.Displayed)
             return true;
         return false;
     }

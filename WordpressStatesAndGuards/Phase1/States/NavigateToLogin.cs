@@ -18,7 +18,7 @@ public class NavigateToLogin : BaseState
     {
     }
 
-    public override async Task Execute()
+    public override async Task Execute(CancellationToken token)
     {
         await _robot.Execute(new NavigationRequest
         {

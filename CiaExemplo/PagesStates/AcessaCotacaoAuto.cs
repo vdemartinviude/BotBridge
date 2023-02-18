@@ -13,13 +13,13 @@ namespace Liberty.PagesStates
         {
         }
 
-        public override void Execute()
+        public override async Task Execute(CancellationToken token)
         {
-            _robot.Execute(new ChangeWindowByClickRequest
+            await _robot.Execute(new ChangeWindowByClickRequest
             {
                 By = By.XPath("//a[contains(text(),'Cotar')]"),
                 Timeout = TimeSpan.FromSeconds(1),
-            }).Wait();
+            });
         }
     }
 }

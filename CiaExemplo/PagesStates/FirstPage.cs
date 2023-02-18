@@ -18,18 +18,16 @@ public class FirstPage : BaseState
     {
     }
 
-    public override void Execute()
+    public override async Task Execute(CancellationToken token)
     {
-        var navigate = new NavigationRequest()
+        await _robot.Execute(new NavigationRequest()
         {
             Url = "https://novomeuespacocorretor.libertyseguros.com.br/"
-        };
-        _robot.Execute(navigate).Wait();
-        var click = new ClickRequest()
+        });
+        await _robot.Execute(new ClickRequest()
         {
             By = By.XPath("//a[contains(text(),'Entrar no novo')]"),
             Timeout = new TimeSpan(0, 0, 5)
-        };
-        _robot.Execute(click).Wait();
+        });
     }
 }

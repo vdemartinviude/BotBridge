@@ -1,5 +1,6 @@
 ﻿using JsonDocumentsManager;
 using OpenQA.Selenium;
+using OpenQA.Selenium.DevTools.V102.CacheStorage;
 using StatesAndEvents;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ public class NavigationStart : BaseState
     {
     }
 
-    public override async Task Execute()
+    public override async Task Execute(CancellationToken token)
     {
         _results.AddResultMessage("StartTime", $"Robot start working at {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
         await _robot.Execute(new NavigationRequest

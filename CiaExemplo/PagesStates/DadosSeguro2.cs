@@ -17,7 +17,7 @@ public class DadosSeguro2 : BaseState
     {
     }
 
-    public override void Execute()
+    public override async Task Execute(CancellationToken token)
     {
         double? value;
         value = _inputData.GetDoubleData("$.Coberturas.FatorDeAjuste");
