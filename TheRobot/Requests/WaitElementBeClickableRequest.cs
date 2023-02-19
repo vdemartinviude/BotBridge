@@ -14,14 +14,14 @@ public class WaitElementBeClickableRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
-    public Action<IWebDriver> PreExecute { get; set; }
-    public Action<IWebDriver> PostExecute { get; set; }
+    public Action<IWebDriver>? PreExecute { get; set; }
+    public Action<IWebDriver>? PostExecute { get; set; }
     public TimeSpan? Timeout { get; set; }
-    public By By { get; set; }
+    public By? By { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        var wait = new WebDriverWait(driver, Timeout.Value)
+        var wait = new WebDriverWait(driver, Timeout!.Value)
             .Until(ExpectedConditions.ElementToBeClickable(By));
 
         return new()

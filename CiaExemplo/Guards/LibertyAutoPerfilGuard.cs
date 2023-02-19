@@ -24,7 +24,7 @@ public class LibertyAutoPerfilGuard : IGuard<LibertyAutoPerfil, DadosPrincipais>
             By = By.XPath("//label[contains(text(),'É uma renovação?')]")
         }).Result;
 
-        if (element.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && element.WebElement.Displayed)
+        if (element.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && element.WebElement!.Displayed)
             return true;
 
         return false;

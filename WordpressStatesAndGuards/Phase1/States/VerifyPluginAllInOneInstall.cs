@@ -58,7 +58,7 @@ public class VerifyPluginAllInOneInstall : BaseState
             });
         } while (buttonInstall.Status != RobotResponseStatus.ActionRealizedOk);
 
-        buttonInstall.WebElement.Click();
+        buttonInstall.WebElement!.Click();
 
         RobotResponse buttonAtivar;
         do
@@ -70,6 +70,6 @@ public class VerifyPluginAllInOneInstall : BaseState
             });
         } while (buttonAtivar.Status != RobotResponseStatus.ActionRealizedOk);
 
-        buttonAtivar.WebElement.Click();
+        buttonAtivar.WebElement!.Click();
     }
 }

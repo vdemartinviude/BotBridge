@@ -23,7 +23,7 @@ public class WaitForDownload : IRobotRequest
     {
         if (Folder is null)
         {
-            throw new ArgumentNullException(nameof(Folder));    
+            throw new ArgumentNullException(nameof(Folder));
         }
         if (FileTypes is null)
         {
@@ -35,8 +35,8 @@ public class WaitForDownload : IRobotRequest
             Timeout = new TimeSpan(0, 5, 0);
         }
         FolderMonitor folderMonitor = new FolderMonitor(Folder);
-        
-        var fileData = folderMonitor.WaitForDownloadByFileTypes(FileTypes,(TimeSpan) Timeout);
+
+        var fileData = folderMonitor.WaitForDownloadByFileTypes(FileTypes, (TimeSpan)Timeout);
         if (fileData.TimedOut)
         {
             return new RobotResponse()
@@ -47,7 +47,7 @@ public class WaitForDownload : IRobotRequest
         var resp = new RobotResponse
         {
             Status = RobotResponseStatus.ActionRealizedOk,
-            Data = Path.Combine(Folder,fileData.Name)
+            Data = Path.Combine(Folder, fileData.Name!)
         };
         return resp;
     }

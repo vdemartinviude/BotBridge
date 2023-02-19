@@ -25,7 +25,7 @@ public class ClickRequest : IRobotRequest
         {
             throw new ArgumentNullException("By", "You must specify the element to click");
         }
-        var wait = new WebDriverWait(driver, Timeout.Value);
+        var wait = new WebDriverWait(driver, Timeout!.Value);
 
         var element = wait.Until(d => d.FindElement(By));
         new Actions(driver)

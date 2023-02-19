@@ -20,7 +20,7 @@ public static class TheStateMachineHelpers
         specification.IntermediaryGuards = assembly.ExportedTypes.Where(x => x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IGuard<,>)))
             .Select(ty => new IntermediaryGuard
             {
-                Namespace = ty.Namespace,
+                Namespace = ty.Namespace!,
                 Guard = ty,
                 CurrentState = ty.GetInterfaces().Single(y => y.GetGenericTypeDefinition() == typeof(IGuard<,>)).GenericTypeArguments[0],
                 NextState = ty.GetInterfaces().Single(y => y.GetGenericTypeDefinition() == typeof(IGuard<,>)).GenericTypeArguments[1],

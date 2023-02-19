@@ -15,9 +15,9 @@ public class ChangeWindowByClickRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
-    public Action<IWebDriver> PreExecute { get; set; }
-    public Action<IWebDriver> PostExecute { get; set; }
-    public By By { get; set; }
+    public Action<IWebDriver>? PreExecute { get; set; }
+    public Action<IWebDriver>? PostExecute { get; set; }
+    public By? By { get; set; }
     public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
@@ -25,13 +25,13 @@ public class ChangeWindowByClickRequest : IRobotRequest
         try
         {
             string originalWindow = driver.CurrentWindowHandle;
-            var wait = new WebDriverWait(driver, Timeout.Value);
+            var wait = new WebDriverWait(driver, Timeout!.Value);
             var clickElement = wait.Until(d => d.FindElement(By));
 
             clickElement.Click();
             Thread.Sleep(3000);
 
-        var wait2 = new WebDriverWait(driver, Timeout.Value);
+            var wait2 = new WebDriverWait(driver, Timeout!.Value);
             var elements = wait2.Until(d => d.WindowHandles.Count == 2);
             foreach (string window in driver.WindowHandles)
             {

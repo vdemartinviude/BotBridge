@@ -14,8 +14,8 @@ public class SetTextWithJsRequest : IRobotRequest
     public TimeSpan DelayAfter { get; set; }
     public Action<IWebDriver>? PreExecute { get; set; }
     public Action<IWebDriver>? PostExecute { get; set; }
-    public By By { get; set; }
-    public string Text { get; set; }
+    public By? By { get; set; }
+    public string? Text { get; set; }
     public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)

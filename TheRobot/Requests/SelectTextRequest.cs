@@ -13,10 +13,10 @@ public class SelectTextRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
-    public Action<IWebDriver> PreExecute { get; set; }
-    public Action<IWebDriver> PostExecute { get; set; }
-    public string Text { get; set; }
-    public By By { get; set; }
+    public Action<IWebDriver>? PreExecute { get; set; }
+    public Action<IWebDriver>? PostExecute { get; set; }
+    public string? Text { get; set; }
+    public By? By { get; set; }
     public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
@@ -25,7 +25,7 @@ public class SelectTextRequest : IRobotRequest
         {
             throw new ArgumentNullException("text");
         }
-        IWebElement selectElement = new WebDriverWait(driver, Timeout.Value).Until(x => x.FindElement(By));
+        IWebElement selectElement = new WebDriverWait(driver, Timeout!.Value).Until(x => x.FindElement(By));
         var selectObject = new SelectElement(selectElement);
         selectObject.SelectByText(Text);
         return new()

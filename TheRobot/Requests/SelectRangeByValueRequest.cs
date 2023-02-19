@@ -15,10 +15,10 @@ public class SelectRangeByValueRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
-    public Action<IWebDriver> PreExecute { get; set; }
-    public Action<IWebDriver> PostExecute { get; set; }
-    public By ByClick { get; set; }
-    public By BySelectValues { get; set; }
+    public Action<IWebDriver>? PreExecute { get; set; }
+    public Action<IWebDriver>? PostExecute { get; set; }
+    public By? ByClick { get; set; }
+    public By? BySelectValues { get; set; }
     public bool GreaterThan { get; set; }
     public bool LessThan { get; set; }
     public TimeSpan? DelayBetweenClicks { get; set; }
@@ -28,7 +28,7 @@ public class SelectRangeByValueRequest : IRobotRequest
     public RobotResponse Exec(IWebDriver driver)
     {
         IWebElement firstClickElement;
-        firstClickElement = new WebDriverWait(driver, Timeout.Value).Until(x => x.FindElement(ByClick));
+        firstClickElement = new WebDriverWait(driver, Timeout!.Value).Until(x => x.FindElement(ByClick));
         DelayBetweenClicks ??= TimeSpan.FromSeconds(1);
         var actions = new Actions(driver);
         actions.ScrollToElement(firstClickElement);
@@ -44,7 +44,7 @@ public class SelectRangeByValueRequest : IRobotRequest
                            valor = Convert.ToDouble(
                            System.Text.RegularExpressions.Regex.Match(element.Text, @"[\d\.,]+").Value, new CultureInfo("pt-BR"))
                        });
-        IWebElement element = null;
+        IWebElement? element = null;
         if (GreaterThan)
         {
             element = elements.OrderBy(a => a.valor).Where(a => a.valor >= Value).Select(a => a.element).First();
@@ -53,7 +53,7 @@ public class SelectRangeByValueRequest : IRobotRequest
         {
             element = elements.OrderByDescending(a => a.valor).Where(a => a.valor <= Value).Select(a => a.element).First();
         }
-        element.Click();
+        element!.Click();
         return new() { Status = RobotResponseStatus.ActionRealizedOk };
     }
 }

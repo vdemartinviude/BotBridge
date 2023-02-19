@@ -23,7 +23,7 @@ public class DadosAlertaModalGuard : IGuard<DadosSeguro2, ProcessaModal>
             By = By.Id("modalCotacao"),
             Timeout = TimeSpan.FromSeconds(7)
         }).Result;
-        if (modal.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && modal.WebElement.Displayed)
+        if (modal.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && modal.WebElement!.Displayed)
             return true;
         return false;
     }

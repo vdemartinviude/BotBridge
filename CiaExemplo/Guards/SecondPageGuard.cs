@@ -48,7 +48,7 @@ public class ErroLoginPageGuard2 : IGuard<FazLogin, ErroLogin>
         };
         var robotResult = robot.Execute(request).Result;
 
-        if (robotResult.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && robotResult.WebElement.Displayed == true)
+        if (robotResult.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && robotResult.WebElement!.Displayed == true)
         {
             return true;
         }

@@ -12,7 +12,7 @@ namespace StatesAndEvents;
 public class EventCreator : IEvent
 {
     public string EventName { get; private set; }
-    public By By { get; set; }
+    public By? By {get; set;}
     public IWebDriver Driver { get; private set; }
     public EventCreator(string eventName,By by,IWebDriver driver)
     {     

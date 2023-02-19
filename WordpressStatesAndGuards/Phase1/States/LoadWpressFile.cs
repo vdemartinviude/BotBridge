@@ -74,6 +74,6 @@ public class LoadWpressFile : BaseState
             });
         } while (resp.Status != RobotResponseStatus.ActionRealizedOk);
 
-        resp.WebElement.Click();
+        resp.WebElement!.Click();
     }
 }

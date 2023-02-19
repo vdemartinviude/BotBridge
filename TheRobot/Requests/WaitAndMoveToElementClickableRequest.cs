@@ -14,14 +14,14 @@ public class WaitAndMoveToElementClickableRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
-    public Action<IWebDriver> PreExecute { get; set; }
-    public Action<IWebDriver> PostExecute { get; set; }
-    public By By { get; set; }
+    public Action<IWebDriver>? PreExecute { get; set; }
+    public Action<IWebDriver>? PostExecute { get; set; }
+    public By? By { get; set; }
     public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        var wait = new WebDriverWait(driver, Timeout.Value)
+        var wait = new WebDriverWait(driver, Timeout!.Value)
             .Until(ExpectedConditions.ElementExists(By));
         IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
         executor.ExecuteScript("arguments[0].scrollIntoView();", wait);

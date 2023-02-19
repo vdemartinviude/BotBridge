@@ -23,7 +23,7 @@ public class MeuCotadorGuard : IGuard<MeuCotador, LibertyAutoPerfil>
             Timeout = TimeSpan.FromSeconds(5),
             By = By.XPath("//h1[contains(text(),'Meu Cotador')]")
         }).Result;
-        if (element.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && element.WebElement.Displayed)
+        if (element.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && element.WebElement!.Displayed)
             return true;
         return false;
     }

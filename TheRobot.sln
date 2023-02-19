@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheRobot", "TheRobot\TheRob
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestRobot", "TestRobot\TestRobot.csproj", "{B2178F6A-D0C2-4A81-BB49-63A9C1B252E7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTestRPAChallenge", "IntegrationTestRPAChallenge\IntegrationTestRPAChallenge.csproj", "{E05A8417-FFE9-4588-9255-BCA9FBCBB6A8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StatesAndEvents", "StatesAndEvents\StatesAndEvents.csproj", "{121A2D7A-1F17-401C-8137-5BDA3DCFA9D2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liberty", "CiaExemplo\Liberty.csproj", "{2BA52C5E-52C8-4BC2-87D3-20B29BD56D80}"
@@ -43,10 +41,6 @@ Global
 		{B2178F6A-D0C2-4A81-BB49-63A9C1B252E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2178F6A-D0C2-4A81-BB49-63A9C1B252E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2178F6A-D0C2-4A81-BB49-63A9C1B252E7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E05A8417-FFE9-4588-9255-BCA9FBCBB6A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E05A8417-FFE9-4588-9255-BCA9FBCBB6A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E05A8417-FFE9-4588-9255-BCA9FBCBB6A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E05A8417-FFE9-4588-9255-BCA9FBCBB6A8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{121A2D7A-1F17-401C-8137-5BDA3DCFA9D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{121A2D7A-1F17-401C-8137-5BDA3DCFA9D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{121A2D7A-1F17-401C-8137-5BDA3DCFA9D2}.Release|Any CPU.ActiveCfg = Release|Any CPU

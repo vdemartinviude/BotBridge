@@ -24,7 +24,7 @@ public class DadosProcessaAlertasGuard : IGuard<DadosSeguro2, ProcessaAlertas>
             Timeout = TimeSpan.FromSeconds(5)
         }).Result;
 
-        if (element.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && element.WebElement.Displayed)
+        if (element.Status == TheRobot.Response.RobotResponseStatus.ActionRealizedOk && element.WebElement!.Displayed)
             return true;
 
         return false;

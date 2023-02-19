@@ -31,7 +31,7 @@ public class SetTextRequest : IRobotRequest
         }
         IWebElement webElement;
 
-        WebDriverWait wait = new WebDriverWait(driver, Timeout.Value);
+        WebDriverWait wait = new WebDriverWait(driver, Timeout!.Value);
         webElement = wait.Until(e => e.FindElement(By));
 
         if (ClearBefore.HasValue && ClearBefore.Value)

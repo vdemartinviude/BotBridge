@@ -91,13 +91,14 @@ public class BaseState : IState
             await activeStateMachine.Fire(MachineEvents.NormalTransition);
             autoEvent.Set();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await activeStateMachine.FirePriority(MachineEvents.FinalizeMachine);
         }
     }
 
-    public virtual async Task Execute(CancellationToken token)
+    public virtual Task Execute(CancellationToken token)
     {
+        return Task.CompletedTask;
     }
 }

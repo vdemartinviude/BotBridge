@@ -21,13 +21,13 @@ public class GetElementRequest : IRobotRequest
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        IWebElement webElement = null;
+        IWebElement? webElement = null;
         if (By == null)
         {
             throw new ArgumentNullException(nameof(By));
         }
 
-        WebDriverWait wait = new WebDriverWait(driver, Timeout.Value);
+        WebDriverWait wait = new WebDriverWait(driver, Timeout!.Value);
         webElement = wait.Until(e => e.FindElement(By));
 
         return new()

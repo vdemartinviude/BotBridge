@@ -13,10 +13,10 @@ public class SetTextWithKeyDownRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
-    public Action<IWebDriver> PreExecute { get; set; }
-    public Action<IWebDriver> PostExecute { get; set; }
-    public By By { get; set; }
-    public string Text { get; set; }
+    public Action<IWebDriver>? PreExecute { get; set; }
+    public Action<IWebDriver>? PostExecute { get; set; }
+    public By? By { get; set; }
+    public string? Text { get; set; }
     public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
@@ -26,7 +26,7 @@ public class SetTextWithKeyDownRequest : IRobotRequest
         firstactions.ScrollToElement(element);
         firstactions.Click(element);
         firstactions.Perform();
-        foreach (var c in Text)
+        foreach (var c in Text!)
         {
             string s = String.Empty;
             s += c;

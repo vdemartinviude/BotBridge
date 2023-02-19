@@ -13,16 +13,16 @@ public class ElementExistRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
-    public Action<IWebDriver> PreExecute { get; set; }
-    public Action<IWebDriver> PostExecute { get; set; }
-    public By By { get; set; }
+    public Action<IWebDriver>? PreExecute { get; set; }
+    public Action<IWebDriver>? PostExecute { get; set; }
+    public By? By { get; set; }
     public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        var wait = new WebDriverWait(driver, Timeout.Value);
+        var wait = new WebDriverWait(driver, Timeout!.Value);
 
-        IWebElement element = null;
+        IWebElement? element = null;
 
         try
         {

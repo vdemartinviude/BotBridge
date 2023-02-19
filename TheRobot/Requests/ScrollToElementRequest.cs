@@ -14,14 +14,14 @@ public class ScrollToElementRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
-    public Action<IWebDriver> PreExecute { get; set; }
-    public Action<IWebDriver> PostExecute { get; set; }
-    public By By { get; set; }
+    public Action<IWebDriver>? PreExecute { get; set; }
+    public Action<IWebDriver>? PostExecute { get; set; }
+    public By? By { get; set; }
     public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        IWebElement webElement = new WebDriverWait(driver, Timeout.Value).Until(x => x.FindElement(By));
+        IWebElement webElement = new WebDriverWait(driver, Timeout!.Value).Until(x => x.FindElement(By));
 
         var actions = new Actions(driver);
         actions.ScrollToElement(webElement);

@@ -16,16 +16,16 @@ public class SelectBy2ClicksRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
-    public Action<IWebDriver> PreExecute { get; set; }
-    public Action<IWebDriver> PostExecute { get; set; }
-    public By By1 { get; set; }
-    public By By2 { get; set; }
+    public Action<IWebDriver>? PreExecute { get; set; }
+    public Action<IWebDriver>? PostExecute { get; set; }
+    public By? By1 { get; set; }
+    public By? By2 { get; set; }
     public TimeSpan DelayBetweenClicks { get; set; }
     public TimeSpan? Timeout { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        IWebElement firstClickElement = new WebDriverWait(driver, Timeout.Value).Until(x => x.FindElement(By1));
+        IWebElement firstClickElement = new WebDriverWait(driver, Timeout!.Value).Until(x => x.FindElement(By1));
 
         var actions = new Actions(driver);
         actions.ScrollToElement(firstClickElement);

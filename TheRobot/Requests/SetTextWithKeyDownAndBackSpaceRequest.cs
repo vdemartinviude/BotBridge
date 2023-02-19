@@ -13,10 +13,10 @@ public class SetTextWithKeyDownAndBackSpaceRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
-    public Action<IWebDriver> PreExecute { get; set; }
-    public Action<IWebDriver> PostExecute { get; set; }
-    public By By { get; set; }
-    public string Text { get; set; }
+    public Action<IWebDriver>? PreExecute { get; set; }
+    public Action<IWebDriver>? PostExecute { get; set; }
+    public By? By { get; set; }
+    public string? Text { get; set; }
     public int? BackSpaceNumber { get; set; }
     public TimeSpan? Timeout { get; set; }
 
@@ -37,7 +37,7 @@ public class SetTextWithKeyDownAndBackSpaceRequest : IRobotRequest
         }
 
         firstactions.Perform();
-        foreach (var c in Text)
+        foreach (var c in Text!)
         {
             string s = String.Empty;
             s += c;
