@@ -18,6 +18,7 @@ public class WaitForDownload : IRobotRequest
     public string? Folder { get; set; }
     public List<string>? FileTypes { get; set; }
     public TimeSpan? Timeout { get; set; }
+    public CancellationToken? CancellationToken { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {

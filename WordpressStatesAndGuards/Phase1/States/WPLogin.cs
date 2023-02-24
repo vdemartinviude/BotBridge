@@ -13,7 +13,7 @@ namespace WordpressStatesAndGuards.States;
 
 public class WPLogin : BaseState
 {
-    public override TimeSpan StateTimeout => TimeSpan.FromMinutes(2);
+    public override TimeSpan StateTimeout => TimeSpan.FromMinutes(10);
 
     public WPLogin(Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson) : base("WPLogin", robot, inputdata, resultJson)
     {

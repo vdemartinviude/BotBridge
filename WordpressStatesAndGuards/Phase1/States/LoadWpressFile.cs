@@ -14,7 +14,7 @@ namespace WordpressStatesAndGuards.States;
 
 public class LoadWpressFile : BaseState
 {
-    public override TimeSpan StateTimeout => TimeSpan.FromMinutes(50);
+    public override TimeSpan StateTimeout => TimeSpan.FromMinutes(60);
 
     public LoadWpressFile(Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson) : base("LoadWpressFile", robot, inputdata, resultJson)
     {
@@ -44,35 +44,51 @@ public class LoadWpressFile : BaseState
         });
 
         RobotResponse resp;
-        do
+        resp = await _robot.Execute(new WaitElementExistsOrVanishRequest
         {
-            resp = await _robot.Execute(new ElementExistRequest
-            {
-                By = By.XPath("//button[contains(text(),'Continuar') and @class='ai1wm-button-green']"),
-                Timeout = TimeSpan.FromSeconds(1)
-            });
-            token.ThrowIfCancellationRequested();
-        } while (resp.Status != RobotResponseStatus.ActionRealizedOk);
+            By = By.XPath("//button[contains(text(),'Continuar') and @class='ai1wm-button-green']"),
+            CancellationToken = token
+        });
+
+        //do
+        //{
+        //    resp = await _robot.Execute(new ElementExistRequest
+        //    {
+        //        By = By.XPath("//button[contains(text(),'Continuar') and @class='ai1wm-button-green']"),
+        //        Timeout = TimeSpan.FromSeconds(1)
+        //    });
+        //    token.ThrowIfCancellationRequested();
+        //} while (resp.Status != RobotResponseStatus.ActionRealizedOk);
 
         resp.WebElement!.Click();
 
-        do
+        await _robot.Execute(new WaitElementExistsOrVanishRequest
         {
-            resp = await _robot.Execute(new ElementExistRequest
-            {
-                By = By.XPath("//p[contains(text(),'Restaurando')]"),
-                Timeout = TimeSpan.FromSeconds(1)
-            });
-        } while (resp.Status != RobotResponseStatus.ActionRealizedOk);
+            By = By.XPath("//p[contains(text(),'Restaurando')]"),
+            CancellationToken = token
+        });
+        //do
+        //{
+        //    resp = await _robot.Execute(new ElementExistRequest
+        //    {
+        //        By = By.XPath("//p[contains(text(),'Restaurando')]"),
+        //        Timeout = TimeSpan.FromSeconds(1)
+        //    });
+        //} while (resp.Status != RobotResponseStatus.ActionRealizedOk);
 
-        do
+        resp = await _robot.Execute(new WaitElementExistsOrVanishRequest
         {
-            resp = await _robot.Execute(new ElementExistRequest
-            {
-                By = By.XPath("//button[contains(text(),'Finalizar')]"),
-                Timeout = TimeSpan.FromSeconds(1)
-            });
-        } while (resp.Status != RobotResponseStatus.ActionRealizedOk);
+            By = By.XPath("//button[contains(text(),'Finalizar')]"),
+            CancellationToken = token
+        });
+        //do
+        //{
+        //    resp = await _robot.Execute(new ElementExistRequest
+        //    {
+        //        By = By.XPath("//button[contains(text(),'Finalizar')]"),
+        //        Timeout = TimeSpan.FromSeconds(1)
+        //    });
+        //} while (resp.Status != RobotResponseStatus.ActionRealizedOk);
 
         resp.WebElement!.Click();
     }

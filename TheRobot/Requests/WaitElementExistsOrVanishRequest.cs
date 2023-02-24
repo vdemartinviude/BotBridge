@@ -9,27 +9,36 @@ using TheRobot.Response;
 
 namespace TheRobot.Requests;
 
-public class ElementExistRequest : IRobotRequest
+public class WaitElementExistsOrVanishRequest : IRobotRequest
 {
     public TimeSpan DelayBefore { get; set; }
     public TimeSpan DelayAfter { get; set; }
     public Action<IWebDriver>? PreExecute { get; set; }
     public Action<IWebDriver>? PostExecute { get; set; }
-    public By? By { get; set; }
     public TimeSpan? Timeout { get; set; }
     public CancellationToken? CancellationToken { get; set; }
+    public By By { get; set; }
+    public bool? WaitVanish { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
-        var wait = new WebDriverWait(driver, Timeout!.Value);
-
         IWebElement? element = null;
-
-        try
+        bool found = false;
+        bool condition = WaitVanish ?? false;
+        do
         {
-            element = wait.Until(d => d.FindElement(By));
-        }
-        catch (Exception ex) when (ex is NoSuchElementException || ex is WebDriverTimeoutException)
+            try
+            {
+                var wait = new WebDriverWait(driver, TimeSpan.FromMilliseconds(500));
+                element = wait.Until(d => d.FindElement(By));
+                found = true;
+            }
+            catch (Exception ex) when (ex is NoSuchElementException || ex is WebDriverTimeoutException)
+            {
+                found = false;
+            }
+        } while (!CancellationToken!.Value.IsCancellationRequested && (found == condition));
+        if (!found)
         {
             return new()
             {

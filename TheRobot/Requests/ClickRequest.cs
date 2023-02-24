@@ -18,6 +18,7 @@ public class ClickRequest : IRobotRequest
     public Action<IWebDriver>? PreExecute { get; set; }
     public Action<IWebDriver>? PostExecute { get; set; }
     public TimeSpan? Timeout { get; set; }
+    public CancellationToken? CancellationToken { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {

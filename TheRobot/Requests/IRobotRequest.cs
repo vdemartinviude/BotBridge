@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TheRobot.Response;
 
@@ -18,4 +19,5 @@ public interface IRobotRequest
     public Action<IWebDriver>? PreExecute { get; set; }
     public Action<IWebDriver>? PostExecute { get; set; }
     public TimeSpan? Timeout { get; set; }
+    public CancellationToken? CancellationToken { get; set; }
 }

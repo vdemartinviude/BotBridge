@@ -24,6 +24,7 @@ public class SelectRangeByValueRequest : IRobotRequest
     public TimeSpan? DelayBetweenClicks { get; set; }
     public double Value { get; set; }
     public TimeSpan? Timeout { get; set; }
+    public CancellationToken? CancellationToken { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {

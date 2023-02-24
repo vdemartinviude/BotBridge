@@ -14,7 +14,7 @@ namespace WordpressStatesAndGuards.States;
 
 public class VerifyPluginAllInOneInstall : BaseState
 {
-    public override TimeSpan StateTimeout => TimeSpan.FromMinutes(20);
+    public override TimeSpan StateTimeout => TimeSpan.FromMinutes(60);
 
     public VerifyPluginAllInOneInstall(Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson) : base("PluginAllInOneInstall", robot, inputdata, resultJson)
     {
@@ -48,27 +48,36 @@ public class VerifyPluginAllInOneInstall : BaseState
             Text = "All-in-one WP Migration",
         });
 
-        RobotResponse buttonInstall;
-        do
+        RobotResponse buttonInstall = await _robot.Execute(new WaitElementExistsOrVanishRequest
         {
-            buttonInstall = await _robot.Execute(new ElementExistRequest
-            {
-                By = By.XPath("//a[contains(@class,'install-now button') and contains(@data-name,'All-in-One')]"),
-                Timeout = TimeSpan.FromSeconds(1)
-            });
-        } while (buttonInstall.Status != RobotResponseStatus.ActionRealizedOk);
+            CancellationToken = token,
+            By = By.XPath("//a[contains(@class,'install-now button') and contains(@data-name,'All-in-One')]"),
+        });
+
+        //do
+        //{
+        //    buttonInstall = await _robot.Execute(new ElementExistRequest
+        //    {
+        //        By = By.XPath("//a[contains(@class,'install-now button') and contains(@data-name,'All-in-One')]"),
+        //        Timeout = TimeSpan.FromSeconds(1)
+        //    });
+        //} while (buttonInstall.Status != RobotResponseStatus.ActionRealizedOk);
 
         buttonInstall.WebElement!.Click();
 
-        RobotResponse buttonAtivar;
-        do
+        RobotResponse buttonAtivar = await _robot.Execute(new WaitElementExistsOrVanishRequest
         {
-            buttonAtivar = await _robot.Execute(new ElementExistRequest
-            {
-                By = By.XPath("//a[contains(text(),'Ativar') and contains(@data-name,'All-in-One')]"),
-                Timeout = TimeSpan.FromSeconds(1)
-            });
-        } while (buttonAtivar.Status != RobotResponseStatus.ActionRealizedOk);
+            CancellationToken = token,
+            By = By.XPath("//a[contains(text(),'Ativar') and contains(@data-name,'All-in-One')]"),
+        });
+        //do
+        //{
+        //    buttonAtivar = await _robot.Execute(new ElementExistRequest
+        //    {
+        //        By = By.XPath("//a[contains(text(),'Ativar') and contains(@data-name,'All-in-One')]"),
+        //        Timeout = TimeSpan.FromSeconds(1)
+        //    });
+        //} while (buttonAtivar.Status != RobotResponseStatus.ActionRealizedOk);
 
         buttonAtivar.WebElement!.Click();
     }

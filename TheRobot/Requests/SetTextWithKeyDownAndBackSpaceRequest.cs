@@ -19,6 +19,7 @@ public class SetTextWithKeyDownAndBackSpaceRequest : IRobotRequest
     public string? Text { get; set; }
     public int? BackSpaceNumber { get; set; }
     public TimeSpan? Timeout { get; set; }
+    public CancellationToken? CancellationToken { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {

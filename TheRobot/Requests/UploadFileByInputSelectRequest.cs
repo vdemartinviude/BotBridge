@@ -17,6 +17,7 @@ public class UploadFileByInputSelectRequest : IRobotRequest
     public TimeSpan? Timeout { get; set; }
     public By? InputSelectBy { get; set; }
     public string? FilePath { get; set; }
+    public CancellationToken? CancellationToken { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {

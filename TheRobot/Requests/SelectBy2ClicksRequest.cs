@@ -22,6 +22,7 @@ public class SelectBy2ClicksRequest : IRobotRequest
     public By? By2 { get; set; }
     public TimeSpan DelayBetweenClicks { get; set; }
     public TimeSpan? Timeout { get; set; }
+    public CancellationToken? CancellationToken { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {

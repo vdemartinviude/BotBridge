@@ -18,6 +18,7 @@ public class SelectTextRequest : IRobotRequest
     public string? Text { get; set; }
     public By? By { get; set; }
     public TimeSpan? Timeout { get; set; }
+    public CancellationToken? CancellationToken { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {

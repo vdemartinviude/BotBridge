@@ -14,7 +14,7 @@ namespace WordpressStatesAndGuards.States;
 
 public class NavigationStart : BaseState
 {
-    public override TimeSpan StateTimeout => TimeSpan.FromSeconds(30);
+    public override TimeSpan StateTimeout => TimeSpan.FromSeconds(60);
 
     public NavigationStart(Robot robot, InputJsonDocument inputdata, ResultJsonDocument resultJson) : base("NavigationStart", robot, inputdata, resultJson)
     {

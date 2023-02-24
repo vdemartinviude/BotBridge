@@ -14,6 +14,7 @@ public class SetTextRequest : IRobotRequest
     public string? Text { get; set; }
     public TimeSpan? Timeout { get; set; }
     public bool? ClearBefore { get; set; }
+    public CancellationToken? CancellationToken { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {

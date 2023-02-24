@@ -19,6 +19,7 @@ public class ChangeWindowByClickRequest : IRobotRequest
     public Action<IWebDriver>? PostExecute { get; set; }
     public By? By { get; set; }
     public TimeSpan? Timeout { get; set; }
+    public CancellationToken? CancellationToken { get; set; }
 
     public RobotResponse Exec(IWebDriver driver)
     {
