@@ -25,6 +25,10 @@ public class WaitElementExistsOrVanishRequest : IRobotRequest
         IWebElement? element = null;
         bool found = false;
         bool condition = WaitVanish ?? false;
+        if (!CancellationToken.HasValue)
+        {
+            throw new ArgumentNullException("CancelationToken");
+        }
         do
         {
             try
